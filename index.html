@@ -1182,7 +1182,7 @@ a    { text-decoration: none; color: inherit; }
   <div class="blog-header">
     <div>
       <div class="ey">Latest Insights</div>
-      <div class="s-title">Perspectives on wealth.</div>
+      <div class="s-title">Insights worth reading.</div>
     </div>
     <button class="btn-outline-forest">View All Articles</button>
   </div>
@@ -1221,7 +1221,7 @@ a    { text-decoration: none; color: inherit; }
   <div class="nl-wrap" id="newsletter">
     <div class="nl-l">
       <div class="ey">The Newsletter</div>
-      <h3>Perspectives<br>on Wealth.</h3>
+      <h3>Meridian.</h3>
       <p>Monthly writing on markets, financial planning and the things that actually matter for your wealth journey. Written personally by Manan Dua. Read by thoughtful investors across India.</p>
     </div>
     <div class="nl-r">
@@ -1230,7 +1230,7 @@ a    { text-decoration: none; color: inherit; }
         <input type="text" id="nl-name" placeholder="Priya" autocomplete="given-name">
         <label for="nl-email">Email address</label>
         <input type="email" id="nl-email" placeholder="priya@example.com" autocomplete="email" required>
-        <button type="submit" class="btn-gold">Subscribe to Perspectives</button>
+        <button type="submit" class="btn-gold">Subscribe to Meridian</button>
         <p class="nl-note">Sent from contact@manandua.in · No spam, ever · Unsubscribe any time</p>
       </form>
     </div>
@@ -1540,7 +1540,7 @@ a    { text-decoration: none; color: inherit; }
       <div class="ft-col">
         <h5>Resources</h5>
         <a href="#resources">Blog</a>
-        <a href="#newsletter">Perspectives on Wealth</a>
+        <a href="#newsletter">Meridian</a>
         <a href="https://www.youtube.com/@mananduafinancial" target="_blank" rel="noopener">YouTube</a>
       </div>
       <div class="ft-col">
@@ -1715,7 +1715,7 @@ function handleNL(e) {
   var orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Submitting...';
   submitToFormspree({ form: 'Newsletter signup', name: name, email: email }).then(function() {
-    alert('Thank you for subscribing to Perspectives on Wealth. Watch your inbox for the next issue.');
+    alert('Thank you for subscribing to Meridian. Watch your inbox for the next issue.');
     e.target.reset();
   }).catch(function() {
     alert('Something went wrong sending that. Please try again or email contact@manandua.in directly.');
