@@ -10,6 +10,7 @@
 <meta property="og:url" content="https://manandua.in">
 <meta property="og:type" content="website">
 <title>Manan Dua — Your Wealth, Thoughtfully Guided</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -389,16 +390,16 @@ a    { text-decoration: none; color: inherit; }
 }
 .svc-card {
   background: var(--cream-d);
-  border: 0.5px solid var(--border);
+  border: 1px solid rgba(184,144,58,0.22);
+  border-top: 2px solid var(--gold);
   border-radius: 12px;
   padding: 32px 28px;
   position: relative;
-  transition: border-color .15s;
+  transition: background .2s, border-color .2s;
 }
-.svc-card:hover { border-color: var(--border-g); }
-.svc-card.featured {
+.svc-card:hover {
   background: var(--forest-d);
-  border-color: transparent;
+  border-color: var(--gold);
 }
 .svc-ic-wrap {
   width: 44px; height: 44px;
@@ -406,22 +407,25 @@ a    { text-decoration: none; color: inherit; }
   background: var(--gold-pale);
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 20px;
+  transition: background .2s;
 }
-.svc-card.featured .svc-ic-wrap { background: rgba(255,255,255,0.12); }
+.svc-card:hover .svc-ic-wrap { background: rgba(255,255,255,0.12); }
 .svc-ic-wrap .ti { font-size: 20px; color: var(--gold); }
 .svc-card h3 {
   font-family: var(--serif);
   font-size: 22px; font-weight: 500;
   color: var(--forest-d);
   margin-bottom: 10px;
+  transition: color .2s;
 }
-.svc-card.featured h3 { color: #fff; }
+.svc-card:hover h3 { color: #fff; }
 .svc-card p {
   font-size: 13.5px; font-weight: 300;
   color: var(--soft);
   line-height: 1.75;
+  transition: color .2s;
 }
-.svc-card.featured p { color: rgba(255,255,255,0.55); }
+.svc-card:hover p { color: rgba(255,255,255,0.55); }
 .svc-cs {
   position: absolute;
   top: 18px; right: 18px;
@@ -582,14 +586,18 @@ a    { text-decoration: none; color: inherit; }
 }
 .nl-l { flex: 1; min-width: 220px; }
 .nl-l .ey { color: var(--gold-l); margin-bottom: 14px; }
+.nl-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.nl-brand svg { flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(207,165,79,0.35)); }
 .nl-l h3 {
   font-family: var(--serif);
-  font-size: 36px; font-weight: 400;
-  color: #fff;
-  line-height: 1.2;
-  margin-bottom: 12px;
+  font-size: 44px; font-weight: 500;
+  color: var(--gold-l);
+  letter-spacing: 0.3px;
+  line-height: 1.1;
+  margin-bottom: 0;
+  text-shadow: 0 0 24px rgba(207,165,79,0.25);
 }
-.nl-l p { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.85; }
+.nl-l p { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.85; margin-top: 18px; }
 .nl-r { flex: 1; min-width: 260px; }
 .nl-r label {
   font-size: 10px; font-weight: 500;
@@ -959,14 +967,12 @@ a    { text-decoration: none; color: inherit; }
           <div class="dp-ic"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
           <div class="dp-tt">Wealth Management</div>
           <div class="dp-dd">Goal-based mutual fund portfolios and Specialised Investment Funds for eligible investors.</div>
-          <span class="dp-tag">MFD · SIF</span>
         </div>
         <div class="dp-sep" aria-hidden="true"></div>
         <div class="dp-item" role="menuitem" tabindex="0">
           <div class="dp-ic"><i class="ti ti-school" aria-hidden="true"></i></div>
           <div class="dp-tt">Financial Literacy</div>
           <div class="dp-dd">Workshops and webinars for individuals, families and corporate teams.</div>
-          <span class="dp-tag">Workshops · Webinars</span>
         </div>
         <div class="dp-sep" aria-hidden="true"></div>
         <div class="dp-item" role="menuitem" tabindex="0">
@@ -1017,7 +1023,6 @@ a    { text-decoration: none; color: inherit; }
 
 <!-- ══ HERO ══════════════════════════════════════ -->
 <section class="hero" id="home">
-  <div class="hero-badge">AMFI Certified &middot; NISM Certified</div>
   <h1>Your Wealth,<br>Thoughtfully <em>Guided.</em></h1>
   <p class="hero-sub">
     I work with Indian HNIs and aspiring affluent families who want to build, protect and grow their wealth with someone they can genuinely trust.
@@ -1106,11 +1111,11 @@ a    { text-decoration: none; color: inherit; }
         Holistic, multi-asset portfolios built around your life goals. We work across mutual funds, SIPs, asset allocation and Specialised Investment Funds for eligible investors, always guided by what makes sense for your specific situation.
       </p>
     </div>
-    <div class="svc-card featured" role="listitem">
+    <div class="svc-card" role="listitem">
       <div class="svc-ic-wrap"><i class="ti ti-target" aria-hidden="true"></i></div>
       <h3>Financial Literacy</h3>
       <p>
-        Focused, practitioner-led workshops and webinars on personal finance, investment frameworks and building lasting wealth habits. Available for individuals, families and corporate teams across India.
+        Practical workshops and sessions designed to help you think clearly about money, make better decisions, and build long-term wealth habits.
       </p>
     </div>
     <div class="svc-card" role="listitem">
@@ -1118,7 +1123,7 @@ a    { text-decoration: none; color: inherit; }
       <div class="svc-ic-wrap"><i class="ti ti-scale" aria-hidden="true"></i></div>
       <h3>Financial Advisory</h3>
       <p>
-        Comprehensive financial planning covering investments, insurance adequacy, tax optimisation and estate strategy. Built around your complete financial picture, not individual products.
+        Comprehensive financial planning across investments, insurance, taxes and estate strategy — built around your full financial picture, not product sales.
       </p>
     </div>
   </div>
@@ -1143,12 +1148,12 @@ a    { text-decoration: none; color: inherit; }
     <div class="proc-item" role="listitem">
       <div class="proc-n" aria-hidden="true">03</div>
       <div class="proc-t">Personalised Plan</div>
-      <div class="proc-d">We present a written plan with specific, actionable recommendations tailored entirely to your situation.</div>
+      <div class="proc-d">We design a personalised financial plan with clear, actionable recommendations aligned to your goals, priorities, and evolving needs.</div>
     </div>
     <div class="proc-item" role="listitem">
       <div class="proc-n" aria-hidden="true">04</div>
       <div class="proc-t">Ongoing Review</div>
-      <div class="proc-d">Quarterly portfolio reviews, annual plan updates and access to us whenever life changes require a rethink.</div>
+      <div class="proc-d">We stay closely aligned with your portfolio through continuous oversight, updating your plan annually and remaining available whenever your financial priorities evolve.</div>
     </div>
   </div>
 </section>
@@ -1221,15 +1226,22 @@ a    { text-decoration: none; color: inherit; }
   <div class="nl-wrap" id="newsletter">
     <div class="nl-l">
       <div class="ey">The Newsletter</div>
-      <h3>Meridian.</h3>
+      <div class="nl-brand">
+        <svg width="44" height="44" viewBox="0 0 200 200" aria-hidden="true">
+          <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="var(--linen)" opacity="0.3"/>
+          <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="var(--gold-l)"/>
+          <rect x="96" y="96" width="8" height="8" fill="var(--forest-d)" transform="rotate(45 100 100)"/>
+        </svg>
+        <h3>Meridian.</h3>
+      </div>
       <p>Monthly writing on markets, financial planning and the things that actually matter for your wealth journey. Written personally by Manan Dua. Read by thoughtful investors across India.</p>
     </div>
     <div class="nl-r">
       <form onsubmit="handleNL(event)" novalidate>
         <label for="nl-name">First name</label>
-        <input type="text" id="nl-name" placeholder="Priya" autocomplete="given-name">
+        <input type="text" id="nl-name" placeholder="Parag" autocomplete="given-name">
         <label for="nl-email">Email address</label>
-        <input type="email" id="nl-email" placeholder="priya@example.com" autocomplete="email" required>
+        <input type="email" id="nl-email" placeholder="parag@example.com" autocomplete="email" required>
         <button type="submit" class="btn-gold">Subscribe to Meridian</button>
         <p class="nl-note">Sent from contact@manandua.in · No spam, ever · Unsubscribe any time</p>
       </form>
@@ -1399,13 +1411,13 @@ a    { text-decoration: none; color: inherit; }
             <div style="font-size:13px;font-weight:500;color:var(--forest-d);margin-bottom:10px;">Preferred time for the call</div>
             <div class="opts" style="grid-template-columns:repeat(3,1fr);" role="radiogroup" aria-label="Preferred call time">
               <div class="opt" onclick="oSel(this,'q5')" role="radio" tabindex="0" aria-checked="false">
-                <div><div class="opt-t">Morning</div><div class="opt-d">9am to 12pm</div></div>
+                <div><div class="opt-t">Morning</div><div class="opt-d">9 AM – 12 PM</div></div>
               </div>
               <div class="opt" onclick="oSel(this,'q5')" role="radio" tabindex="0" aria-checked="false">
-                <div><div class="opt-t">Afternoon</div><div class="opt-d">12pm to 4pm</div></div>
+                <div><div class="opt-t">Afternoon</div><div class="opt-d">12 PM – 3 PM</div></div>
               </div>
               <div class="opt" onclick="oSel(this,'q5')" role="radio" tabindex="0" aria-checked="false">
-                <div><div class="opt-t">Evening</div><div class="opt-d">4pm to 7pm</div></div>
+                <div><div class="opt-t">Evening</div><div class="opt-d">3 PM – 6 PM</div></div>
               </div>
             </div>
           </div>
@@ -1502,18 +1514,18 @@ a    { text-decoration: none; color: inherit; }
     <div class="con-form">
       <form onsubmit="handleCon(event)" novalidate>
         <label for="c-name">Your name</label>
-        <input type="text" id="c-name" name="name" placeholder="Rahul Sharma" autocomplete="name" required>
+        <input type="text" id="c-name" name="name" placeholder="Naman Kumar" autocomplete="name" required>
         <label for="c-email">Email</label>
-        <input type="email" id="c-email" name="email" placeholder="rahul@example.com" autocomplete="email" required>
+        <input type="email" id="c-email" name="email" placeholder="naman@example.com" autocomplete="email" required>
         <label for="c-phone">Phone (optional)</label>
         <input type="tel" id="c-phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel">
         <label for="c-int">I am interested in</label>
         <select id="c-int" name="interest">
-          <option value="wealth">Wealth management</option>
-          <option value="education">Financial literacy workshop</option>
-          <option value="advisory">Financial advisory (coming soon)</option>
-          <option value="newsletter">Newsletter or resources</option>
-          <option value="other">Something else</option>
+          <option value="wealth">Wealth Management</option>
+          <option value="education">Financial Literacy Workshop</option>
+          <option value="advisory">Financial Advisory (Coming Soon)</option>
+          <option value="newsletter">Newsletter or Resources</option>
+          <option value="other">Something Else</option>
         </select>
         <label for="c-msg">Your message</label>
         <textarea id="c-msg" name="message" placeholder="Tell me a bit about where you are financially and what you are trying to figure out..."></textarea>
@@ -1554,7 +1566,7 @@ a    { text-decoration: none; color: inherit; }
         <h5>Connect</h5>
         <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener">Instagram</a>
         <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:contact@manandua.in">contact@manandua.in</a>
+        <a href="#contact">Connect With Us</a>
       </div>
     </div>
   </div>
