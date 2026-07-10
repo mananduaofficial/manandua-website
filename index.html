@@ -1192,34 +1192,8 @@ a    { text-decoration: none; color: inherit; }
     <button class="btn-outline-forest">View All Articles</button>
   </div>
 
-  <div class="blog-grid" role="list">
-    <article class="blog-card" role="listitem">
-      <div class="blog-top">
-        <div class="blog-cat">Investing</div>
-        <div class="blog-date">June 2025</div>
-      </div>
-      <h4>Understanding PMS vs Mutual Funds: What HNIs Need to Know</h4>
-      <p>Portfolio Management Services offer customised strategies that mutual funds simply cannot match. Here is what you need to consider before making the move.</p>
-      <div class="blog-read">Read Article <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
-    </article>
-    <article class="blog-card" role="listitem">
-      <div class="blog-top">
-        <div class="blog-cat">Planning</div>
-        <div class="blog-date">May 2025</div>
-      </div>
-      <h4>Estate Planning in India: A Guide for the Affluent Family</h4>
-      <p>Most affluent families put off estate planning. But if you have meaningful assets, this conversation simply cannot wait. A comprehensive primer.</p>
-      <div class="blog-read">Read Article <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
-    </article>
-    <article class="blog-card" role="listitem">
-      <div class="blog-top">
-        <div class="blog-cat">Tax</div>
-        <div class="blog-date">April 2025</div>
-      </div>
-      <h4>Tax-Efficient Investing: Strategies for the Rs.50L+ Annual Income Bracket</h4>
-      <p>From ELSS to indexation benefits on debt funds, there are multiple ways to legally and effectively reduce your tax burden. A practical guide.</p>
-      <div class="blog-read">Read Article <i class="ti ti-arrow-right" aria-hidden="true"></i></div>
-    </article>
+  <div class="blog-grid" role="list" id="blogGrid">
+    <p style="font-size:13px;color:var(--mute);grid-column:1/-1;">Loading articles...</p>
   </div>
 
   <!-- NEWSLETTER -->
@@ -1579,6 +1553,118 @@ a    { text-decoration: none; color: inherit; }
 
 <!-- ══ JAVASCRIPT ══════════════════════════════════ -->
 <script>
+// ── Blog posts (loaded from a published Google Sheet — no code editing needed to add articles) ──
+// STEP: replace the URL below with your own "Publish to web" CSV link (see instructions provided separately).
+var SHEET_CSV_URL = 'PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE';
+
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function slugify(str) {
+  return (str || '').toString().toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-+|-+$)/g, '');
+}
+
+// Minimal CSV parser that handles quoted fields containing commas
+function parseCSV(text) {
+  var rows = [];
+  var row = [];
+  var field = '';
+  var inQuotes = false;
+  for (var i = 0; i < text.length; i++) {
+    var c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else { inQuotes = false; }
+      } else { field += c; }
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else { field += c; }
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+function loadBlogPosts() {
+  var grid = document.getElementById('blogGrid');
+  if (!SHEET_CSV_URL || SHEET_CSV_URL.indexOf('PASTE_YOUR') === 0) {
+    grid.innerHTML = '<p style="font-size:13px;color:var(--mute);grid-column:1/-1;">Articles will appear here once the Google Sheet is connected.</p>';
+    return;
+  }
+  fetch(SHEET_CSV_URL)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Could not load sheet');
+      return res.text();
+    })
+    .then(function(csvText) {
+      var rows = parseCSV(csvText);
+      if (rows.length < 2) {
+        grid.innerHTML = '<p style="font-size:13px;color:var(--mute);grid-column:1/-1;">No articles yet — check back soon.</p>';
+        return;
+      }
+      var header = rows[0].map(function(h) { return h.trim().toLowerCase(); });
+      var idx = {
+        title: header.indexOf('title'),
+        category: header.indexOf('category'),
+        date: header.indexOf('date'),
+        excerpt: header.indexOf('excerpt'),
+        url: header.indexOf('url'),
+        content: header.indexOf('content')
+      };
+      var posts = rows.slice(1)
+        .filter(function(r) { return r.some(function(cell) { return cell.trim() !== ''; }); })
+        .map(function(r) {
+          return {
+            title: idx.title > -1 ? r[idx.title] : '',
+            category: idx.category > -1 ? r[idx.category] : '',
+            date: idx.date > -1 ? r[idx.date] : '',
+            excerpt: idx.excerpt > -1 ? r[idx.excerpt] : '',
+            url: idx.url > -1 ? r[idx.url] : '',
+            content: idx.content > -1 ? r[idx.content] : ''
+          };
+        });
+      posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+      grid.innerHTML = posts.map(function(p) {
+        var dateLabel = p.date ? new Date(p.date + 'T00:00:00').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
+        var inner =
+          '<div class="blog-top">' +
+            '<div class="blog-cat">' + escapeHtml(p.category) + '</div>' +
+            '<div class="blog-date">' + escapeHtml(dateLabel) + '</div>' +
+          '</div>' +
+          '<h4>' + escapeHtml(p.title) + '</h4>' +
+          '<p>' + escapeHtml(p.excerpt) + '</p>' +
+          '<div class="blog-read">Read Article <i class="ti ti-arrow-right" aria-hidden="true"></i></div>';
+        // Priority: explicit URL column (external link) > auto-generated on-site article page (if Content filled in) > no link
+        var linkHref = '';
+        if (p.url && p.url.trim()) {
+          linkHref = p.url.trim();
+        } else if (p.content && p.content.trim()) {
+          linkHref = 'article.html?post=' + encodeURIComponent(slugify(p.title));
+        }
+        if (linkHref) {
+          return '<a class="blog-card" role="listitem" href="' + escapeHtml(linkHref) + '" style="display:block;">' + inner + '</a>';
+        }
+        return '<article class="blog-card" role="listitem">' + inner + '</article>';
+      }).join('');
+    })
+    .catch(function() {
+      grid.innerHTML = '<p style="font-size:13px;color:var(--mute);grid-column:1/-1;">Articles could not be loaded right now.</p>';
+    });
+}
+loadBlogPosts();
+
 // Mobile menu
 var ham = document.getElementById('ham');
 var mob = document.getElementById('mobMenu');

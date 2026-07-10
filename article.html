@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article — Manan Dua</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#2a4038;--forest-d:#1d2e28;--forest-m:#3a5448;--gold:#b8903a;--gold-l:#cfa54f;--gold-pale:#f0e6cc;--cream:#f5f0e8;--cream-d:#ede8de;--linen:#faf8f3;--warm:#7a6e60;--text:#1c1917;--soft:#4a4038;--mute:#8c8070;--border:rgba(42,64,56,0.10);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--r:6px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--linen);color:var(--text);line-height:1.7;}
+a{text-decoration:none;color:var(--gold);}
+a:hover{color:var(--forest);}
+.nav{background:var(--linen);border-bottom:0.5px solid var(--border);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.logo{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--forest-d);}
+.nav a.back{font-size:13.5px;color:var(--soft);}
+.wrap{max-width:760px;margin:0 auto;padding:64px 2rem 96px;}
+.art-cat{font-size:11px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.art-title{font-family:var(--serif);font-size:42px;font-weight:400;color:var(--forest-d);line-height:1.15;margin-bottom:14px;}
+.art-date{font-size:13px;color:var(--mute);margin-bottom:44px;}
+.art-body p{font-size:16px;font-weight:300;color:var(--soft);margin-bottom:20px;line-height:1.9;}
+.art-body h3{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--forest-d);margin-top:36px;margin-bottom:14px;}
+.art-body ul{padding-left:22px;margin-bottom:20px;}
+.art-body li{font-size:16px;font-weight:300;color:var(--soft);margin-bottom:10px;line-height:1.8;}
+.art-body strong{color:var(--forest-d);font-weight:600;}
+.art-state{font-size:14px;color:var(--mute);padding:40px 0;}
+.footer{background:var(--forest-d);padding:40px 3rem;margin-top:56px;text-align:center;}
+.footer p{color:rgba(255,255,255,0.35);font-size:12px;margin-bottom:6px;}
+.footer a{color:var(--gold-l);}
+@media(max-width:640px){.nav{padding:0 1.25rem;}.wrap{padding:44px 1.25rem 64px;}.art-title{font-size:30px;}.footer{padding:32px 1.25rem;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">Manan Dua</a>
+  <a href="index.html#resources" class="back">&larr; Back to insights</a>
+</nav>
+
+<div class="wrap" id="articleWrap">
+  <p class="art-state">Loading article...</p>
+</div>
+
+<div class="footer">
+  <p>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</p>
+  <p><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="terms.html">Terms of Use</a> &middot; <a href="investor-charter.html">Investor Charter</a></p>
+</div>
+
+<script>
+// Same published Google Sheet CSV used by the homepage's Insights section.
+// Keep this in sync with the SHEET_CSV_URL in index.html — same sheet, same link.
+var SHEET_CSV_URL = 'PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE';
+
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+function slugify(str) {
+  return (str || '').toString().toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-+|-+$)/g, '');
+}
+function parseCSV(text) {
+  var rows = [], row = [], field = '', inQuotes = false;
+  for (var i = 0; i < text.length; i++) {
+    var c = text[i];
+    if (inQuotes) {
+      if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; } }
+      else { field += c; }
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else { field += c; }
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+// Turns simple plain-text formatting into HTML:
+//   blank line        -> new paragraph
+//   "## Heading"       -> subheading
+//   "- item"           -> bullet point
+//   **bold** / *italic* -> inline emphasis
+function renderContent(raw) {
+  if (!raw) return '';
+  var lines = raw.split(/\r\n|\r|\n/);
+  var html = '';
+  var inList = false;
+  var paraBuffer = [];
+  var imageLineRe = /^\[image:\s*(.+?)\s*\]$/i;
+  function inlineFormat(text) {
+    var e = escapeHtml(text);
+    e = e.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    e = e.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    return e;
+  }
+  function flushPara() {
+    if (paraBuffer.length) { html += '<p>' + inlineFormat(paraBuffer.join(' ')) + '</p>'; paraBuffer = []; }
+  }
+  function closeList() { if (inList) { html += '</ul>'; inList = false; } }
+  lines.forEach(function(line) {
+    var t = line.trim();
+    if (t === '') { flushPara(); closeList(); return; }
+    var imgMatch = t.match(imageLineRe);
+    if (imgMatch) {
+      flushPara(); closeList();
+      html += '<img src="' + escapeHtml(imgMatch[1]) + '" alt="" style="width:100%;border-radius:8px;margin:24px 0;">';
+      return;
+    }
+    if (t.indexOf('## ') === 0) { flushPara(); closeList(); html += '<h3>' + escapeHtml(t.slice(3)) + '</h3>'; return; }
+    if (t.indexOf('- ') === 0) { flushPara(); if (!inList) { html += '<ul>'; inList = true; } html += '<li>' + inlineFormat(t.slice(2)) + '</li>'; return; }
+    closeList();
+    paraBuffer.push(t);
+  });
+  flushPara(); closeList();
+  return html;
+}
+
+function loadArticle() {
+  var wrap = document.getElementById('articleWrap');
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get('post');
+  if (!slug) { wrap.innerHTML = '<p class="art-state">No article specified.</p>'; return; }
+  if (!SHEET_CSV_URL || SHEET_CSV_URL.indexOf('PASTE_YOUR') === 0) {
+    wrap.innerHTML = '<p class="art-state">Articles will appear here once the Google Sheet is connected.</p>';
+    return;
+  }
+  fetch(SHEET_CSV_URL)
+    .then(function(res) { if (!res.ok) throw new Error('fail'); return res.text(); })
+    .then(function(csvText) {
+      var rows = parseCSV(csvText);
+      if (rows.length < 2) { wrap.innerHTML = '<p class="art-state">Article not found.</p>'; return; }
+      var header = rows[0].map(function(h) { return h.trim().toLowerCase(); });
+      var idx = {
+        title: header.indexOf('title'),
+        category: header.indexOf('category'),
+        date: header.indexOf('date'),
+        excerpt: header.indexOf('excerpt'),
+        content: header.indexOf('content')
+      };
+      var match = null;
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i];
+        var title = idx.title > -1 ? r[idx.title] : '';
+        if (slugify(title) === slug) { match = r; break; }
+      }
+      if (!match) { wrap.innerHTML = '<p class="art-state">Article not found. It may have been renamed or removed.</p>'; return; }
+      var title = idx.title > -1 ? match[idx.title] : '';
+      var category = idx.category > -1 ? match[idx.category] : '';
+      var date = idx.date > -1 ? match[idx.date] : '';
+      var content = idx.content > -1 ? match[idx.content] : '';
+      var dateLabel = date ? new Date(date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+      document.title = (title || 'Article') + ' — Manan Dua';
+      wrap.innerHTML =
+        '<div class="art-cat">' + escapeHtml(category) + '</div>' +
+        '<h1 class="art-title">' + escapeHtml(title) + '</h1>' +
+        '<div class="art-date">' + escapeHtml(dateLabel) + '</div>' +
+        '<div class="art-body">' + (content ? renderContent(content) : '<p>Full article content coming soon.</p>') + '</div>';
+    })
+    .catch(function() {
+      wrap.innerHTML = '<p class="art-state">Could not load this article right now. Please try again shortly.</p>';
+    });
+}
+loadArticle();
+</script>
+
+</body>
+</html>
