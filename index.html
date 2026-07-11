@@ -949,6 +949,57 @@ a    { text-decoration: none; color: inherit; }
   .oq-body { padding: 24px 20px; }
   .oq-hdr  { padding: 24px 20px; }
 }
+/* ═══════════════════════════════════
+   TOAST NOTIFICATIONS
+═══════════════════════════════════ */
+.toast-stack {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 360px;
+}
+.toast {
+  background: var(--forest-d);
+  border: 0.5px solid rgba(184,144,58,0.35);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 12px 32px rgba(28,25,23,0.25);
+  transform: translateX(420px);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.2,.9,.3,1), opacity .35s;
+}
+.toast.show { transform: translateX(0); opacity: 1; }
+.toast.error { border-left-color: #c0654a; }
+.toast-ic {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(207,165,79,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.toast.error .toast-ic { background: rgba(192,101,74,0.18); }
+.toast-ic .ti { font-size: 13px; color: var(--gold-l); }
+.toast.error .toast-ic .ti { color: #e0a48e; }
+.toast-msg { font-size: 13.5px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.6; }
+.toast-close {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  font-size: 16px; line-height: 1; padding: 0; margin-left: auto;
+  flex-shrink: 0;
+}
+.toast-close:hover { color: rgba(255,255,255,0.7); }
+@media(max-width: 640px) {
+  .toast-stack { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+}
 </style>
 </head>
 <body>
@@ -1553,9 +1604,34 @@ a    { text-decoration: none; color: inherit; }
 
 <!-- ══ JAVASCRIPT ══════════════════════════════════ -->
 <script>
+// ── Toast notifications (replaces browser alert() popups) ──
+function showToast(message, type) {
+  var stack = document.getElementById('toastStack');
+  if (!stack) { window.alert(message); return; }
+  var toast = document.createElement('div');
+  toast.className = 'toast' + (type === 'error' ? ' error' : '');
+  var iconClass = type === 'error' ? 'ti-alert-triangle' : 'ti-circle-check';
+  toast.innerHTML =
+    '<div class="toast-ic"><i class="ti ' + iconClass + '" aria-hidden="true"></i></div>' +
+    '<div class="toast-msg"></div>' +
+    '<button class="toast-close" aria-label="Dismiss">&times;</button>';
+  toast.querySelector('.toast-msg').textContent = message;
+  stack.appendChild(toast);
+  requestAnimationFrame(function() { toast.classList.add('show'); });
+  var timer = setTimeout(function() { dismissToast(toast); }, 6000);
+  toast.querySelector('.toast-close').addEventListener('click', function() {
+    clearTimeout(timer);
+    dismissToast(toast);
+  });
+}
+function dismissToast(toast) {
+  toast.classList.remove('show');
+  setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 350);
+}
+
 // ── Blog posts (loaded from a published Google Sheet — no code editing needed to add articles) ──
 // STEP: replace the URL below with your own "Publish to web" CSV link (see instructions provided separately).
-var SHEET_CSV_URL = 'PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE';
+var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1NVOfCjfmEQWtUBpC7mShp1v3zuV3KS4_5qXD4l3OBio/gviz/tq?tqx=out:csv&gid=316850898';
 
 function escapeHtml(str) {
   var d = document.createElement('div');
@@ -1567,6 +1643,21 @@ function slugify(str) {
   return (str || '').toString().toLowerCase().trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-+|-+$)/g, '');
+}
+
+// Handles dates from Google Forms/Sheets in DD/MM/YYYY, DD-MM-YYYY, DDMMYYYY, or YYYY-MM-DD formats
+function parseDateFlexible(str) {
+  if (!str) return null;
+  str = str.trim();
+  var m;
+  m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (m) return new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+  m = str.match(/^(\d{2})(\d{2})(\d{4})$/);
+  if (m) return new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+  m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+  var fallback = new Date(str);
+  return isNaN(fallback) ? null : fallback;
 }
 
 // Minimal CSV parser that handles quoted fields containing commas
@@ -1635,9 +1726,13 @@ function loadBlogPosts() {
             content: idx.content > -1 ? r[idx.content] : ''
           };
         });
-      posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+      posts.sort(function(a, b) {
+        var da = parseDateFlexible(a.date), db = parseDateFlexible(b.date);
+        return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
+      });
       grid.innerHTML = posts.map(function(p) {
-        var dateLabel = p.date ? new Date(p.date + 'T00:00:00').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
+        var parsedDate = parseDateFlexible(p.date);
+        var dateLabel = parsedDate ? parsedDate.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
         var inner =
           '<div class="blog-top">' +
             '<div class="blog-cat">' + escapeHtml(p.category) + '</div>' +
@@ -1738,7 +1833,7 @@ function oChk(el, grp) {
 
 function oSubmit() {
   var email = document.getElementById('oqEmail').value.trim();
-  if (!email) { alert('Please enter your email address.'); return; }
+  if (!email) { showToast('Please enter your email address.', 'error'); return; }
   oqA.name  = document.getElementById('oqName').value.trim();
   oqA.email = email;
   for (var i = 1; i <= 5; i++) {
@@ -1782,9 +1877,9 @@ function oConfirm() {
     preferred_call_time: oqA.q5 || ''
   };
   submitToFormspree(payload).then(function() {
-    alert('Thank you. I will be in touch at your email within one business day to arrange your consultation.');
+    showToast('Thank you. I will be in touch at your email within one business day to arrange your consultation.');
   }).catch(function() {
-    alert('Something went wrong sending that. Please try again or email contact@manandua.in directly.');
+    showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');
   }).finally(function() {
     btn.disabled = false; btn.textContent = orig;
   });
@@ -1804,19 +1899,34 @@ function submitToFormspree(payload, btn, btnDefaultText) {
   });
 }
 
+var BREVO_FORM_URL = 'https://c7d30daa.sibforms.com/serve/MUIFAKp0oopX-_6BjksgObWpxKMXdo7HuJYqDH3PqJ8CcyobxBN4BPomtYV9bXSOAr1ct13EEXuXuMYyNI0usP2m18h114IjhGGXAC1pIR0umw9slHhC82Vyqv9jeLloXi15wZfZQurKbk8d3q7WtVJgP1luuQM58WbehnJHL1FjZi9Mwz6BbKTkdtz8iDDLYFQMg9gJnmDIZOoNOg==';
+
 function handleNL(e) {
   e.preventDefault();
   var email = document.getElementById('nl-email').value.trim();
   var name  = document.getElementById('nl-name').value.trim();
-  if (!email) { alert('Please enter your email address.'); return; }
+  if (!email) { showToast('Please enter your email address.', 'error'); return; }
   var btn = e.target.querySelector('button[type=submit]');
   var orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Submitting...';
-  submitToFormspree({ form: 'Newsletter signup', name: name, email: email }).then(function() {
-    alert('Thank you for subscribing to Meridian. Watch your inbox for the next issue.');
+
+  var body = new URLSearchParams();
+  body.append('EMAIL', email);
+  body.append('email_address_check', ''); // Brevo's spam honeypot field — must stay empty
+  body.append('locale', 'en');
+
+  // Brevo's form endpoint doesn't return a readable response from the browser (cross-site request),
+  // so we fire the submission and optimistically confirm — network failures are still caught below.
+  fetch(BREVO_FORM_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  }).then(function() {
+    showToast('Thank you for subscribing to Meridian. Check your inbox to confirm.');
     e.target.reset();
   }).catch(function() {
-    alert('Something went wrong sending that. Please try again or email contact@manandua.in directly.');
+    showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');
   }).finally(function() {
     btn.disabled = false; btn.textContent = orig;
   });
@@ -1829,20 +1939,22 @@ function handleCon(e) {
   var phone   = document.getElementById('c-phone').value.trim();
   var interest= document.getElementById('c-int').value;
   var message = document.getElementById('c-msg').value.trim();
-  if (!name || !email) { alert('Please fill in your name and email address.'); return; }
+  if (!name || !email) { showToast('Please fill in your name and email address.', 'error'); return; }
   var btn = e.target.querySelector('button[type=submit]');
   var orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Sending...';
   submitToFormspree({ form: 'Contact form', name: name, email: email, phone: phone, interest: interest, message: message }).then(function() {
-    alert('Thank you, ' + name + '. I will respond within one business day at ' + email + '.');
+    showToast('Thank you, ' + name + '. I will respond within one business day at ' + email + '.');
     e.target.reset();
   }).catch(function() {
-    alert('Something went wrong sending that. Please try again or email contact@manandua.in directly.');
+    showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');
   }).finally(function() {
     btn.disabled = false; btn.textContent = orig;
   });
 }
 </script>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
 </body>
 </html>
