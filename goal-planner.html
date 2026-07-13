@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free goal-based financial planning calculator by Manan Dua. Pick a goal such as education, wedding, vehicle, or house, and see the SIP it takes to get there.">
+<title>Plan Your Goal · Meridian Tools by Manan Dua</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+:root {
+  --forest:    #2a4038;
+  --forest-d:  #1d2e28;
+  --forest-m:  #3a5448;
+  --forest-l:  #4a6858;
+  --gold:      #b8903a;
+  --gold-l:    #cfa54f;
+  --gold-pale: #f0e6cc;
+  --cream:     #f5f0e8;
+  --cream-d:   #ede8de;
+  --linen:     #faf8f3;
+  --warm:      #7a6e60;
+  --text:      #1c1917;
+  --soft:      #4a4038;
+  --mute:      #8c8070;
+  --border:    rgba(42,64,56,0.10);
+  --border-g:  rgba(184,144,58,0.25);
+  --good:      #3a6b4f;
+  --bad:       #a8483a;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'Inter', system-ui, sans-serif;
+  --r:         6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--linen); color: var(--text); line-height: 1.6; }
+img  { max-width: 100%; display: block; }
+a    { text-decoration: none; color: inherit; }
+
+/* ═══ NAV ═══ */
+.nav {
+  background: var(--linen);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand svg { flex-shrink: 0; }
+.nav-brand-txt { display: flex; flex-direction: column; line-height: 1.15; }
+.nav-brand-txt .nb-name { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--forest-d); letter-spacing: 0.2px; }
+.nav-brand-txt .nb-sub { font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--mute); }
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-link { font-size: 13.5px; font-weight: 400; color: var(--soft); cursor: pointer; transition: color .15s; letter-spacing: 0.1px; white-space: nowrap; }
+.nav-link:hover, .nav-link.active { color: var(--forest); }
+.nav-link.active { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.btn-book {
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  background: var(--forest); color: #fff;
+  border: none; border-radius: var(--r); padding: 11px 24px;
+  cursor: pointer; transition: background .15s; letter-spacing: 0.2px;
+}
+.btn-book:hover { background: var(--forest-m); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
+.mob-menu {
+  display: none; position: fixed; top: 68px; left: 0; right: 0;
+  background: var(--linen); border-bottom: 0.5px solid var(--border);
+  padding: 1.5rem 2rem; z-index: 99; box-shadow: 0 8px 32px rgba(28,25,23,0.08);
+}
+.mob-menu a { display: block; font-size: 15px; color: var(--soft); padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+.mob-menu a:last-of-type { border-bottom: none; }
+.mob-menu .btn-book { display: block; width: 100%; text-align: center; margin-top: 16px; }
+
+/* ═══ HERO ═══ */
+.hero { background: var(--forest-d); padding: 56px 3rem 48px; position: relative; overflow: hidden; }
+.hero::after {
+  content: ''; position: absolute; top: -40%; right: -8%;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-in { max-width: 1240px; margin: 0 auto; position: relative; }
+.crumb { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 6px; }
+.crumb:hover { color: var(--gold-l); }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--gold-l); margin-bottom: 18px;
+}
+.hero-badge::before { content: ''; display: inline-block; width: 32px; height: 0.5px; background: var(--gold); }
+.hero h1 { font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.14; color: #fff; max-width: 680px; }
+.hero h1 em { color: var(--gold-l); font-style: italic; }
+.hero-sub { font-size: 14.5px; font-weight: 300; color: rgba(255,255,255,0.55); max-width: 560px; margin-top: 14px; line-height: 1.8; }
+.hero-switch { margin-top: 26px; display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-switch a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: rgba(255,255,255,0.7);
+  border: 0.5px solid rgba(255,255,255,0.18); border-radius: 20px;
+  padding: 9px 18px; transition: border-color .15s, color .15s;
+}
+.hero-switch a:hover { border-color: var(--gold); color: var(--gold-l); }
+
+/* ═══ SECTION WRAP ═══ */
+.sec { padding: 48px 3rem 88px; }
+.sec-in { max-width: 1240px; margin: 0 auto; }
+
+.layout-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 26px; align-items: flex-start; }
+
+/* ═══ PANELS (input cards) ═══ */
+.panel {
+  background: #fff; border: 0.5px solid var(--border); border-radius: 12px;
+  padding: 30px; box-shadow: 0 2px 24px rgba(28,25,23,0.04); margin-bottom: 22px;
+}
+.panel-hd h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--forest-d); }
+.panel-hd p.panel-sub { font-size: 12px; color: var(--mute); margin-top: 4px; line-height: 1.6; }
+.panel-body { margin-top: 22px; display: flex; flex-direction: column; gap: 22px; }
+.panel-body.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+
+/* ═══ FIELDS ═══ */
+.fld { display: flex; flex-direction: column; gap: 9px; }
+.fld-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fld-top label { font-size: 12.5px; color: var(--soft); font-weight: 400; }
+.fld-box {
+  display: flex; align-items: center; gap: 4px; background: var(--linen);
+  border: 0.5px solid var(--border); border-radius: var(--r); padding: 6px 10px;
+}
+.fld-box span { font-size: 11.5px; color: var(--mute); white-space: nowrap; }
+.fld-box input {
+  width: 92px; border: none; background: transparent; text-align: right;
+  font-family: var(--sans); font-size: 13.5px; font-weight: 600; color: var(--forest-d);
+}
+.fld-box input:focus { outline: none; }
+.fld-box.wide input { width: 140px; }
+.fld-box.wide { padding: 9px 12px; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 3px; border-radius: 3px;
+  background: var(--cream-d); outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--gold); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border-g); cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 13px; height: 13px; border-radius: 50%; background: var(--gold); border: 2px solid #fff; cursor: pointer;
+}
+
+.sel {
+  width: 100%; background: var(--linen); border: 0.5px solid var(--border);
+  border-radius: var(--r); padding: 10px 34px 10px 13px; font-size: 13px;
+  color: var(--text); font-family: var(--sans); appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c8070' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; cursor: pointer;
+}
+.sel:focus { outline: none; border-color: var(--gold); }
+.fld-hint { font-size: 11px; color: var(--mute); line-height: 1.6; }
+.fld-hint.warn { color: var(--bad); }
+
+.income-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; }
+.income-row .fld { flex: 1; min-width: 190px; }
+.income-row .fld-freq { width: 140px; }
+.income-row .fld-freq label { font-size: 11px; color: var(--mute); display: block; margin-bottom: 8px; }
+
+/* ═══ ASSET BLOCKS ═══ */
+.asset-block { border: 0.5px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.asset-block + .asset-block { margin-top: 14px; }
+.asset-hd { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; user-select: none; }
+.asset-hd input[type=checkbox] {
+  appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border-g); border-radius: 4px;
+  margin-top: 2px; flex-shrink: 0; cursor: pointer; position: relative; background: var(--linen);
+}
+.asset-hd input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
+.asset-hd input[type=checkbox]:checked::after {
+  content: ''; position: absolute; left: 5px; top: 1px; width: 5px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+.asset-name { font-size: 14.5px; font-weight: 500; color: var(--forest-d); }
+.asset-sub { font-size: 11.5px; color: var(--mute); margin-top: 2px; }
+.asset-content { margin-top: 18px; display: none; flex-direction: column; gap: 18px; padding-top: 16px; border-top: 0.5px dashed var(--border); }
+.asset-content.open { display: flex; }
+.asset-content .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.mini-panel { border: 0.5px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: var(--linen); }
+
+/* ═══ SIDEBAR / RESULTS ═══ */
+.side { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 16px; }
+.hero-stat {
+  background: var(--forest-d); border-radius: 12px; padding: 24px 26px; position: relative; overflow: hidden;
+}
+.hero-stat::after {
+  content: ''; position: absolute; top: -30%; right: -8%; width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.14) 0%, transparent 70%);
+}
+.hero-stat .hs-l { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-l); position: relative; }
+.hero-stat .hs-v { font-family: var(--serif); font-size: 34px; font-weight: 500; color: #fff; margin-top: 8px; position: relative; }
+.hero-stat .hs-sub { font-size: 12.5px; color: rgba(255,255,255,0.5); margin-top: 4px; position: relative; }
+
+.res-card { background: #fff; border: 0.5px solid var(--border); border-radius: 10px; padding: 20px 22px; }
+.res-card h4 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
+.res-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; }
+.res-row span:first-child { color: var(--mute); }
+.res-row span:last-child { font-weight: 600; color: var(--forest-d); }
+.res-row.tot { border-top: 0.5px solid var(--border); margin-top: 4px; padding-top: 10px; }
+.res-row.empty { color: var(--mute); font-size: 12px; padding: 4px 0; }
+
+.cov-bar { height: 10px; border-radius: 6px; background: var(--cream-d); overflow: hidden; margin: 12px 0 6px; }
+.cov-bar-fill { height: 100%; background: linear-gradient(90deg, var(--forest), var(--gold)); border-radius: 6px; transition: width .3s; }
+.cov-pct { font-size: 11.5px; color: var(--mute); }
+
+.gap-card { border-radius: 10px; padding: 20px 22px; border: 0.5px solid var(--border); }
+.gap-card.neg { background: #fbeeec; border-color: rgba(168,72,58,0.25); }
+.gap-card.pos { background: #eef3ef; border-color: rgba(58,107,79,0.25); }
+.gap-card h4 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--mute); margin-bottom: 8px; }
+.gap-card .gv { font-family: var(--serif); font-size: 24px; font-weight: 500; }
+.gap-card.neg .gv { color: var(--bad); }
+.gap-card.pos .gv { color: var(--good); }
+.gap-card .gs { font-size: 12px; color: var(--mute); margin-top: 4px; }
+
+.btn-gold-full {
+  width: 100%; background: var(--gold); color: #fff; border: none; border-radius: var(--r);
+  padding: 13px 20px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans);
+}
+.btn-gold-full:hover { background: #a37f32; }
+.btn-gold-full:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-outline-full {
+  width: 100%; background: transparent; color: var(--forest); border: 1px solid var(--forest); border-radius: var(--r);
+  padding: 12px 20px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: all .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans);
+}
+.btn-outline-full:hover { background: var(--forest); color: #fff; }
+.dl-note { font-size: 11px; color: var(--mute); text-align: center; line-height: 1.6; }
+.method-tabs { display: inline-flex; gap: 6px; background: var(--linen); border: 0.5px solid var(--border); border-radius: 10px; padding: 5px; }
+.method-tab { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 20px; border: none; background: transparent; color: var(--soft); border-radius: 7px; cursor: pointer; transition: all .15s; }
+.method-tab:hover { color: var(--forest); }
+.method-tab.active { background: var(--gold); color: #fff; }
+.goal-icon { width: 52px; height: 52px; border-radius: 12px; background: var(--forest-d); display: flex; align-items: center; justify-content: center; color: var(--gold-l); font-size: 24px; flex-shrink: 0; }
+.goal-desc { font-size: 12px; color: var(--mute); margin-top: 6px; }
+.alloc-bar { height: 10px; border-radius: 6px; overflow: hidden; display: flex; border: 0.5px solid var(--border); }
+.alloc-bar .a-eq { background: var(--forest); height: 100%; }
+.alloc-bar .a-dt { background: var(--gold); height: 100%; }
+.alloc-legend { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--mute); margin-top: 8px; }
+.status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; padding: 5px 12px; border-radius: 20px; }
+.status-badge.on-track { background: #eaf3ee; color: var(--good); }
+.status-badge.partial { background: #f7f0dd; color: #93731f; }
+.status-badge.at-risk { background: #fbeeec; color: var(--bad); }
+
+.note-strip { margin-top: 4px; font-size: 11.5px; color: var(--mute); line-height: 1.7; }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--forest-d); padding: 48px 3rem 28px; }
+.footer-in { max-width: 1240px; margin: 0 auto; }
+.footer-top { display: flex; gap: 56px; flex-wrap: wrap; padding-bottom: 28px; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.ft-brand { flex: 1.3; min-width: 200px; display: flex; align-items: flex-start; gap: 12px; }
+.ft-logo { font-family: var(--serif); font-size: 19px; font-weight: 500; color: #fff; }
+.ft-logo em { color: var(--gold-l); font-style: normal; }
+.ft-brand p { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.35); margin-top: 8px; line-height: 1.8; max-width: 240px; }
+.ft-links { display: flex; gap: 48px; flex-wrap: wrap; }
+.ft-col h5 { font-size: 10px; font-weight: 500; letter-spacing: 0.9px; text-transform: uppercase; color: rgba(255,255,255,0.30); margin-bottom: 12px; }
+.ft-col a { display: block; font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 8px; transition: color .15s; }
+.ft-col a:hover { color: var(--gold-l); }
+.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-top: 18px; align-items: flex-start; }
+.footer-bottom span { font-size: 11px; color: rgba(255,255,255,0.18); }
+.ft-disc { font-size: 10px; color: rgba(255,255,255,0.16); max-width: 480px; line-height: 1.6; }
+
+@media(max-width: 1080px) {
+  .layout-grid { grid-template-columns: 1fr; }
+  .side { position: static; }
+}
+@media(max-width: 900px) {
+  .nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .hero { padding: 44px 1.5rem 40px; }
+  .hero h1 { font-size: 32px; }
+  .sec { padding: 36px 1.5rem 56px; }
+  .panel { padding: 22px; }
+  .panel-body.grid2, .asset-content .grid2, .income-row { grid-template-columns: 1fr; }
+  .income-row .fld-freq { width: 100%; }
+  .footer { padding: 40px 1.5rem 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="https://manandua.in" class="nav-brand">
+    <svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true">
+      <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+      <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+      <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+      <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+    </svg>
+    <div class="nav-brand-txt">
+      <span class="nb-name">Meridian</span>
+      <span class="nb-sub">Tools by Manan Dua</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="https://manandua.in" class="nav-link">Home</a>
+    <a href="financial-tools.html" class="nav-link">All Tools</a>
+    <a href="https://manandua.in#contact" class="nav-link">Contact</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+    <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="https://manandua.in">Home</a>
+  <a href="financial-tools.html">All Tools</a>
+  <a href="https://manandua.in#contact">Contact</a>
+  <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-in">
+    <a href="https://manandua.in" class="crumb"><i class="ti ti-arrow-left" aria-hidden="true"></i> manandua.in</a>
+    <div class="hero-badge">Meridian Financial Tools</div>
+    <h1>Plan your goal, <em>one at a time.</em></h1>
+    <p class="hero-sub">Pick a goal, map what you've already saved towards it, and see the monthly SIP it takes to get there.</p>
+    <div class="hero-switch">
+      <a href="retirement-corpus-calculator.html">Planning for retirement? Use the dedicated calculator <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      <a href="financial-tools.html">Explore all Meridian tools <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</header>
+
+<!-- ══ CALCULATOR ══ -->
+<section class="sec">
+  <div class="sec-in">
+
+    <div class="panel" style="margin-bottom:22px;">
+      <div class="panel-hd">
+        <h3>Choose your goal</h3>
+        <p class="panel-sub">Select the goal you want to plan for. The form below adjusts automatically.</p>
+      </div>
+      <div class="panel-body" style="margin-top:18px;">
+        <div style="display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+          <div class="goal-icon" id="goalIcon"><i class="ti ti-school" aria-hidden="true"></i></div>
+          <div style="flex:1; min-width:220px;">
+            <select class="sel" id="goalType" style="font-size:15px; font-weight:500;">
+              <option value="education" selected>Education</option>
+              <option value="wedding">Wedding</option>
+              <option value="vehicle">Vehicle Purchase</option>
+              <option value="house">House Purchase</option>
+              <option value="vacation">Vacation</option>
+              <option value="other">Other Goal</option>
+            </select>
+            <p class="goal-desc" id="goalDesc">Plan for school or college fees. Supports a multi-year fee range.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-grid">
+
+      <!-- LEFT: INPUTS -->
+      <div class="inputs-col">
+
+        <div class="panel">
+          <div class="panel-hd"><h3>Goal details</h3></div>
+          <div class="panel-body">
+            <div class="fld"><div class="fld-top"><label for="goalName">Goal name</label></div><div class="fld-box wide"><input type="text" id="goalName" style="text-align:left; width:100%;" value="Education"></div></div>
+
+            <div class="fld" id="freqField" style="display:none;">
+              <div class="fld-top"><label for="isRecurring">Frequency</label></div>
+              <select class="sel" id="isRecurring">
+                <option value="one-time" selected>One-time</option>
+                <option value="recurring">Recurring</option>
+              </select>
+            </div>
+
+            <div class="panel-body grid2" style="margin-top:0;">
+              <div class="fld"><div class="fld-top"><label for="goalDate" id="goalDateLabel">Goal start date</label></div><div class="fld-box wide"><input type="date" id="goalDate" style="width:100%;"></div></div>
+              <div class="fld" id="goalEndField"><div class="fld-top"><label for="goalEndDate">Goal end date</label></div><div class="fld-box wide"><input type="date" id="goalEndDate" style="width:100%;"></div></div>
+            </div>
+
+            <div class="panel-body grid2" style="margin-top:0;">
+              <div class="fld"><div class="fld-top"><label for="goalAmountPV">Goal amount, present value (₹)</label></div><div class="fld-box wide"><input type="number" id="goalAmountPV" value="500000"></div></div>
+              <div class="fld">
+                <div class="fld-top"><label for="priority">Priority</label></div>
+                <select class="sel" id="priority">
+                  <option value="Low">Low</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="panel-body grid2" style="margin-top:0;">
+              <div class="fld"><div class="fld-top"><label for="savingsStartDate">Savings start date</label></div><div class="fld-box wide"><input type="date" id="savingsStartDate" style="width:100%;"></div></div>
+              <div class="fld"><div class="fld-top"><label for="savingsEndDate">Savings end date</label></div><div class="fld-box wide"><input type="date" id="savingsEndDate" style="width:100%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-hd"><h3>Asset allocation</h3><p class="panel-sub">Equity + Debt must total 100%.</p></div>
+          <div class="panel-body">
+            <div class="alloc-bar"><div class="a-eq" id="allocEqBar" style="width:60%;"></div><div class="a-dt" id="allocDtBar" style="width:40%;"></div></div>
+            <div class="alloc-legend"><span>Equity <b id="allocEqLabel">60%</b></span><span>Debt <b id="allocDtLabel">40%</b></span></div>
+            <div class="panel-body grid2" style="margin-top:0;">
+              <div class="fld"><div class="fld-top"><label for="equityAllocPct">Equity (%)</label></div><div class="fld-box wide"><input type="number" id="equityAllocPct" value="60" min="0" max="100"></div></div>
+              <div class="fld"><div class="fld-top"><label for="debtAllocPct">Debt (%)</label></div><div class="fld-box wide"><input type="number" id="debtAllocPct" value="40" min="0" max="100"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-hd"><h3>Assumptions</h3></div>
+          <div class="panel-body grid2">
+            <div class="fld"><div class="fld-top"><label for="inflation">Inflation</label><div class="fld-box"><input type="number" id="inflation" value="6" step="0.1"><span>%</span></div></div></div>
+            <div class="fld"><div class="fld-top"><label for="equityReturn">Equity returns</label><div class="fld-box"><input type="number" id="equityReturn" value="12" step="0.1"><span>%</span></div></div></div>
+            <div class="fld"><div class="fld-top"><label for="debtReturn">Debt returns</label><div class="fld-box"><input type="number" id="debtReturn" value="7" step="0.1"><span>%</span></div></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-hd"><h3>Assets currently mapped</h3><p class="panel-sub">Today's value, ₹.</p></div>
+          <div class="panel-body grid2">
+            <div class="fld"><div class="fld-top"><label for="mappedEquity">Equity</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="mappedEquity" value="0"></div></div>
+            <div class="fld"><div class="fld-top"><label for="mappedDebt">Debt</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="mappedDebt" value="0"></div></div>
+            <div class="fld"><div class="fld-top"><label for="mappedHybrid">Hybrid</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="mappedHybrid" value="0"></div></div>
+            <div class="fld"><div class="fld-top"><label for="mappedOthers">Others</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="mappedOthers" value="0"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-hd"><h3>SIP strategy</h3></div>
+          <div class="panel-body grid2">
+            <div class="fld">
+              <div class="fld-top"><label for="sipMode">SIP mode</label></div>
+              <select class="sel" id="sipMode">
+                <option value="constant" selected>Constant SIP</option>
+                <option value="stepup">Step-up SIP</option>
+              </select>
+            </div>
+            <div class="fld" id="stepUpField" style="display:none;"><div class="fld-top"><label for="stepUpPct">Annual step-up</label><div class="fld-box"><input type="number" id="stepUpPct" value="10" step="0.5"><span>%</span></div></div></div>
+          </div>
+        </div>
+
+        <p class="note-strip">Indicative figures based on the assumptions above. Actual returns, inflation, and contribution capacity vary. Please confirm details with your financial advisor.</p>
+      </div>
+
+      <!-- RIGHT: RESULTS -->
+      <div class="side">
+        <div class="hero-stat">
+          <div class="hs-l">Required monthly SIP</div>
+          <div class="hs-v" id="outSIP">—</div>
+          <div class="hs-sub" id="outSIPSplit">—</div>
+        </div>
+
+        <div class="res-card">
+          <h4>Goal snapshot</h4>
+          <div class="res-row"><span>Goal amount (today)</span><span id="outGoalPV">—</span></div>
+          <div class="res-row"><span>Required at goal date</span><span id="outRequiredFV">—</span></div>
+          <div class="res-row tot"><span>Years to goal</span><span id="outYearsToGoal">—</span></div>
+        </div>
+
+        <div class="res-card">
+          <h4>Coverage from current assets</h4>
+          <div class="res-row"><span>Mapped today</span><span id="outMappedToday">—</span></div>
+          <div class="res-row"><span>Projected (mapped)</span><span id="outProjectedMapped">—</span></div>
+          <div class="cov-bar"><div class="cov-bar-fill" id="covBarFill" style="width:0%"></div></div>
+          <div class="cov-pct" id="covPct" style="margin-bottom:10px;">0% covered</div>
+          <span class="status-badge" id="statusBadge">—</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn-gold-full" id="downloadJpegBtn"><i class="ti ti-download" aria-hidden="true"></i> Download report</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-in">
+    <div class="footer-top">
+      <div class="ft-brand">
+        <svg width="30" height="30" viewBox="0 0 200 200" aria-hidden="true" style="flex-shrink:0;">
+          <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+          <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+          <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+          <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+        </svg>
+        <div>
+          <div class="ft-logo">Meridian<em>.</em></div>
+          <p>Free financial tools from Manan Dua, independent financial guidance for those building wealth with clarity and purpose.</p>
+        </div>
+      </div>
+      <div class="ft-links">
+        <div class="ft-col">
+          <h5>Manan Dua</h5>
+          <a href="financial-tools.html">All Tools</a>
+          <a href="https://manandua.in">Home</a>
+          <a href="https://manandua.in#resources">Blog</a>
+          <a href="https://manandua.in#newsletter">Meridian Newsletter</a>
+        </div>
+        <div class="ft-col">
+          <h5>Legal</h5>
+          <a href="https://manandua.in/privacy.html">Privacy Policy</a>
+          <a href="https://manandua.in/disclaimer.html">Disclaimer</a>
+        </div>
+        <div class="ft-col">
+          <h5>Connect</h5>
+          <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://manandua.in#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span class="ft-disc">This calculator is for illustrative purposes only and does not constitute financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
+      <span>manandua.in</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Goal metadata (retirement intentionally excluded, dedicated calculator exists) */
+const GOAL_META = {
+  education: { label: "Education", icon: "ti-school", desc: "Plan for school or college fees. Supports a multi-year fee range.", hasRange: true, recurringEligible: false },
+  wedding:   { label: "Wedding", icon: "ti-diamond", desc: "A one-time goal for wedding expenses.", hasRange: false, recurringEligible: false },
+  vehicle:   { label: "Vehicle Purchase", icon: "ti-car", desc: "A one-time goal for buying a car or two-wheeler.", hasRange: false, recurringEligible: false },
+  house:     { label: "House Purchase", icon: "ti-home", desc: "A one-time goal for a home down payment.", hasRange: false, recurringEligible: false },
+  vacation:  { label: "Vacation", icon: "ti-plane", desc: "A one-time trip, or a recurring annual holiday.", hasRange: false, recurringEligible: true },
+  other:     { label: "Other Goal", icon: "ti-target", desc: "Any other financial goal you're saving towards.", hasRange: false, recurringEligible: false },
+};
+
+/* ═══════════ Math (mirrors the original lovable calculator's logic) ═══════════ */
+const fmtINR = (n) => isFinite(n) ? new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Math.round(n)) : "—";
+const escapeHtml = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const yearsBetween = (a, b) => (new Date(b).getTime() - new Date(a).getTime()) / (365.25 * 24 * 3600 * 1000);
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const addYears = (iso, y) => { const d = new Date(iso); d.setFullYear(d.getFullYear() + y); return d.toISOString().slice(0, 10); };
+
+function blendedReturn(g) { return (g.equityAllocPct * g.equityReturn + g.debtAllocPct * g.debtReturn) / 100; }
+
+function requiredFV(g) {
+  const today = todayISO();
+  const yearsToGoal = Math.max(0, yearsBetween(today, g.goalDate));
+  const infl = g.inflation / 100;
+  if (g.hasRangeEffective && g.goalEndDate) {
+    const r = blendedReturn(g) / 100;
+    const startY = yearsBetween(today, g.goalDate);
+    const endY = yearsBetween(today, g.goalEndDate);
+    const years = Math.max(1, Math.round(endY - startY) + 1);
+    let total = 0;
+    for (let k = 0; k < years; k++) {
+      const y = startY + k;
+      const futureSpend = g.goalAmountPV * Math.pow(1 + infl, y);
+      total += futureSpend / Math.pow(1 + r, k);
+    }
+    return total;
+  }
+  return g.goalAmountPV * Math.pow(1 + infl, yearsToGoal);
+}
+
+function fvOfMappedAssets(g) {
+  const today = todayISO();
+  const y = Math.max(0, yearsBetween(today, g.goalDate));
+  const eR = g.equityReturn / 100, dR = g.debtReturn / 100, hR = (eR + dR) / 2, oR = blendedReturn(g) / 100;
+  return g.mappedEquity * Math.pow(1 + eR, y) + g.mappedDebt * Math.pow(1 + dR, y) + (g.mappedHybrid || 0) * Math.pow(1 + hR, y) + (g.mappedOthers || 0) * Math.pow(1 + oR, y);
+}
+
+function fvConstantSIP(g, monthlySIP) {
+  const r = blendedReturn(g) / 100, i = r / 12;
+  const months = Math.max(0, Math.round(yearsBetween(g.savingsStartDate, g.savingsEndDate) * 12));
+  const fvAtEnd = i === 0 ? monthlySIP * months : monthlySIP * ((Math.pow(1 + i, months) - 1) / i) * (1 + i);
+  const tail = Math.max(0, yearsBetween(g.savingsEndDate, g.goalDate));
+  return fvAtEnd * Math.pow(1 + r, tail);
+}
+function fvStepUpSIP(g, monthlySIP) {
+  const r = blendedReturn(g) / 100;
+  const step = (g.stepUpPct || 0) / 100;
+  const savingYears = Math.max(0, Math.round(yearsBetween(g.savingsStartDate, g.savingsEndDate)));
+  let fvAtEnd = 0;
+  for (let k = 0; k < savingYears; k++) {
+    const yearlyContribution = monthlySIP * 12 * Math.pow(1 + step, k);
+    fvAtEnd += yearlyContribution * Math.pow(1 + r, savingYears - k - 0.5);
+  }
+  const tail = Math.max(0, yearsBetween(g.savingsEndDate, g.goalDate));
+  return fvAtEnd * Math.pow(1 + r, tail);
+}
+function fvOfSIP(g, monthlySIP) { return g.sipMode === "stepup" ? fvStepUpSIP(g, monthlySIP) : fvConstantSIP(g, monthlySIP); }
+
+function requiredMonthlySIP(g) {
+  const gap = Math.max(0, requiredFV(g) - fvOfMappedAssets(g));
+  if (gap === 0) return 0;
+  let lo = 0, hi = 1;
+  while (fvOfSIP(g, hi) < gap && hi < 1e12) hi *= 2;
+  for (let k = 0; k < 60; k++) {
+    const mid = (lo + hi) / 2;
+    if (fvOfSIP(g, mid) < gap) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+function sipSplit(g, monthly) { return { equity: monthly * (g.equityAllocPct / 100), debt: monthly * (g.debtAllocPct / 100) }; }
+function achievedRatio(g) {
+  const req = requiredFV(g);
+  if (req <= 0) return 1;
+  return Math.min(1, fvOfMappedAssets(g) / req);
+}
+
+/* ═══════════ DOM helpers ═══════════ */
+const $ = (id) => document.getElementById(id);
+const num = (id) => +$(id).value || 0;
+const str = (id) => $(id).value;
+
+/* ═══════════ Goal-type switching ═══════════ */
+function currentMeta() { return GOAL_META[str("goalType")]; }
+
+function applyGoalTypeUI(resetName) {
+  const meta = currentMeta();
+  $("goalIcon").innerHTML = '<i class="ti ' + meta.icon + '" aria-hidden="true"></i>';
+  $("goalDesc").textContent = meta.desc;
+  if (resetName) $("goalName").value = meta.label;
+
+  $("freqField").style.display = meta.recurringEligible ? "flex" : "none";
+  if (!meta.recurringEligible) $("isRecurring").value = "one-time";
+
+  const showEnd = meta.hasRange || (meta.recurringEligible && str("isRecurring") === "recurring");
+  $("goalEndField").style.display = showEnd ? "flex" : "none";
+  $("goalDateLabel").textContent = meta.hasRange ? "Goal start date" : "Goal date";
+}
+
+$("goalType").addEventListener("change", () => { applyGoalTypeUI(true); render(); });
+$("isRecurring").addEventListener("change", () => { applyGoalTypeUI(false); render(); });
+
+/* ═══════════ Allocation linking ═══════════ */
+$("equityAllocPct").addEventListener("input", () => {
+  const v = Math.max(0, Math.min(100, num("equityAllocPct")));
+  $("debtAllocPct").value = 100 - v;
+  render();
+});
+$("debtAllocPct").addEventListener("input", () => {
+  const v = Math.max(0, Math.min(100, num("debtAllocPct")));
+  $("equityAllocPct").value = 100 - v;
+  render();
+});
+
+/* ═══════════ SIP mode toggle ═══════════ */
+$("sipMode").addEventListener("change", () => {
+  $("stepUpField").style.display = str("sipMode") === "stepup" ? "flex" : "none";
+  render();
+});
+
+/* ═══════════ Wire remaining inputs ═══════════ */
+const plainIds = [
+  "goalName", "goalDate", "goalEndDate", "goalAmountPV", "priority",
+  "savingsStartDate", "savingsEndDate", "inflation", "equityReturn", "debtReturn",
+  "mappedEquity", "mappedDebt", "mappedHybrid", "mappedOthers", "stepUpPct",
+];
+plainIds.forEach((id) => { const el = $(id); if (el) el.addEventListener("input", render); });
+
+/* ═══════════ Core compute + render ═══════════ */
+let LAST = null;
+
+function compute() {
+  const meta = currentMeta();
+  const hasRangeEffective = meta.hasRange || (meta.recurringEligible && str("isRecurring") === "recurring");
+  const g = {
+    type: str("goalType"),
+    name: str("goalName"),
+    hasRangeEffective,
+    goalDate: str("goalDate"),
+    goalEndDate: str("goalEndDate"),
+    goalAmountPV: num("goalAmountPV"),
+    savingsStartDate: str("savingsStartDate"),
+    savingsEndDate: str("savingsEndDate"),
+    equityAllocPct: num("equityAllocPct"),
+    debtAllocPct: num("debtAllocPct"),
+    inflation: num("inflation"),
+    equityReturn: num("equityReturn"),
+    debtReturn: num("debtReturn"),
+    mappedEquity: num("mappedEquity"),
+    mappedDebt: num("mappedDebt"),
+    mappedHybrid: num("mappedHybrid"),
+    mappedOthers: num("mappedOthers"),
+    sipMode: str("sipMode"),
+    stepUpPct: num("stepUpPct"),
+    priority: str("priority"),
+  };
+  const req = requiredFV(g);
+  const mappedFV = fvOfMappedAssets(g);
+  const sip = requiredMonthlySIP(g);
+  const split = sipSplit(g, sip);
+  const ratio = achievedRatio(g);
+  const years = Math.max(0, yearsBetween(todayISO(), g.goalDate));
+  return { g, req, mappedFV, sip, split, ratio, years };
+}
+
+function render() {
+  applyGoalTypeUI(false);
+  const d = compute();
+  LAST = d;
+  const { g, req, mappedFV, sip, split, ratio, years } = d;
+
+  $("allocEqBar").style.width = g.equityAllocPct + "%";
+  $("allocDtBar").style.width = g.debtAllocPct + "%";
+  $("allocEqLabel").textContent = g.equityAllocPct + "%";
+  $("allocDtLabel").textContent = g.debtAllocPct + "%";
+
+  $("outSIP").textContent = fmtINR(sip);
+  $("outSIPSplit").textContent = sip > 0 ? "Equity " + fmtINR(split.equity) + " · Debt " + fmtINR(split.debt) : "Goal already fully covered by mapped assets";
+
+  $("outGoalPV").textContent = fmtINR(g.goalAmountPV);
+  $("outRequiredFV").textContent = fmtINR(req);
+  $("outYearsToGoal").textContent = years.toFixed(1) + " yrs";
+
+  $("outMappedToday").textContent = fmtINR(g.mappedEquity + g.mappedDebt + g.mappedHybrid + g.mappedOthers);
+  $("outProjectedMapped").textContent = fmtINR(mappedFV);
+
+  const pct = Math.round(ratio * 100);
+  $("covBarFill").style.width = pct + "%";
+  $("covPct").textContent = pct + "% covered by current assets";
+
+  const badge = $("statusBadge");
+  if (ratio >= 1) {
+    badge.className = "status-badge on-track";
+    badge.innerHTML = '<i class="ti ti-circle-check" aria-hidden="true"></i> On Track';
+  } else if (ratio >= 0.5) {
+    badge.className = "status-badge partial";
+    badge.innerHTML = '<i class="ti ti-alert-triangle" aria-hidden="true"></i> Partial';
+  } else {
+    badge.className = "status-badge at-risk";
+    badge.innerHTML = '<i class="ti ti-alert-octagon" aria-hidden="true"></i> At Risk';
+  }
+}
+
+/* Report builder (single goal only, no multi-goal aggregation) */
+function buildReportHtml() {
+  const d = LAST || compute();
+  const { g, req, mappedFV, sip, split, ratio, years } = d;
+  const meta = GOAL_META[g.type];
+  const dateStr = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+
+  const rawHref = typeof window !== "undefined" ? window.location.href : "";
+  const revisitUrl = /^https?:\/\//i.test(rawHref) ? rawHref : "https://manandua.in/goal-planner.html";
+
+  const status = ratio >= 1 ? { label: "ON TRACK", color: "#3a6b4f", bg: "#e9f2ec" }
+    : ratio >= 0.5 ? { label: "PARTIAL", color: "#93731f", bg: "#f7f0dd" }
+    : { label: "AT RISK", color: "#a8483a", bg: "#fbeeec" };
+
+  const inputRows = [
+    ["Goal type", meta.label],
+    [g.hasRangeEffective ? "Goal start date" : "Goal date", new Date(g.goalDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })],
+  ];
+  if (g.hasRangeEffective && g.goalEndDate) inputRows.push(["Goal end date", new Date(g.goalEndDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })]);
+  inputRows.push(["Goal amount (today's value)", fmtINR(g.goalAmountPV)]);
+  inputRows.push(["Priority", g.priority]);
+  inputRows.push(["Savings window", new Date(g.savingsStartDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) + " → " + new Date(g.savingsEndDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })]);
+  inputRows.push(["Allocation", "Equity " + g.equityAllocPct + "% · Debt " + g.debtAllocPct + "%"]);
+  inputRows.push(["Assumptions", "Inflation " + g.inflation + "% · Equity " + g.equityReturn + "% · Debt " + g.debtReturn + "%"]);
+  inputRows.push(["SIP mode", g.sipMode === "stepup" ? "Step-up (" + g.stepUpPct + "%/yr)" : "Constant"]);
+
+  const insight = ratio >= 1
+    ? "Your currently mapped assets are projected to fully fund this goal without any additional SIP. Review annually and redirect any surplus SIP capacity to other goals."
+    : ratio >= 0.5
+      ? "You're broadly on track for this goal. Starting the SIP shown above, split by your chosen equity/debt allocation, should close the remaining gap comfortably."
+      : "There's a meaningful gap between what's currently mapped and what this goal will need. Starting the recommended SIP as early as possible, and reviewing the allocation, will materially improve the odds of hitting this goal on time.";
+
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${meta.label} Goal Report · Meridian</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,Segoe UI,Roboto,Helvetica,sans-serif;max-width:860px;margin:0 auto;padding:48px 44px;color:#1c1917;background:#faf8f3;line-height:1.5}
+.brand{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #1d2e28;margin-bottom:28px}
+.brand-mark{font-size:11px;letter-spacing:2px;color:#1d2e28;font-weight:700}
+.brand-date{font-size:12px;color:#8c8070}
+.title{font-family:Georgia,serif;color:#1d2e28;font-size:30px;font-weight:700;letter-spacing:.3px;margin:0 0 6px}
+.lede{color:#4a4038;font-size:13px;margin-bottom:20px;max-width:600px}
+.status-pill{display:inline-block;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:1.2px;background:${status.bg};color:${status.color};margin-bottom:18px;text-transform:uppercase}
+.hero-card{background:#1d2e28;border-radius:12px;padding:22px 26px;color:#fff;margin-bottom:26px}
+.hero-card .lbl{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#cfa54f;font-weight:600;margin-bottom:8px}
+.hero-card .val{font-size:28px;font-weight:700}
+.hero-card .sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px}
+h2{font-size:13px;color:#1d2e28;margin:24px 0 12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:#fff;border:1px solid rgba(42,64,56,0.12);border-radius:10px;padding:14px 16px}
+.stat .lbl{font-size:10px;color:#8c8070;letter-spacing:.6px;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.stat .val{font-size:17px;font-weight:700;color:#1c1917}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border:1px solid rgba(42,64,56,0.12);border-radius:10px;overflow:hidden}
+td{padding:9px 12px;border-bottom:1px solid #f0ece2}
+tr:last-child td{border-bottom:none}
+.kv td:first-child{color:#8c8070}
+.kv td:last-child{text-align:right;font-weight:600;color:#1d2e28}
+.bar-wrap{background:#ede8de;border-radius:8px;height:24px;overflow:hidden;margin:10px 0 4px;position:relative}
+.bar{height:100%;background:linear-gradient(90deg,#2a4038,#cfa54f);width:${Math.min(100, Math.max(0, ratio * 100))}%}
+.bar-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#1d2e28;text-shadow:0 1px 3px rgba(255,255,255,0.55)}
+.insight{background:#1d2e28;color:#ece7dd;padding:18px 22px;border-radius:10px;font-size:13px;line-height:1.65;margin-top:22px}
+.insight .tag{font-size:10px;letter-spacing:2px;font-weight:700;color:#cfa54f;text-transform:uppercase;margin-bottom:8px;display:block}
+.cta{margin-top:26px;padding:22px 24px;border-radius:14px;background:linear-gradient(135deg,#1d2e28 0%,#3a5448 100%);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta .cta-title{font-size:15px;font-weight:800;margin-bottom:4px}
+.cta .cta-sub{font-size:11.5px;color:#e6ded0;max-width:440px;line-height:1.5}
+.cta .cta-btn{display:inline-block;padding:10px 18px;background:#cfa54f;color:#1d2e28;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;border-radius:8px;text-decoration:none;white-space:nowrap}
+.footer{margin-top:22px;padding-top:16px;border-top:1px solid rgba(42,64,56,0.12);font-size:10px;color:#8c8070;text-align:center;line-height:1.6}
+</style></head><body>
+
+<div class="brand">
+  <div class="brand-mark">MERIDIAN &middot; GOAL PLANNING REPORT</div>
+  <div class="brand-date">${dateStr}</div>
+</div>
+
+<div class="status-pill">${status.label}</div>
+<h1 class="title">${escapeHtml(g.name) || meta.label}</h1>
+<p class="lede">${meta.label} goal &middot; ${years.toFixed(1)} years away &middot; Target ${fmtINR(g.goalAmountPV)} in today's value</p>
+
+<div class="hero-card">
+  <div class="lbl">Required Monthly SIP</div>
+  <div class="val">${fmtINR(sip)}</div>
+  <div class="sub">${sip > 0 ? "Equity " + fmtINR(split.equity) + " · Debt " + fmtINR(split.debt) : "Goal already fully covered by mapped assets"}</div>
+</div>
+
+<h2>Coverage from current assets</h2>
+<div class="bar-wrap"><div class="bar"></div><div class="bar-label">${Math.round(ratio * 100)}% Covered</div></div>
+
+<h2>Key figures</h2>
+<div class="stat-grid">
+  <div class="stat"><div class="lbl">Required at goal date</div><div class="val">${fmtINR(req)}</div></div>
+  <div class="stat"><div class="lbl">Mapped today</div><div class="val">${fmtINR(g.mappedEquity + g.mappedDebt + g.mappedHybrid + g.mappedOthers)}</div></div>
+  <div class="stat"><div class="lbl">Projected (mapped)</div><div class="val">${fmtINR(mappedFV)}</div></div>
+</div>
+
+<h2>Inputs</h2>
+<table class="kv">
+<tbody>
+${inputRows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}
+</tbody>
+</table>
+
+<div class="insight"><span class="tag">Advisor insight</span>${insight}</div>
+
+<div class="cta">
+  <div>
+    <div class="cta-title">Life changes. So should your plan.</div>
+    <div class="cta-sub">Salary hike, new SIP, or a new goal? Come back any time and re-run this planner. The numbers update instantly.</div>
+  </div>
+  <a class="cta-btn" href="${revisitUrl}">Revisit Planner →</a>
+</div>
+
+<div class="footer">Indicative figures based on the assumptions above. This is a single-goal projection intended for planning purposes and does not constitute investment advice. For a consolidated, multi-goal financial plan, please consult your advisor. Generated by manandua.in</div>
+
+</body></html>`;
+}
+
+async function downloadJpeg() {
+  const btn = $("downloadJpegBtn");
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" aria-hidden="true"></i> Generating JPEG…';
+  try {
+    if (typeof html2canvas === "undefined") throw new Error("html2canvas did not load");
+    const html = buildReportHtml();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const styleTag = doc.querySelector("style") ? doc.querySelector("style").outerHTML : "";
+    const bodyContent = doc.body.innerHTML;
+
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "fixed";
+    wrapper.style.top = "0";
+    wrapper.style.left = "-10000px";
+    wrapper.style.width = "860px";
+    wrapper.style.background = "#faf8f3";
+    wrapper.innerHTML = styleTag + '<div class="report-root">' + bodyContent + "</div>";
+    const scoped = wrapper.querySelector("style");
+    if (scoped) {
+      scoped.textContent = (scoped.textContent || "").replace(/(^|\})\s*body\s*\{/g, "$1 .report-root{");
+    }
+    document.body.appendChild(wrapper);
+
+    const canvas = await html2canvas(wrapper.querySelector(".report-root"), { backgroundColor: "#faf8f3", scale: 2, useCORS: true });
+    document.body.removeChild(wrapper);
+
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "goal-report-" + str("goalType") + "-" + new Date().toISOString().slice(0, 10) + ".jpg";
+    document.body.appendChild(a); a.click(); a.remove();
+  } catch (err) {
+    console.error(err);
+    alert("Could not generate report: " + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
+/* ═══════════ Wire up buttons + nav (before first render) ═══════════ */
+$("downloadJpegBtn").addEventListener("click", downloadJpeg);
+
+const ham = $("ham"), mob = $("mobMenu");
+ham.addEventListener("click", function () {
+  const open = mob.style.display === "block";
+  mob.style.display = open ? "none" : "block";
+  ham.setAttribute("aria-expanded", String(!open));
+});
+mob.querySelectorAll("a").forEach((el) => el.addEventListener("click", () => { mob.style.display = "none"; ham.setAttribute("aria-expanded", "false"); }));
+
+window.addEventListener("scroll", function () {
+  document.querySelector(".nav").style.boxShadow = window.scrollY > 20 ? "0 2px 24px rgba(28,25,23,0.07)" : "none";
+});
+
+/* ═══════════ Init defaults (dates are set at runtime, in the visitor's local time) ═══════════ */
+function initDefaults() {
+  const t = todayISO();
+  $("goalDate").value = addYears(t, 5);
+  $("goalEndDate").value = addYears(t, 9);
+  $("savingsStartDate").value = t;
+  $("savingsEndDate").value = addYears(t, 5);
+  applyGoalTypeUI(true);
+}
+
+initDefaults();
+render();
+</script>
+</body>
+</html>

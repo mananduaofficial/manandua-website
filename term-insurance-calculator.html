@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free term insurance cover calculator by Manan Dua. Estimate the life cover you need using the Human Life Value (HLV) method or a Need Based analysis.">
+<title>Term Insurance Cover Calculator · Meridian Tools by Manan Dua</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+:root {
+  --forest:    #2a4038;
+  --forest-d:  #1d2e28;
+  --forest-m:  #3a5448;
+  --forest-l:  #4a6858;
+  --gold:      #b8903a;
+  --gold-l:    #cfa54f;
+  --gold-pale: #f0e6cc;
+  --cream:     #f5f0e8;
+  --cream-d:   #ede8de;
+  --linen:     #faf8f3;
+  --warm:      #7a6e60;
+  --text:      #1c1917;
+  --soft:      #4a4038;
+  --mute:      #8c8070;
+  --border:    rgba(42,64,56,0.10);
+  --border-g:  rgba(184,144,58,0.25);
+  --good:      #3a6b4f;
+  --bad:       #a8483a;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'Inter', system-ui, sans-serif;
+  --r:         6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--linen); color: var(--text); line-height: 1.6; }
+img  { max-width: 100%; display: block; }
+a    { text-decoration: none; color: inherit; }
+
+/* ═══ NAV ═══ */
+.nav {
+  background: var(--linen);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand svg { flex-shrink: 0; }
+.nav-brand-txt { display: flex; flex-direction: column; line-height: 1.15; }
+.nav-brand-txt .nb-name { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--forest-d); letter-spacing: 0.2px; }
+.nav-brand-txt .nb-sub { font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--mute); }
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-link { font-size: 13.5px; font-weight: 400; color: var(--soft); cursor: pointer; transition: color .15s; letter-spacing: 0.1px; white-space: nowrap; }
+.nav-link:hover, .nav-link.active { color: var(--forest); }
+.nav-link.active { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.btn-book {
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  background: var(--forest); color: #fff;
+  border: none; border-radius: var(--r); padding: 11px 24px;
+  cursor: pointer; transition: background .15s; letter-spacing: 0.2px;
+}
+.btn-book:hover { background: var(--forest-m); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
+.mob-menu {
+  display: none; position: fixed; top: 68px; left: 0; right: 0;
+  background: var(--linen); border-bottom: 0.5px solid var(--border);
+  padding: 1.5rem 2rem; z-index: 99; box-shadow: 0 8px 32px rgba(28,25,23,0.08);
+}
+.mob-menu a { display: block; font-size: 15px; color: var(--soft); padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+.mob-menu a:last-of-type { border-bottom: none; }
+.mob-menu .btn-book { display: block; width: 100%; text-align: center; margin-top: 16px; }
+
+/* ═══ HERO ═══ */
+.hero { background: var(--forest-d); padding: 56px 3rem 48px; position: relative; overflow: hidden; }
+.hero::after {
+  content: ''; position: absolute; top: -40%; right: -8%;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-in { max-width: 1240px; margin: 0 auto; position: relative; }
+.crumb { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 6px; }
+.crumb:hover { color: var(--gold-l); }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--gold-l); margin-bottom: 18px;
+}
+.hero-badge::before { content: ''; display: inline-block; width: 32px; height: 0.5px; background: var(--gold); }
+.hero h1 { font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.14; color: #fff; max-width: 680px; }
+.hero h1 em { color: var(--gold-l); font-style: italic; }
+.hero-sub { font-size: 14.5px; font-weight: 300; color: rgba(255,255,255,0.55); max-width: 560px; margin-top: 14px; line-height: 1.8; }
+.hero-switch { margin-top: 26px; display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-switch a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: rgba(255,255,255,0.7);
+  border: 0.5px solid rgba(255,255,255,0.18); border-radius: 20px;
+  padding: 9px 18px; transition: border-color .15s, color .15s;
+}
+.hero-switch a:hover { border-color: var(--gold); color: var(--gold-l); }
+
+/* ═══ SECTION WRAP ═══ */
+.sec { padding: 48px 3rem 88px; }
+.sec-in { max-width: 1240px; margin: 0 auto; }
+
+.layout-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 26px; align-items: flex-start; }
+
+/* ═══ PANELS (input cards) ═══ */
+.panel {
+  background: #fff; border: 0.5px solid var(--border); border-radius: 12px;
+  padding: 30px; box-shadow: 0 2px 24px rgba(28,25,23,0.04); margin-bottom: 22px;
+}
+.panel-hd h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--forest-d); }
+.panel-hd p.panel-sub { font-size: 12px; color: var(--mute); margin-top: 4px; line-height: 1.6; }
+.panel-body { margin-top: 22px; display: flex; flex-direction: column; gap: 22px; }
+.panel-body.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+
+/* ═══ FIELDS ═══ */
+.fld { display: flex; flex-direction: column; gap: 9px; }
+.fld-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fld-top label { font-size: 12.5px; color: var(--soft); font-weight: 400; }
+.fld-box {
+  display: flex; align-items: center; gap: 4px; background: var(--linen);
+  border: 0.5px solid var(--border); border-radius: var(--r); padding: 6px 10px;
+}
+.fld-box span { font-size: 11.5px; color: var(--mute); white-space: nowrap; }
+.fld-box input {
+  width: 92px; border: none; background: transparent; text-align: right;
+  font-family: var(--sans); font-size: 13.5px; font-weight: 600; color: var(--forest-d);
+}
+.fld-box input:focus { outline: none; }
+.fld-box.wide input { width: 140px; }
+.fld-box.wide { padding: 9px 12px; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 3px; border-radius: 3px;
+  background: var(--cream-d); outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--gold); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border-g); cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 13px; height: 13px; border-radius: 50%; background: var(--gold); border: 2px solid #fff; cursor: pointer;
+}
+
+.sel {
+  width: 100%; background: var(--linen); border: 0.5px solid var(--border);
+  border-radius: var(--r); padding: 10px 34px 10px 13px; font-size: 13px;
+  color: var(--text); font-family: var(--sans); appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c8070' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; cursor: pointer;
+}
+.sel:focus { outline: none; border-color: var(--gold); }
+.fld-hint { font-size: 11px; color: var(--mute); line-height: 1.6; }
+.fld-hint.warn { color: var(--bad); }
+
+.income-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; }
+.income-row .fld { flex: 1; min-width: 190px; }
+.income-row .fld-freq { width: 140px; }
+.income-row .fld-freq label { font-size: 11px; color: var(--mute); display: block; margin-bottom: 8px; }
+
+/* ═══ ASSET BLOCKS ═══ */
+.asset-block { border: 0.5px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.asset-block + .asset-block { margin-top: 14px; }
+.asset-hd { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; user-select: none; }
+.asset-hd input[type=checkbox] {
+  appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border-g); border-radius: 4px;
+  margin-top: 2px; flex-shrink: 0; cursor: pointer; position: relative; background: var(--linen);
+}
+.asset-hd input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
+.asset-hd input[type=checkbox]:checked::after {
+  content: ''; position: absolute; left: 5px; top: 1px; width: 5px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+.asset-name { font-size: 14.5px; font-weight: 500; color: var(--forest-d); }
+.asset-sub { font-size: 11.5px; color: var(--mute); margin-top: 2px; }
+.asset-content { margin-top: 18px; display: none; flex-direction: column; gap: 18px; padding-top: 16px; border-top: 0.5px dashed var(--border); }
+.asset-content.open { display: flex; }
+.asset-content .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.mini-panel { border: 0.5px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: var(--linen); }
+
+/* ═══ SIDEBAR / RESULTS ═══ */
+.side { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 16px; }
+.hero-stat {
+  background: var(--forest-d); border-radius: 12px; padding: 24px 26px; position: relative; overflow: hidden;
+}
+.hero-stat::after {
+  content: ''; position: absolute; top: -30%; right: -8%; width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.14) 0%, transparent 70%);
+}
+.hero-stat .hs-l { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-l); position: relative; }
+.hero-stat .hs-v { font-family: var(--serif); font-size: 34px; font-weight: 500; color: #fff; margin-top: 8px; position: relative; }
+.hero-stat .hs-sub { font-size: 12.5px; color: rgba(255,255,255,0.5); margin-top: 4px; position: relative; }
+
+.res-card { background: #fff; border: 0.5px solid var(--border); border-radius: 10px; padding: 20px 22px; }
+.res-card h4 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
+.res-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; }
+.res-row span:first-child { color: var(--mute); }
+.res-row span:last-child { font-weight: 600; color: var(--forest-d); }
+.res-row.tot { border-top: 0.5px solid var(--border); margin-top: 4px; padding-top: 10px; }
+.res-row.empty { color: var(--mute); font-size: 12px; padding: 4px 0; }
+
+.cov-bar { height: 10px; border-radius: 6px; background: var(--cream-d); overflow: hidden; margin: 12px 0 6px; }
+.cov-bar-fill { height: 100%; background: linear-gradient(90deg, var(--forest), var(--gold)); border-radius: 6px; transition: width .3s; }
+.cov-pct { font-size: 11.5px; color: var(--mute); }
+
+.gap-card { border-radius: 10px; padding: 20px 22px; border: 0.5px solid var(--border); }
+.gap-card.neg { background: #fbeeec; border-color: rgba(168,72,58,0.25); }
+.gap-card.pos { background: #eef3ef; border-color: rgba(58,107,79,0.25); }
+.gap-card h4 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--mute); margin-bottom: 8px; }
+.gap-card .gv { font-family: var(--serif); font-size: 24px; font-weight: 500; }
+.gap-card.neg .gv { color: var(--bad); }
+.gap-card.pos .gv { color: var(--good); }
+.gap-card .gs { font-size: 12px; color: var(--mute); margin-top: 4px; }
+
+.btn-gold-full {
+  width: 100%; background: var(--gold); color: #fff; border: none; border-radius: var(--r);
+  padding: 13px 20px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans);
+}
+.btn-gold-full:hover { background: #a37f32; }
+.btn-gold-full:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-outline-full {
+  width: 100%; background: transparent; color: var(--forest); border: 1px solid var(--forest); border-radius: var(--r);
+  padding: 12px 20px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: all .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans);
+}
+.btn-outline-full:hover { background: var(--forest); color: #fff; }
+.dl-note { font-size: 11px; color: var(--mute); text-align: center; line-height: 1.6; }
+.method-tabs { display: inline-flex; gap: 6px; background: var(--linen); border: 0.5px solid var(--border); border-radius: 10px; padding: 5px; }
+.method-tab { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 20px; border: none; background: transparent; color: var(--soft); border-radius: 7px; cursor: pointer; transition: all .15s; }
+.method-tab:hover { color: var(--forest); }
+.method-tab.active { background: var(--gold); color: #fff; }
+
+.note-strip { margin-top: 4px; font-size: 11.5px; color: var(--mute); line-height: 1.7; }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--forest-d); padding: 48px 3rem 28px; }
+.footer-in { max-width: 1240px; margin: 0 auto; }
+.footer-top { display: flex; gap: 56px; flex-wrap: wrap; padding-bottom: 28px; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.ft-brand { flex: 1.3; min-width: 200px; display: flex; align-items: flex-start; gap: 12px; }
+.ft-logo { font-family: var(--serif); font-size: 19px; font-weight: 500; color: #fff; }
+.ft-logo em { color: var(--gold-l); font-style: normal; }
+.ft-brand p { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.35); margin-top: 8px; line-height: 1.8; max-width: 240px; }
+.ft-links { display: flex; gap: 48px; flex-wrap: wrap; }
+.ft-col h5 { font-size: 10px; font-weight: 500; letter-spacing: 0.9px; text-transform: uppercase; color: rgba(255,255,255,0.30); margin-bottom: 12px; }
+.ft-col a { display: block; font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 8px; transition: color .15s; }
+.ft-col a:hover { color: var(--gold-l); }
+.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-top: 18px; align-items: flex-start; }
+.footer-bottom span { font-size: 11px; color: rgba(255,255,255,0.18); }
+.ft-disc { font-size: 10px; color: rgba(255,255,255,0.16); max-width: 480px; line-height: 1.6; }
+
+@media(max-width: 1080px) {
+  .layout-grid { grid-template-columns: 1fr; }
+  .side { position: static; }
+}
+@media(max-width: 900px) {
+  .nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .hero { padding: 44px 1.5rem 40px; }
+  .hero h1 { font-size: 32px; }
+  .sec { padding: 36px 1.5rem 56px; }
+  .panel { padding: 22px; }
+  .panel-body.grid2, .asset-content .grid2, .income-row { grid-template-columns: 1fr; }
+  .income-row .fld-freq { width: 100%; }
+  .footer { padding: 40px 1.5rem 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="https://manandua.in" class="nav-brand">
+    <svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true">
+      <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+      <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+      <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+      <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+    </svg>
+    <div class="nav-brand-txt">
+      <span class="nb-name">Meridian</span>
+      <span class="nb-sub">Tools by Manan Dua</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="https://manandua.in" class="nav-link">Home</a>
+    <a href="financial-tools.html" class="nav-link">All Tools</a>
+    <a href="https://manandua.in#contact" class="nav-link">Contact</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+    <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="https://manandua.in">Home</a>
+  <a href="financial-tools.html">All Tools</a>
+  <a href="https://manandua.in#contact">Contact</a>
+  <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-in">
+    <a href="https://manandua.in" class="crumb"><i class="ti ti-arrow-left" aria-hidden="true"></i> manandua.in</a>
+    <div class="hero-badge">Meridian Financial Tools</div>
+    <h1>Know exactly how much <em>life cover</em> you need.</h1>
+    <p class="hero-sub">Estimate your ideal term insurance cover using the Human Life Value or Need Based method.</p>
+    <div class="hero-switch">
+      <a href="retirement-corpus-calculator.html">Also plan your retirement corpus <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      <a href="financial-tools.html">Explore all Meridian tools <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</header>
+
+<!-- ══ CALCULATOR ══ -->
+<section class="sec">
+  <div class="sec-in">
+
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px; flex-wrap:wrap;">
+      <label for="methodMode" style="font-size:12.5px; color:var(--soft); font-weight:500;">Method</label>
+      <select class="sel" id="methodMode" style="width:auto; min-width:220px;">
+        <option value="hlv" selected>Human Life Value (HLV)</option>
+        <option value="need">Need Based</option>
+      </select>
+    </div>
+
+    <div class="layout-grid">
+
+      <!-- LEFT: INPUTS -->
+      <div class="inputs-col">
+
+        <!-- HLV PANEL -->
+        <div id="hlvPanel">
+          <div class="panel">
+            <div class="panel-hd"><h3>HLV inputs</h3><p class="panel-sub">Values your future income stream. Best for salaried earners with stable income growth.</p></div>
+            <div class="panel-body">
+              <div class="fld"><div class="fld-top"><label for="hlvIncome">Current annual income (net of tax)</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvIncome" value="3499080"></div></div>
+              <div class="fld"><div class="fld-top"><label for="hlvExpenses">Annual personal expenses</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvExpenses" value="1049724"></div></div>
+              <div class="res-row tot"><span>Net income for family</span><span id="hlvNetIncome">—</span></div>
+              <div class="fld">
+                <div class="fld-top"><label for="hlvGrowth">Income growth rate</label><div class="fld-box"><input type="number" id="hlvGrowth" value="8" step="0.1"><span>%</span></div></div>
+                <input type="range" id="hlvGrowthR" min="0" max="20" step="0.1" value="8">
+              </div>
+              <div class="fld">
+                <div class="fld-top"><label for="hlvDiscount">Discount rate / investment return</label><div class="fld-box"><input type="number" id="hlvDiscount" value="7" step="0.1"><span>%</span></div></div>
+                <input type="range" id="hlvDiscountR" min="0" max="20" step="0.1" value="7">
+              </div>
+              <div class="fld">
+                <div class="fld-top"><label for="hlvYears">Working years remaining</label><div class="fld-box"><input type="number" id="hlvYears" value="24"><span>yrs</span></div></div>
+                <input type="range" id="hlvYearsR" min="1" max="45" step="1" value="24">
+              </div>
+              <div class="fld"><div class="fld-top"><label for="hlvSavings">Current savings &amp; investments</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvSavings" value="6990000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="hlvExistingCover">Existing life cover</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvExistingCover" value="0"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEED-BASED PANEL -->
+        <div id="needPanel" style="display:none;">
+          <div class="panel">
+            <div class="panel-hd"><h3>Family income replacement</h3><p class="panel-sub">Sums your family's actual money needs. Best when income is variable or you want a goal led plan.</p></div>
+            <div class="panel-body">
+              <div class="fld"><div class="fld-top"><label for="needExpenses">Annual family expenses</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="needExpenses" value="1200000"></div></div>
+              <div class="fld">
+                <div class="fld-top"><label for="needInflation">Inflation rate</label><div class="fld-box"><input type="number" id="needInflation" value="6" step="0.1"><span>%</span></div></div>
+                <input type="range" id="needInflationR" min="0" max="15" step="0.1" value="6">
+              </div>
+              <div class="fld">
+                <div class="fld-top"><label for="needReturn">Expected return on corpus</label><div class="fld-box"><input type="number" id="needReturn" value="8" step="0.1"><span>%</span></div></div>
+                <input type="range" id="needReturnR" min="0" max="20" step="0.1" value="8">
+              </div>
+              <div class="fld">
+                <div class="fld-top"><label for="needYears">Years of support needed</label><div class="fld-box"><input type="number" id="needYears" value="25"><span>yrs</span></div></div>
+                <input type="range" id="needYearsR" min="1" max="45" step="1" value="25">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hd"><h3>Outstanding liabilities</h3></div>
+            <div class="panel-body grid2">
+              <div class="fld"><div class="fld-top"><label for="homeLoan">Home loan outstanding</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="homeLoan" value="3000000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="otherLoans">Other loans (car, personal)</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="otherLoans" value="200000"></div></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hd"><h3>Future goals</h3><p class="panel-sub">Enter these at future value, already inflated.</p></div>
+            <div class="panel-body grid2">
+              <div class="fld"><div class="fld-top"><label for="childEducation">Children's education</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="childEducation" value="5000000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="childMarriage">Children's marriage</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="childMarriage" value="2500000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="otherGoals">Other goals</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="otherGoals" value="0"></div></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hd"><h3>Existing resources</h3></div>
+            <div class="panel-body grid2">
+              <div class="fld"><div class="fld-top"><label for="needSavings">Current savings &amp; investments</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="needSavings" value="6990000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="needExistingCover">Existing life cover</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="needExistingCover" value="0"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="note-strip">Indicative figures based on standard actuarial assumptions. Actual premiums, underwriting, and payouts depend on the insurer. Please confirm details with a licensed advisor before buying a policy.</p>
+      </div>
+
+      <!-- RIGHT: RESULTS -->
+      <div class="side">
+        <div class="hero-stat">
+          <div class="hs-l">Additional life cover needed</div>
+          <div class="hs-v" id="outCover">—</div>
+          <div class="hs-sub" id="outCoverCr">—</div>
+        </div>
+
+        <div class="res-card" id="hlvResultCard">
+          <h4>HLV calculation</h4>
+          <div class="res-row"><span>Net annual income for family</span><span id="rHlvNet">—</span></div>
+          <div class="res-row"><span>HLV (PV of growing annuity)</span><span id="rHlvHlv">—</span></div>
+          <div class="res-row"><span>&minus; Current savings</span><span id="rHlvSavings">—</span></div>
+          <div class="res-row tot"><span>&minus; Existing life cover</span><span id="rHlvCover">—</span></div>
+        </div>
+
+        <div class="res-card" id="needResultCard" style="display:none;">
+          <h4>Need Based calculation</h4>
+          <div class="res-row"><span>PV of family expenses</span><span id="rNeedIncome">—</span></div>
+          <div class="res-row"><span>+ Outstanding liabilities</span><span id="rNeedLiab">—</span></div>
+          <div class="res-row"><span>+ Future goals</span><span id="rNeedGoals">—</span></div>
+          <div class="res-row tot"><span>Total financial need</span><span id="rNeedTotal">—</span></div>
+          <div class="res-row"><span>&minus; Savings &amp; existing cover</span><span id="rNeedAssets">—</span></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn-gold-full" id="downloadJpegBtn"><i class="ti ti-download" aria-hidden="true"></i> Download report</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel" style="margin-top:22px;">
+      <div class="panel-hd"><h3>Which method should I use?</h3></div>
+      <div class="panel-body">
+        <div style="font-size:13px; color:var(--soft); line-height:1.7;"><b style="color:var(--forest-d)">HLV</b> values your future income stream. Best for salaried earners with stable income growth.</div>
+        <div style="font-size:13px; color:var(--soft); line-height:1.7;"><b style="color:var(--forest-d)">Need Based</b> sums your family's actual money needs (liabilities, expenses, goals). Best when income is variable or you want a goal led plan.</div>
+        <div style="font-size:13px; color:var(--soft); line-height:1.7;">A common practice is to compute both and take the <b style="color:var(--forest-d)">higher</b> of the two as your target cover.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-in">
+    <div class="footer-top">
+      <div class="ft-brand">
+        <svg width="30" height="30" viewBox="0 0 200 200" aria-hidden="true" style="flex-shrink:0;">
+          <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+          <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+          <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+          <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+        </svg>
+        <div>
+          <div class="ft-logo">Meridian<em>.</em></div>
+          <p>Free financial tools from Manan Dua, independent financial guidance for those building wealth with clarity and purpose.</p>
+        </div>
+      </div>
+      <div class="ft-links">
+        <div class="ft-col">
+          <h5>Manan Dua</h5>
+          <a href="financial-tools.html">All Tools</a>
+          <a href="https://manandua.in">Home</a>
+          <a href="https://manandua.in#resources">Blog</a>
+          <a href="https://manandua.in#newsletter">Meridian Newsletter</a>
+        </div>
+        <div class="ft-col">
+          <h5>Legal</h5>
+          <a href="https://manandua.in/privacy.html">Privacy Policy</a>
+          <a href="https://manandua.in/disclaimer.html">Disclaimer</a>
+        </div>
+        <div class="ft-col">
+          <h5>Connect</h5>
+          <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://manandua.in#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span class="ft-disc">This calculator is for illustrative purposes only and does not constitute financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
+      <span>manandua.in</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════ Math (mirrors the original lovable calculator's logic) ═══════════ */
+const fmtINR = (n) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(isFinite(n) ? n : 0);
+const toCr = (n) => (n / 1e7).toFixed(2) + " Cr";
+
+/* PV of a growing annuity: net ÷ (r − g) × (1 − ((1+g)/(1+r))^n); net × n when r = g */
+function pvGrowingAnnuity(net, g, r, n) {
+  if (r === g) return net * n;
+  return (net / (r - g)) * (1 - Math.pow((1 + g) / (1 + r), n));
+}
+
+/* ═══════════ DOM helpers ═══════════ */
+const $ = (id) => document.getElementById(id);
+const num = (id) => +$(id).value || 0;
+
+/* keep each numeric input's paired range slider in sync both ways */
+function linkSlider(numId, rangeId) {
+  const n = $(numId), r = $(rangeId);
+  if (!n || !r) return;
+  n.addEventListener("input", () => { r.value = n.value; render(); });
+  r.addEventListener("input", () => { n.value = r.value; render(); });
+}
+[
+  ["hlvGrowth", "hlvGrowthR"], ["hlvDiscount", "hlvDiscountR"], ["hlvYears", "hlvYearsR"],
+  ["needInflation", "needInflationR"], ["needReturn", "needReturnR"], ["needYears", "needYearsR"],
+].forEach(([a, b]) => linkSlider(a, b));
+
+const plainIds = [
+  "hlvIncome", "hlvExpenses", "hlvSavings", "hlvExistingCover",
+  "needExpenses", "homeLoan", "otherLoans", "childEducation", "childMarriage", "otherGoals",
+  "needSavings", "needExistingCover",
+];
+plainIds.forEach((id) => { const el = $(id); if (el) el.addEventListener("input", render); });
+
+/* ═══════════ Method switching ═══════════ */
+let method = "hlv";
+function setMethod(m) {
+  method = m;
+  $("hlvPanel").style.display = m === "hlv" ? "block" : "none";
+  $("needPanel").style.display = m === "need" ? "block" : "none";
+  $("hlvResultCard").style.display = m === "hlv" ? "block" : "none";
+  $("needResultCard").style.display = m === "need" ? "block" : "none";
+  render();
+}
+$("methodMode").addEventListener("change", () => setMethod($("methodMode").value));
+
+/* ═══════════ Core compute + render ═══════════ */
+let LAST = null;
+
+function computeHlv() {
+  const income = num("hlvIncome"), expenses = num("hlvExpenses");
+  const growth = num("hlvGrowth"), discount = num("hlvDiscount"), years = num("hlvYears");
+  const savings = num("hlvSavings"), existingCover = num("hlvExistingCover");
+  const netIncome = Math.max(income - expenses, 0);
+  const hlv = pvGrowingAnnuity(netIncome, growth / 100, discount / 100, years);
+  const additional = Math.max(hlv - savings - existingCover, 0);
+  return { income, expenses, growth, discount, years, savings, existingCover, netIncome, hlv, additional, crores: additional / 1e7 };
+}
+
+function computeNeed() {
+  const annualExpenses = num("needExpenses"), inflation = num("needInflation"), returnRate = num("needReturn"), yearsSupport = num("needYears");
+  const homeLoan = num("homeLoan"), otherLoans = num("otherLoans");
+  const childEducation = num("childEducation"), childMarriage = num("childMarriage"), otherGoals = num("otherGoals");
+  const savings = num("needSavings"), existingCover = num("needExistingCover");
+
+  const incomeReplacement = pvGrowingAnnuity(annualExpenses, inflation / 100, returnRate / 100, yearsSupport);
+  const liabilities = homeLoan + otherLoans;
+  const goals = childEducation + childMarriage + otherGoals;
+  const totalNeed = incomeReplacement + liabilities + goals;
+  const assets = savings + existingCover;
+  const additional = Math.max(totalNeed - assets, 0);
+  return {
+    annualExpenses, inflation, returnRate, yearsSupport, homeLoan, otherLoans,
+    childEducation, childMarriage, otherGoals, savings, existingCover,
+    incomeReplacement, liabilities, goals, totalNeed, assets, additional, crores: additional / 1e7,
+  };
+}
+
+function render() {
+  const hlv = computeHlv();
+  const need = computeNeed();
+  const active = method === "hlv" ? hlv : need;
+  LAST = { method, hlv, need };
+
+  $("hlvNetIncome").textContent = fmtINR(hlv.netIncome);
+  $("rHlvNet").textContent = fmtINR(hlv.netIncome);
+  $("rHlvHlv").textContent = fmtINR(hlv.hlv);
+  $("rHlvSavings").textContent = fmtINR(hlv.savings);
+  $("rHlvCover").textContent = fmtINR(hlv.existingCover);
+
+  $("rNeedIncome").textContent = fmtINR(need.incomeReplacement);
+  $("rNeedLiab").textContent = fmtINR(need.liabilities);
+  $("rNeedGoals").textContent = fmtINR(need.goals);
+  $("rNeedTotal").textContent = fmtINR(need.totalNeed);
+  $("rNeedAssets").textContent = fmtINR(need.assets);
+
+  $("outCover").textContent = fmtINR(active.additional);
+  $("outCoverCr").textContent = "≈ " + toCr(active.additional);
+}
+
+/* ═══════════ Report builder (Meridian-themed) ═══════════ */
+function buildReportHtml() {
+  const d = LAST || { method, hlv: computeHlv(), need: computeNeed() };
+  const active = d.method === "hlv" ? d.hlv : d.need;
+  const methodLabel = d.method === "hlv" ? "Human Life Value (HLV)" : "Need Based Analysis";
+  const dateStr = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+
+  const rawHref = typeof window !== "undefined" ? window.location.href : "";
+  const revisitUrl = /^https?:\/\//i.test(rawHref) ? rawHref : "https://manandua.in/term-insurance-calculator.html";
+
+  const inputRows = d.method === "hlv"
+    ? [
+        ["Current annual income (net of tax)", fmtINR(d.hlv.income)],
+        ["Annual personal expenses", fmtINR(d.hlv.expenses)],
+        ["Net income for family", fmtINR(d.hlv.netIncome)],
+        ["Income growth rate", d.hlv.growth + "% p.a."],
+        ["Discount rate / investment return", d.hlv.discount + "% p.a."],
+        ["Working years remaining", d.hlv.years + " yrs"],
+        ["Current savings & investments", fmtINR(d.hlv.savings)],
+        ["Existing life cover", fmtINR(d.hlv.existingCover)],
+      ]
+    : [
+        ["Annual family expenses", fmtINR(d.need.annualExpenses)],
+        ["Inflation rate", d.need.inflation + "%"],
+        ["Expected return on corpus", d.need.returnRate + "%"],
+        ["Years of support needed", d.need.yearsSupport + " yrs"],
+        ["Home loan outstanding", fmtINR(d.need.homeLoan)],
+        ["Other loans", fmtINR(d.need.otherLoans)],
+        ["Children's education", fmtINR(d.need.childEducation)],
+        ["Children's marriage", fmtINR(d.need.childMarriage)],
+        ["Other goals", fmtINR(d.need.otherGoals)],
+        ["Current savings & investments", fmtINR(d.need.savings)],
+        ["Existing life cover", fmtINR(d.need.existingCover)],
+      ];
+
+  const calcRows = d.method === "hlv"
+    ? [
+        ["Net annual income for family", fmtINR(d.hlv.netIncome)],
+        ["HLV (PV of growing annuity)", fmtINR(d.hlv.hlv)],
+        ["Less: Current savings & investments", fmtINR(d.hlv.savings)],
+        ["Less: Existing life cover", fmtINR(d.hlv.existingCover)],
+      ]
+    : [
+        ["PV of family expenses (income replacement)", fmtINR(d.need.incomeReplacement)],
+        ["Add: Outstanding liabilities", fmtINR(d.need.liabilities)],
+        ["Add: Future goals", fmtINR(d.need.goals)],
+        ["Total financial need", fmtINR(d.need.totalNeed)],
+        ["Less: Savings & existing cover", fmtINR(d.need.assets)],
+      ];
+
+  const insight = active.additional <= 0
+    ? "Based on the inputs provided, your existing cover and savings already meet or exceed your calculated need. Review this annually, especially after income changes, new liabilities, or new dependents."
+    : "We recommend closing this gap with a pure term insurance plan, which offers the highest cover at the lowest cost. Consider running both the HLV and Need Based methods and choosing the higher figure as your target cover.";
+
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Term Insurance Cover Report · Meridian</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,Segoe UI,Roboto,Helvetica,sans-serif;max-width:860px;margin:0 auto;padding:48px 44px;color:#1c1917;background:#faf8f3;line-height:1.5}
+.brand{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #1d2e28;margin-bottom:28px}
+.brand-mark{font-size:11px;letter-spacing:2px;color:#1d2e28;font-weight:700}
+.brand-date{font-size:12px;color:#8c8070}
+.title{font-family:Georgia,serif;color:#1d2e28;font-size:32px;font-weight:700;letter-spacing:.3px;margin:0 0 6px}
+.lede{color:#4a4038;font-size:14px;margin-bottom:22px;max-width:600px}
+.status-pill{display:inline-block;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:1.2px;background:#f0e6cc;color:#93731f;margin-bottom:18px;text-transform:uppercase}
+.hero-card{background:#1d2e28;border-radius:12px;padding:22px 26px;color:#fff;margin-bottom:28px}
+.hero-card .lbl{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#cfa54f;font-weight:600;margin-bottom:8px}
+.hero-card .val{font-size:30px;font-weight:700}
+.hero-card .sub{font-size:12px;color:rgba(255,255,255,0.55);margin-top:4px}
+h2{font-size:13px;color:#1d2e28;margin:26px 0 12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid rgba(42,64,56,0.12);border-radius:10px;overflow:hidden}
+th{background:#f5f0e8;color:#1d2e28;font-weight:700;padding:11px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(42,64,56,0.12)}
+td{padding:11px 12px;border-bottom:1px solid #f0ece2}
+tr:last-child td{border-bottom:none}
+.tot td{background:#f5f0e8;font-weight:700;color:#1d2e28}
+.insight{background:#1d2e28;color:#ece7dd;padding:20px 24px;border-radius:10px;font-size:13px;line-height:1.65;margin-top:24px}
+.insight .tag{font-size:10px;letter-spacing:2px;font-weight:700;color:#cfa54f;text-transform:uppercase;margin-bottom:8px;display:block}
+.cta{margin-top:28px;padding:24px 26px;border-radius:14px;background:linear-gradient(135deg,#1d2e28 0%,#3a5448 100%);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta .cta-title{font-size:16px;font-weight:800;margin-bottom:4px;letter-spacing:.2px}
+.cta .cta-sub{font-size:12px;color:#e6ded0;line-height:1.5;max-width:460px}
+.cta .cta-btn{display:inline-block;padding:10px 18px;background:#cfa54f;color:#1d2e28;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;border-radius:8px;text-decoration:none;white-space:nowrap}
+.footer{margin-top:24px;padding-top:18px;border-top:1px solid rgba(42,64,56,0.12);font-size:10px;color:#8c8070;text-align:center;line-height:1.6}
+</style></head><body>
+
+<div class="brand">
+  <div class="brand-mark">MERIDIAN &middot; TERM INSURANCE COVER REPORT</div>
+  <div class="brand-date">${dateStr}</div>
+</div>
+
+<div class="status-pill">${methodLabel}</div>
+<h1 class="title">Your Term Insurance Cover</h1>
+<p class="lede">A snapshot of the life cover you need to protect your family's financial future, based on the ${methodLabel} method.</p>
+
+<div class="hero-card">
+  <div class="lbl">Additional Life Cover Needed</div>
+  <div class="val">${fmtINR(active.additional)}</div>
+  <div class="sub">Recommended cover: ${active.crores.toFixed(2)} Cr</div>
+</div>
+
+<h2>Inputs</h2>
+<table>
+<tbody>
+${inputRows.map((r) => `<tr><td style="color:#8c8070">${r[0]}</td><td style="text-align:right;font-weight:600">${r[1]}</td></tr>`).join("")}
+</tbody>
+</table>
+
+<h2>Calculation</h2>
+<table>
+<tbody>
+${calcRows.map((r, i) => `<tr${i === calcRows.length - 1 ? ' class="tot"' : ""}><td>${r[0]}</td><td style="text-align:right">${r[1]}</td></tr>`).join("")}
+<tr class="tot"><td>Additional Life Cover Needed</td><td style="text-align:right">${fmtINR(active.additional)}</td></tr>
+</tbody>
+</table>
+
+<div class="insight"><span class="tag">Advisor insight</span>${insight}</div>
+
+<div class="cta">
+  <div>
+    <div class="cta-title">Life changes. So should your cover.</div>
+    <div class="cta-sub">New job, new loan, new child? Come back any time and re-run this planner in under a minute. The numbers update instantly.</div>
+  </div>
+  <a class="cta-btn" href="${revisitUrl}">Revisit Planner →</a>
+</div>
+
+<div class="footer">This report is an indicative projection based on the inputs you provided and standard actuarial assumptions. It is intended for educational and planning purposes and does not constitute investment or insurance advice. Please consult a licensed advisor before buying a policy. Generated by manandua.in</div>
+
+</body></html>`;
+}
+
+async function downloadJpeg() {
+  const btn = $("downloadJpegBtn");
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" aria-hidden="true"></i> Generating JPEG…';
+  try {
+    if (typeof html2canvas === "undefined") throw new Error("html2canvas did not load");
+    const html = buildReportHtml();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const styleTag = doc.querySelector("style") ? doc.querySelector("style").outerHTML : "";
+    const bodyContent = doc.body.innerHTML;
+
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "fixed";
+    wrapper.style.top = "0";
+    wrapper.style.left = "-10000px";
+    wrapper.style.width = "860px";
+    wrapper.style.background = "#faf8f3";
+    wrapper.innerHTML = styleTag + '<div class="report-root">' + bodyContent + "</div>";
+    const scoped = wrapper.querySelector("style");
+    if (scoped) {
+      scoped.textContent = (scoped.textContent || "").replace(/(^|\})\s*body\s*\{/g, "$1 .report-root{");
+    }
+    document.body.appendChild(wrapper);
+
+    const canvas = await html2canvas(wrapper.querySelector(".report-root"), {
+      backgroundColor: "#faf8f3", scale: 2, useCORS: true,
+    });
+    document.body.removeChild(wrapper);
+
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "term-insurance-cover-" + new Date().toISOString().slice(0, 10) + ".jpg";
+    document.body.appendChild(a); a.click(); a.remove();
+  } catch (err) {
+    console.error(err);
+    alert("Could not generate report: " + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
+/* ═══════════ Wire up buttons + nav (before first render) ═══════════ */
+$("downloadJpegBtn").addEventListener("click", downloadJpeg);
+
+const ham = $("ham"), mob = $("mobMenu");
+ham.addEventListener("click", function () {
+  const open = mob.style.display === "block";
+  mob.style.display = open ? "none" : "block";
+  ham.setAttribute("aria-expanded", String(!open));
+});
+mob.querySelectorAll("a").forEach((el) => el.addEventListener("click", () => { mob.style.display = "none"; ham.setAttribute("aria-expanded", "false"); }));
+
+window.addEventListener("scroll", function () {
+  document.querySelector(".nav").style.boxShadow = window.scrollY > 20 ? "0 2px 24px rgba(28,25,23,0.07)" : "none";
+});
+
+/* First render, after every listener above is wired up. */
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free EMI and loan prepayment calculator by Manan Dua. Calculate your EMI, simulate one-time or recurring prepayments, and see exactly how much interest and time you can save.">
+<title>EMI &amp; Prepayment Calculator · Meridian Tools by Manan Dua</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+:root {
+  --forest:    #2a4038;
+  --forest-d:  #1d2e28;
+  --forest-m:  #3a5448;
+  --forest-l:  #4a6858;
+  --gold:      #b8903a;
+  --gold-l:    #cfa54f;
+  --gold-pale: #f0e6cc;
+  --cream:     #f5f0e8;
+  --cream-d:   #ede8de;
+  --linen:     #faf8f3;
+  --warm:      #7a6e60;
+  --text:      #1c1917;
+  --soft:      #4a4038;
+  --mute:      #8c8070;
+  --border:    rgba(42,64,56,0.10);
+  --border-g:  rgba(184,144,58,0.25);
+  --good:      #3a6b4f;
+  --bad:       #a8483a;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'Inter', system-ui, sans-serif;
+  --r:         6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--linen); color: var(--text); line-height: 1.6; }
+img  { max-width: 100%; display: block; }
+a    { text-decoration: none; color: inherit; }
+
+/* ═══ NAV ═══ */
+.nav {
+  background: var(--linen);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand svg { flex-shrink: 0; }
+.nav-brand-txt { display: flex; flex-direction: column; line-height: 1.15; }
+.nav-brand-txt .nb-name { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--forest-d); letter-spacing: 0.2px; }
+.nav-brand-txt .nb-sub { font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--mute); }
+.nav-links { display: flex; align-items: center; gap: 30px; }
+.nav-link { font-size: 13.5px; font-weight: 400; color: var(--soft); cursor: pointer; transition: color .15s; letter-spacing: 0.1px; white-space: nowrap; }
+.nav-link:hover, .nav-link.active { color: var(--forest); }
+.nav-link.active { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.btn-book {
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  background: var(--forest); color: #fff;
+  border: none; border-radius: var(--r); padding: 11px 24px;
+  cursor: pointer; transition: background .15s; letter-spacing: 0.2px;
+}
+.btn-book:hover { background: var(--forest-m); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
+.mob-menu {
+  display: none; position: fixed; top: 68px; left: 0; right: 0;
+  background: var(--linen); border-bottom: 0.5px solid var(--border);
+  padding: 1.5rem 2rem; z-index: 99; box-shadow: 0 8px 32px rgba(28,25,23,0.08);
+}
+.mob-menu a { display: block; font-size: 15px; color: var(--soft); padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+.mob-menu a:last-of-type { border-bottom: none; }
+.mob-menu .btn-book { display: block; width: 100%; text-align: center; margin-top: 16px; }
+
+/* ═══ HERO ═══ */
+.hero { background: var(--forest-d); padding: 56px 3rem 48px; position: relative; overflow: hidden; }
+.hero::after {
+  content: ''; position: absolute; top: -40%; right: -8%;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-in { max-width: 1180px; margin: 0 auto; position: relative; }
+.crumb { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 6px; }
+.crumb:hover { color: var(--gold-l); }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--gold-l); margin-bottom: 18px;
+}
+.hero-badge::before { content: ''; display: inline-block; width: 32px; height: 0.5px; background: var(--gold); }
+.hero h1 { font-family: var(--serif); font-size: 46px; font-weight: 400; line-height: 1.12; color: #fff; max-width: 640px; }
+.hero h1 em { color: var(--gold-l); font-style: italic; }
+.hero-sub { font-size: 14.5px; font-weight: 300; color: rgba(255,255,255,0.55); max-width: 520px; margin-top: 14px; line-height: 1.8; }
+.hero-tags { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 26px; }
+.hero-tag { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.45); }
+.hero-tag .ti { color: var(--gold-l); font-size: 14px; }
+.hero-switch { margin-top: 30px; }
+.hero-switch a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: rgba(255,255,255,0.7);
+  border: 0.5px solid rgba(255,255,255,0.18); border-radius: 20px;
+  padding: 9px 18px; transition: border-color .15s, color .15s;
+}
+.hero-switch a:hover { border-color: var(--gold); color: var(--gold-l); }
+
+/* ═══ SECTION WRAP ═══ */
+.sec { padding: 56px 3rem 88px; }
+.sec-in { max-width: 1180px; margin: 0 auto; }
+
+/* ═══ CALCULATOR CARD ═══ */
+.calc-card {
+  background: #fff; border: 0.5px solid var(--border); border-radius: 12px;
+  padding: 36px; box-shadow: 0 2px 24px rgba(28,25,23,0.04);
+}
+.calc-card-hd { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+.calc-card-hd h2 { font-family: var(--serif); font-size: 26px; font-weight: 500; color: var(--forest-d); }
+.calc-card-hd p { font-size: 12.5px; color: var(--mute); margin-top: 4px; }
+
+.f-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
+.f-field { display: flex; flex-direction: column; gap: 6px; }
+.f-field.span2 { grid-column: 1 / -1; }
+.f-field label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; color: var(--mute);
+}
+.f-field input, .f-field select {
+  width: 100%; background: var(--linen); border: 0.5px solid var(--border);
+  border-radius: var(--r); padding: 11px 13px; font-size: 14px; font-weight: 400;
+  color: var(--text); font-family: var(--sans); transition: border-color .15s, background .15s;
+}
+.f-field input:focus, .f-field select:focus { outline: none; border-color: var(--gold); background: #fff; }
+.f-field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c8070' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center; padding-right: 34px;
+}
+.f-hint { font-size: 11px; color: var(--mute); margin-top: -2px; }
+.f-divider { grid-column: 1 / -1; height: 0.5px; background: var(--border); margin: 4px 0 2px; }
+.f-subtitle { grid-column: 1 / -1; font-size: 11px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: var(--gold); margin-top: 6px; }
+
+/* ═══ RESULTS ═══ */
+.results { margin-top: 40px; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.stat-card {
+  border: 0.5px solid var(--border); border-radius: 10px; background: var(--linen);
+  padding: 18px 20px;
+}
+.stat-card .st-l { font-size: 10.5px; font-weight: 500; letter-spacing: 0.6px; text-transform: uppercase; color: var(--mute); }
+.stat-card .st-v { font-family: var(--serif); font-size: 25px; font-weight: 500; color: var(--forest-d); margin-top: 6px; }
+.stat-card.good .st-v { color: var(--good); }
+.stat-card.bad .st-v { color: var(--bad); }
+
+.impact-panel {
+  margin-top: 22px; background: var(--forest-d); border-radius: 12px; padding: 26px 28px;
+  position: relative; overflow: hidden;
+}
+.impact-panel::after {
+  content: ''; position: absolute; top: -30%; right: -6%; width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.12) 0%, transparent 70%);
+}
+.impact-hd { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: var(--gold-l); margin-bottom: 18px; position: relative; }
+.impact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; }
+.impact-stat .is-l { font-size: 10.5px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px; }
+.impact-stat .is-v { font-family: var(--serif); font-size: 23px; font-weight: 500; color: #fff; margin-top: 6px; }
+.impact-stat.good .is-v { color: var(--gold-l); }
+
+.chart-wrap { margin-top: 28px; }
+.chart-hd { font-size: 13px; font-weight: 500; color: var(--forest-d); margin-bottom: 12px; }
+.chart-box { border: 0.5px solid var(--border); border-radius: 10px; background: #fff; padding: 18px; height: 320px; }
+
+.actions-row { display: flex; justify-content: flex-end; margin-top: 20px; gap: 10px; }
+.btn-outline-forest {
+  background: transparent; border: 1px solid var(--forest); color: var(--forest);
+  border-radius: var(--r); padding: 11px 22px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .15s; font-family: var(--sans); display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-outline-forest:hover { background: var(--forest); color: #fff; }
+.btn-outline-forest:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.note-strip {
+  margin-top: 18px; font-size: 11.5px; color: var(--mute); line-height: 1.7;
+  border-top: 0.5px dashed var(--border); padding-top: 14px;
+}
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--forest-d); padding: 48px 3rem 28px; }
+.footer-in { max-width: 1180px; margin: 0 auto; }
+.footer-top { display: flex; gap: 56px; flex-wrap: wrap; padding-bottom: 28px; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.ft-brand { flex: 1.3; min-width: 200px; display: flex; align-items: flex-start; gap: 12px; }
+.ft-logo { font-family: var(--serif); font-size: 19px; font-weight: 500; color: #fff; }
+.ft-logo em { color: var(--gold-l); font-style: normal; }
+.ft-brand p { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.35); margin-top: 8px; line-height: 1.8; max-width: 240px; }
+.ft-links { display: flex; gap: 48px; flex-wrap: wrap; }
+.ft-col h5 { font-size: 10px; font-weight: 500; letter-spacing: 0.9px; text-transform: uppercase; color: rgba(255,255,255,0.30); margin-bottom: 12px; }
+.ft-col a { display: block; font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 8px; transition: color .15s; }
+.ft-col a:hover { color: var(--gold-l); }
+.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-top: 18px; align-items: flex-start; }
+.footer-bottom span { font-size: 11px; color: rgba(255,255,255,0.18); }
+.ft-disc { font-size: 10px; color: rgba(255,255,255,0.16); max-width: 480px; line-height: 1.6; }
+
+/* ═══ PRINT REPORT (offscreen) ═══ */
+#reportRoot { position: fixed; left: -10000px; top: 0; width: 860px; background: var(--linen); padding: 40px; font-family: var(--sans); color: var(--text); }
+.rp-banner { background: var(--forest-d); border-radius: 12px; padding: 24px 28px; color: #fff; margin-bottom: 22px; }
+.rp-eyebrow { font-size: 10.5px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--gold-l); }
+.rp-title { font-family: var(--serif); font-size: 26px; font-weight: 500; margin-top: 6px; }
+.rp-sub { font-size: 12.5px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.rp-date { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 10px; }
+.rp-section-title { font-size: 10.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--mute); margin: 20px 0 10px; }
+.rp-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; }
+.rp-kv-row { display: flex; justify-content: space-between; border-bottom: 0.5px dashed var(--border); padding: 7px 0; font-size: 13px; }
+.rp-kv-row span:first-child { color: var(--mute); }
+.rp-kv-row span:last-child { font-weight: 500; color: var(--forest-d); }
+.rp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.rp-stat { background: #fff; border: 0.5px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.rp-stat .rl { font-size: 10px; text-transform: uppercase; color: var(--mute); letter-spacing: 0.5px; }
+.rp-stat .rv { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--forest-d); margin-top: 4px; }
+.rp-foot { margin-top: 22px; border-top: 0.5px solid var(--border); padding-top: 12px; font-size: 10px; color: var(--mute); }
+
+@media(max-width: 900px) {
+  .nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .hero { padding: 44px 1.5rem 40px; }
+  .hero h1 { font-size: 32px; }
+  .sec { padding: 40px 1.5rem 56px; }
+  .calc-card { padding: 22px; }
+  .f-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr; }
+  .impact-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 40px 1.5rem 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="https://manandua.in" class="nav-brand">
+    <svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true">
+      <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+      <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+      <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+      <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+    </svg>
+    <div class="nav-brand-txt">
+      <span class="nb-name">Meridian</span>
+      <span class="nb-sub">Tools by Manan Dua</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="https://manandua.in" class="nav-link">Home</a>
+    <a href="financial-tools.html" class="nav-link">All Tools</a>
+    <a href="https://manandua.in#contact" class="nav-link">Contact</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+    <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="https://manandua.in">Home</a>
+  <a href="financial-tools.html">All Tools</a>
+  <a href="https://manandua.in#contact">Contact</a>
+  <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-in">
+    <a href="https://manandua.in" class="crumb"><i class="ti ti-arrow-left" aria-hidden="true"></i> manandua.in</a>
+    <div class="hero-badge">Meridian Financial Tools</div>
+    <h1>EMI &amp; <em>Prepayment</em> Calculator</h1>
+    <p class="hero-sub">Work out your monthly EMI, then simulate a prepayment to see how much interest and time you can save.</p>
+    <div class="hero-switch">
+      <a href="interest-rate-change-calculator.html">Looking for the rate-change calculator instead? <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      <a href="financial-tools.html">Explore all Meridian tools <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</header>
+
+<!-- ══ CALCULATOR ══ -->
+<section class="sec">
+  <div class="sec-in">
+    <div class="calc-card">
+      <div class="calc-card-hd">
+        <div>
+          <h2>Loan EMI &amp; Prepayment</h2>
+          <p>Fill in your loan details. Results update as you type.</p>
+        </div>
+      </div>
+
+      <div class="f-grid">
+        <div class="f-field">
+          <label for="emiMode">EMI input</label>
+          <select id="emiMode">
+            <option value="calculate" selected>Calculate EMI</option>
+            <option value="known">EMI known</option>
+          </select>
+        </div>
+        <div class="f-field">
+          <label for="rate">Rate of interest (% p.a.)</label>
+          <input type="number" id="rate" step="0.01" value="9">
+        </div>
+
+        <div class="f-field calc-only">
+          <label for="originalAmount">Loan original amount (₹)</label>
+          <input type="number" id="originalAmount" value="2500000">
+        </div>
+        <div class="f-field calc-only">
+          <label for="originalTenure">Original tenure (months)</label>
+          <input type="number" id="originalTenure" value="240">
+        </div>
+        <div class="f-field known-only" style="display:none;">
+          <label for="knownEMI">EMI (₹)</label>
+          <input type="number" id="knownEMI" value="22500">
+        </div>
+
+        <div class="f-divider"></div>
+
+        <div class="f-field">
+          <label for="pendingAmount">Loan pending amount (₹)</label>
+          <input type="number" id="pendingAmount" value="2300000">
+        </div>
+        <div class="f-field">
+          <label for="pendingTenure">Pending tenure (months)</label>
+          <input type="number" id="pendingTenure" value="216">
+        </div>
+
+        <div class="f-subtitle">Prepayment</div>
+        <div class="f-field">
+          <label for="prepay">Loan prepayment</label>
+          <select id="prepay">
+            <option value="no">No</option>
+            <option value="yes" selected>Yes</option>
+          </select>
+        </div>
+        <div class="f-field prepay-only">
+          <label for="freq">Frequency</label>
+          <select id="freq">
+            <option value="one-time" selected>One time</option>
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+        </div>
+        <div class="f-field prepay-only">
+          <label for="prepayAmount">Prepayment amount (₹)</label>
+          <input type="number" id="prepayAmount" value="100000">
+        </div>
+      </div>
+
+      <div class="results">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="st-l" id="emiLabel">EMI (calculated)</div>
+            <div class="st-v" id="outEmi">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="st-l">Pending tenure</div>
+            <div class="st-v" id="outTenure">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="st-l">Interest on pending (no prepay)</div>
+            <div class="st-v" id="outBaseInterest">—</div>
+          </div>
+        </div>
+
+        <div class="impact-panel" id="impactPanel">
+          <div class="impact-hd"><i class="ti ti-trending-down" aria-hidden="true"></i> With prepayment</div>
+          <div class="impact-grid">
+            <div class="impact-stat good">
+              <div class="is-l">New interest paid</div>
+              <div class="is-v" id="outNewInterest">—</div>
+            </div>
+            <div class="impact-stat good">
+              <div class="is-l">New tenure</div>
+              <div class="is-v" id="outNewTenure">—</div>
+            </div>
+            <div class="impact-stat good">
+              <div class="is-l">Interest saved</div>
+              <div class="is-v" id="outInterestSaved">—</div>
+            </div>
+            <div class="impact-stat good">
+              <div class="is-l">Tenure saved</div>
+              <div class="is-v" id="outTenureSaved">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-hd">Outstanding balance over time</div>
+          <div class="chart-box"><canvas id="balanceChart"></canvas></div>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn-outline-forest" id="downloadBtn"><i class="ti ti-download" aria-hidden="true"></i> Download report</button>
+        </div>
+
+        <div class="note-strip">Indicative figures based on the standard reducing-balance EMI method. Actual amortisation, charges, and prepayment terms vary by lender. Please confirm with your bank before making financial decisions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-in">
+    <div class="footer-top">
+      <div class="ft-brand">
+        <svg width="30" height="30" viewBox="0 0 200 200" aria-hidden="true" style="flex-shrink:0;">
+          <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+          <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+          <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+          <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+        </svg>
+        <div>
+          <div class="ft-logo">Meridian<em>.</em></div>
+          <p>Free financial tools from Manan Dua, independent financial guidance for those building wealth with clarity and purpose.</p>
+        </div>
+      </div>
+      <div class="ft-links">
+        <div class="ft-col">
+          <h5>Manan Dua</h5>
+          <a href="financial-tools.html">All Tools</a>
+          <a href="https://manandua.in">Home</a>
+          <a href="https://manandua.in#resources">Blog</a>
+          <a href="https://manandua.in#newsletter">Meridian Newsletter</a>
+        </div>
+        <div class="ft-col">
+          <h5>Legal</h5>
+          <a href="https://manandua.in/privacy.html">Privacy Policy</a>
+          <a href="https://manandua.in/disclaimer.html">Disclaimer</a>
+        </div>
+        <div class="ft-col">
+          <h5>Connect</h5>
+          <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://manandua.in#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span class="ft-disc">This calculator is for illustrative purposes only and does not constitute financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
+      <span>manandua.in</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ OFFSCREEN REPORT (for download) ══ -->
+<div id="reportRoot">
+  <div class="rp-banner">
+    <div class="rp-eyebrow">Meridian &middot; Loan Analysis Report</div>
+    <div class="rp-title">EMI &amp; Prepayment Analysis</div>
+    <div class="rp-sub">Summary of EMI, pending dues and prepayment impact.</div>
+    <div class="rp-date" id="rpDate"></div>
+  </div>
+  <div class="rp-section-title">Inputs</div>
+  <div class="rp-kv" id="rpInputs"></div>
+  <div class="rp-section-title">Current position</div>
+  <div class="rp-stats" id="rpCurrent"></div>
+  <div class="rp-section-title" id="rpImpactTitle">With prepayment</div>
+  <div class="rp-stats" id="rpImpact"></div>
+  <div class="rp-section-title">Outstanding balance over time</div>
+  <div class="chart-box" style="height:280px;"><canvas id="rpChart" width="780" height="260"></canvas></div>
+  <div class="rp-foot">Indicative figures. Actual schedule may vary by lender and payment timing. Generated by manandua.in</div>
+</div>
+
+<script>
+/* ── Math (mirrors the original lovable calculator's logic) ── */
+function calcEMI(principal, annualPct, months) {
+  const r = annualPct / 100 / 12;
+  if (principal <= 0 || months <= 0) return 0;
+  if (r === 0) return principal / months;
+  const pow = Math.pow(1 + r, months);
+  return (principal * r * pow) / (pow - 1);
+}
+function amortize(startBalance, annualPct, emi, prepayAmount, freq, maxMonths) {
+  maxMonths = maxMonths || 1200;
+  const r = annualPct / 100 / 12;
+  let balance = startBalance, interestPaid = 0, m = 0;
+  const schedule = [];
+  while (balance > 0.01 && m < maxMonths) {
+    m += 1;
+    const interest = balance * r;
+    let principal = Math.min(emi - interest, balance);
+    if (principal < 0) principal = 0;
+    balance -= principal;
+    let prepay = 0;
+    if (freq !== "none" && prepayAmount > 0) {
+      if (freq === "one-time" && m === 1) prepay = prepayAmount;
+      else if (freq === "monthly") prepay = prepayAmount;
+      else if (freq === "quarterly" && m % 3 === 0) prepay = prepayAmount;
+      else if (freq === "yearly" && m % 12 === 0) prepay = prepayAmount;
+    }
+    if (prepay > balance) prepay = balance;
+    balance -= prepay;
+    interestPaid += interest;
+    schedule.push({ month: m, interest, principal, prepayment: prepay, balance: Math.max(balance, 0) });
+  }
+  return { months: m, interest: interestPaid, schedule };
+}
+function formatINR(n) {
+  if (!isFinite(n)) return "—";
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
+}
+function formatMonths(n) {
+  if (!isFinite(n)) return "—";
+  const total = Math.round(n);
+  const y = Math.floor(total / 12), m = total % 12;
+  if (y === 0) return m + " mo";
+  if (m === 0) return y + " yr";
+  return y + " yr " + m + " mo";
+}
+function computePrepayment(d) {
+  const emi = d.emiMode === "known" ? d.knownEMI : calcEMI(d.originalAmount, d.rate, d.originalTenure);
+  const base = amortize(d.pendingAmount, d.rate, emi, 0, "none");
+  let prepay = null;
+  if (d.prepayEnabled && d.prepayAmount > 0) {
+    prepay = amortize(d.pendingAmount, d.rate, emi, d.prepayAmount, d.prepayFreq);
+  }
+  return { emi, remainingScheduled: d.pendingTenure, base, prepay };
+}
+
+/* ── DOM refs ── */
+const $ = (id) => document.getElementById(id);
+const emiModeEl = $("emiMode"), rateEl = $("rate"), originalAmountEl = $("originalAmount"),
+      originalTenureEl = $("originalTenure"), knownEMIEl = $("knownEMI"),
+      pendingAmountEl = $("pendingAmount"), pendingTenureEl = $("pendingTenure"),
+      prepayEl = $("prepay"), freqEl = $("freq"), prepayAmountEl = $("prepayAmount");
+
+const calcOnlyEls = document.querySelectorAll(".calc-only");
+const knownOnlyEls = document.querySelectorAll(".known-only");
+const prepayOnlyEls = document.querySelectorAll(".prepay-only");
+
+let chart;
+
+function readInputs() {
+  return {
+    emiMode: emiModeEl.value,
+    originalAmount: +originalAmountEl.value || 0,
+    originalTenure: +originalTenureEl.value || 0,
+    knownEMI: +knownEMIEl.value || 0,
+    pendingAmount: +pendingAmountEl.value || 0,
+    pendingTenure: +pendingTenureEl.value || 0,
+    rate: +rateEl.value || 0,
+    prepayEnabled: prepayEl.value === "yes",
+    prepayFreq: freqEl.value,
+    prepayAmount: +prepayAmountEl.value || 0,
+  };
+}
+
+function toggleFieldVisibility() {
+  const known = emiModeEl.value === "known";
+  calcOnlyEls.forEach(el => el.style.display = known ? "none" : "flex");
+  knownOnlyEls.forEach(el => el.style.display = known ? "flex" : "none");
+  const showPrepay = prepayEl.value === "yes";
+  prepayOnlyEls.forEach(el => el.style.display = showPrepay ? "flex" : "none");
+  $("impactPanel").style.display = showPrepay ? "block" : "none";
+  $("emiLabel").textContent = known ? "EMI (entered)" : "EMI (calculated)";
+}
+
+function buildChart(canvasId, baseline, prepay, labelBase, labelPrepay) {
+  const maxLen = Math.max(baseline.length, prepay ? prepay.length : 0);
+  const labels = Array.from({ length: maxLen }, (_, i) => i + 1);
+  const baseData = labels.map((_, i) => baseline[i] ? Math.round(baseline[i].balance) : null);
+  const prepayData = prepay ? labels.map((_, i) => prepay[i] ? Math.round(prepay[i].balance) : null) : null;
+
+  const ctx = document.getElementById(canvasId).getContext("2d");
+  const gBase = ctx.createLinearGradient(0, 0, 0, 260);
+  gBase.addColorStop(0, "rgba(58,84,72,0.35)");
+  gBase.addColorStop(1, "rgba(58,84,72,0)");
+  const gGold = ctx.createLinearGradient(0, 0, 0, 260);
+  gGold.addColorStop(0, "rgba(184,144,58,0.45)");
+  gGold.addColorStop(1, "rgba(184,144,58,0)");
+
+  const datasets = [{
+    label: labelBase, data: baseData, borderColor: "#3a5448", backgroundColor: gBase,
+    fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2,
+  }];
+  if (prepayData) {
+    datasets.push({
+      label: labelPrepay, data: prepayData, borderColor: "#b8903a", backgroundColor: gGold,
+      fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2,
+    });
+  }
+
+  return new Chart(ctx, {
+    type: "line",
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { position: "bottom", labels: { font: { family: "Inter", size: 11 }, color: "#4a4038", boxWidth: 12, usePointStyle: true } },
+        tooltip: {
+          backgroundColor: "#faf8f3", titleColor: "#1d2e28", bodyColor: "#1d2e28",
+          borderColor: "rgba(42,64,56,0.10)", borderWidth: 1, padding: 10,
+          callbacks: {
+            title: (items) => "Month " + items[0].label,
+            label: (item) => item.dataset.label + ": " + formatINR(item.parsed.y),
+          }
+        }
+      },
+      scales: {
+        x: { title: { display: true, text: "Month", color: "#8c8070", font: { size: 11 } }, ticks: { color: "#8c8070", font: { size: 10 }, maxTicksLimit: 10 }, grid: { color: "rgba(42,64,56,0.06)" } },
+        y: {
+          ticks: {
+            color: "#8c8070", font: { size: 10 },
+            callback: (v) => v >= 1e7 ? (v/1e7).toFixed(1) + "Cr" : v >= 1e5 ? (v/1e5).toFixed(1) + "L" : v >= 1e3 ? (v/1e3).toFixed(0) + "k" : v
+          },
+          grid: { color: "rgba(42,64,56,0.06)" }
+        }
+      }
+    }
+  });
+}
+
+function render() {
+  const input = readInputs();
+  toggleFieldVisibility();
+  const data = computePrepayment(input);
+  const interestSaved = data.prepay ? data.base.interest - data.prepay.interest : 0;
+  const monthsSaved = data.prepay ? data.base.months - data.prepay.months : 0;
+
+  $("outEmi").textContent = formatINR(data.emi);
+  $("outTenure").textContent = formatMonths(data.remainingScheduled);
+  $("outBaseInterest").textContent = formatINR(data.base.interest);
+
+  if (data.prepay) {
+    $("outNewInterest").textContent = formatINR(data.prepay.interest);
+    $("outNewTenure").textContent = formatMonths(data.prepay.months);
+    $("outInterestSaved").textContent = formatINR(interestSaved);
+    $("outTenureSaved").textContent = formatMonths(monthsSaved);
+  }
+
+  window._currentData = { input, data, interestSaved, monthsSaved };
+
+  try {
+    if (typeof Chart === "undefined") throw new Error("Chart.js did not load");
+    if (chart) chart.destroy();
+    chart = buildChart("balanceChart", data.base.schedule, data.prepay ? data.prepay.schedule : null, "Baseline", "With prepayment");
+  } catch (err) {
+    console.error("Chart render failed:", err);
+    document.getElementById("balanceChart").parentElement.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:12px;color:var(--mute);">Chart could not load. Please check your internet connection and refresh.</div>';
+  }
+}
+
+/* Wire up inputs, then do the first render last so every listener below is
+   guaranteed to attach even if chart rendering hits an error. */
+[emiModeEl, rateEl, originalAmountEl, originalTenureEl, knownEMIEl, pendingAmountEl, pendingTenureEl, prepayEl, freqEl, prepayAmountEl]
+  .forEach(el => el.addEventListener("input", render));
+
+/* ── Download report ── */
+$("downloadBtn").addEventListener("click", async function () {
+  const btn = this;
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" aria-hidden="true"></i> Generating…';
+  try {
+    const { input, data, interestSaved, monthsSaved } = window._currentData;
+
+    $("rpDate").textContent = "Generated on " + new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+    const inputRows = [
+      ["EMI source", input.emiMode === "known" ? "Provided" : "Calculated"],
+      ["Rate of interest", input.rate + "% p.a."],
+    ];
+    if (input.emiMode === "calculate") {
+      inputRows.push(["Original loan amount", formatINR(input.originalAmount)]);
+      inputRows.push(["Original tenure", formatMonths(input.originalTenure)]);
+    } else {
+      inputRows.push(["EMI (entered)", formatINR(input.knownEMI)]);
+    }
+    inputRows.push(["Pending amount", formatINR(input.pendingAmount)]);
+    inputRows.push(["Pending tenure", formatMonths(input.pendingTenure)]);
+    if (input.prepayEnabled) {
+      inputRows.push(["Prepayment frequency", input.prepayFreq]);
+      inputRows.push(["Prepayment amount", formatINR(input.prepayAmount)]);
+    }
+    $("rpInputs").innerHTML = inputRows.map(r => `<div class="rp-kv-row"><span>${r[0]}</span><span>${r[1]}</span></div>`).join("");
+
+    $("rpCurrent").innerHTML = `
+      <div class="rp-stat"><div class="rl">${input.emiMode === "known" ? "EMI (entered)" : "EMI (calculated)"}</div><div class="rv">${formatINR(data.emi)}</div></div>
+      <div class="rp-stat"><div class="rl">Pending tenure</div><div class="rv">${formatMonths(data.remainingScheduled)}</div></div>
+      <div class="rp-stat"><div class="rl">Interest on pending</div><div class="rv">${formatINR(data.base.interest)}</div></div>
+    `;
+
+    if (data.prepay) {
+      $("rpImpactTitle").style.display = "block";
+      $("rpImpact").style.display = "grid";
+      $("rpImpact").innerHTML = `
+        <div class="rp-stat"><div class="rl">New interest paid</div><div class="rv">${formatINR(data.prepay.interest)}</div></div>
+        <div class="rp-stat"><div class="rl">New tenure</div><div class="rv">${formatMonths(data.prepay.months)}</div></div>
+        <div class="rp-stat"><div class="rl">Interest saved</div><div class="rv">${formatINR(interestSaved)}</div></div>
+      `;
+    } else {
+      $("rpImpactTitle").style.display = "none";
+      $("rpImpact").style.display = "none";
+    }
+
+    const rpChartInstance = buildChart("rpChart", data.base.schedule, data.prepay ? data.prepay.schedule : null, "Baseline", "With prepayment");
+    await new Promise(r => setTimeout(r, 250));
+
+    const node = $("reportRoot");
+    const prevCss = node.style.cssText;
+    node.style.cssText = "position:fixed;left:0;top:0;z-index:-1;opacity:1;pointer-events:none;width:860px;";
+    const canvas = await html2canvas(node, { backgroundColor: "#faf8f3", scale: 2, useCORS: true });
+    node.style.cssText = prevCss;
+    rpChartInstance.destroy();
+
+    const stamp = new Date().toISOString().slice(0, 10);
+    const url = canvas.toDataURL("image/jpeg", 0.95);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "emi-prepayment-report-" + stamp + ".jpg";
+    a.click();
+  } catch (err) {
+    console.error(err);
+    alert("Could not generate report: " + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+});
+
+/* ── Mobile menu ── */
+const ham = $("ham"), mob = $("mobMenu");
+ham.addEventListener("click", function () {
+  const open = mob.style.display === "block";
+  mob.style.display = open ? "none" : "block";
+  ham.setAttribute("aria-expanded", String(!open));
+});
+mob.querySelectorAll("a").forEach(el => el.addEventListener("click", () => { mob.style.display = "none"; ham.setAttribute("aria-expanded", "false"); }));
+
+window.addEventListener("scroll", function () {
+  document.querySelector(".nav").style.boxShadow = window.scrollY > 20 ? "0 2px 24px rgba(28,25,23,0.07)" : "none";
+});
+
+/* First render, after every other listener above is already wired up. */
+render();
+</script>
+</body>
+</html>
