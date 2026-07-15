@@ -1062,7 +1062,7 @@ function gJ(s,fb){ try{return s?JSON.parse(s):fb}catch(e){return fb} }
 
 async function gPull() {
   const sid=G.sheet;
-  const rq=['Clients!A2:AD','Tasks!A2:G','Pipeline!A2:I','Log!A2:B'].map(r=>'ranges='+encodeURIComponent(r)).join('&');
+  const rq=['Clients!A2:AE','Tasks!A2:G','Pipeline!A2:I','Log!A2:B'].map(r=>'ranges='+encodeURIComponent(r)).join('&');
   const res=await gFetch('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'/values:batchGet?'+rq);
   const [cr,tr,pr,lr]=res.valueRanges.map(r=>r.values||[]);
   if (cr.length) S.clients=cr.map(r=>({
@@ -1097,11 +1097,11 @@ async function gPush() {
     const pipeRows=(S.pipeline||[]).map(p=>[p.id,p.name,p.stage,p.potential,p.source||'',p.referredBy||'',p.phone||'',p.date||'',p.notes||'']);
     const logRows=S.actLog.slice(0,200).map(l=>[l.ts,l.msg]);
     await gFetch('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'/values:batchClear',{
-      method:'POST', body:JSON.stringify({ranges:['Clients!A2:AD','Tasks!A2:G','Pipeline!A2:I','Log!A2:B']})
+      method:'POST', body:JSON.stringify({ranges:['Clients!A2:AE','Tasks!A2:G','Pipeline!A2:I','Log!A2:B']})
     });
     await gFetch('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'/values:batchUpdate',{
       method:'POST', body:JSON.stringify({valueInputOption:'RAW', data:[
-        {range:'Clients!A2:AD',values:clientRows},
+        {range:'Clients!A2:AE',values:clientRows},
         {range:'Tasks!A2:G',values:taskRows},
         {range:'Pipeline!A2:I',values:pipeRows},
         {range:'Log!A2:B',values:logRows},
