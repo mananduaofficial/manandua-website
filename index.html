@@ -389,6 +389,7 @@ a    { text-decoration: none; color: inherit; }
   margin-top: 48px;
 }
 .svc-card {
+  display: block;
   background: var(--cream-d);
   border: 1px solid rgba(184,144,58,0.22);
   border-top: 2px solid var(--gold);
@@ -1010,9 +1011,9 @@ a    { text-decoration: none; color: inherit; }
 
   <div class="nav-links">
     <div class="dd">
-      <div class="dd-trigger" tabindex="0" aria-haspopup="true">
+      <a href="#services" class="dd-trigger" tabindex="0" aria-haspopup="true">
         What we do <i class="ti ti-chevron-down" aria-hidden="true"></i>
-      </div>
+      </a>
       <div class="dd-panel" role="menu">
         <div class="dp-item" role="menuitem" tabindex="0">
           <div class="dp-ic"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
@@ -1052,7 +1053,7 @@ a    { text-decoration: none; color: inherit; }
       </a>
     </div>
     <button class="btn-book" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-      Book a Consultation
+      Start a Conversation
     </button>
   </div>
 
@@ -1062,27 +1063,24 @@ a    { text-decoration: none; color: inherit; }
 </nav>
 
 <div class="mob-menu" id="mobMenu">
-  <a href="#">Home</a>
-  <a href="#">Wealth Management</a>
-  <a href="#">Financial Literacy</a>
-  <a href="#">Financial Advisory</a>
+  <a href="index.html">Home</a>
+  <a href="wealth-management.html">Wealth Management</a>
+  <a href="financial-literacy.html">Financial Literacy</a>
+  <a href="financial-advisory.html">Financial Advisory</a>
   <a href="#resources">Blog</a>
   <a href="investor-charter.html">Investor Charter</a>
   <a href="#contact">Contact</a>
-  <button class="btn-book" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Consultation</button>
+  <button class="btn-book" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a Conversation</button>
 </div>
 
 <!-- ══ HERO ══════════════════════════════════════ -->
 <section class="hero" id="home">
   <h1>Your Wealth,<br>Thoughtfully <em>Guided.</em></h1>
   <p class="hero-sub">
-    I work with a select set of individuals and families to build, protect, and grow wealth with clarity and discipline.
+    I work closely with a select set of individuals and families to build, protect, and grow wealth with clarity, discipline, and a relationship you can rely on.
   </p>
   <div class="hero-btns">
-    <button class="btn-gold" onclick="document.getElementById('onboarding').scrollIntoView({behavior:'smooth'})">
-      Book a Consultation
-    </button>
-    <button class="btn-outline-white" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">
+    <button class="btn-gold" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">
       Explore Services
     </button>
   </div>
@@ -1155,28 +1153,28 @@ a    { text-decoration: none; color: inherit; }
   <p class="s-body">Tailored strategies for every stage of your financial life.</p>
 
   <div class="svc-grid" role="list">
-    <div class="svc-card" role="listitem">
+    <a href="wealth-management.html" class="svc-card" role="listitem">
       <div class="svc-ic-wrap"><i class="ti ti-building-bank" aria-hidden="true"></i></div>
       <h3>Wealth Management</h3>
       <p>
         Portfolios aligned to your goals, risk, and time horizon, built across equity, debt, and alternative investments. Intentional in design and continuously reviewed as your financial life evolves.
       </p>
-    </div>
-    <div class="svc-card" role="listitem">
+    </a>
+    <a href="financial-literacy.html" class="svc-card" role="listitem">
       <div class="svc-ic-wrap"><i class="ti ti-target" aria-hidden="true"></i></div>
       <h3>Financial Literacy</h3>
       <p>
         Practical workshops and sessions designed to help you think clearly about money, make better decisions, and build long-term wealth habits.
       </p>
-    </div>
-    <div class="svc-card" role="listitem">
+    </a>
+    <a href="financial-advisory.html" class="svc-card" role="listitem">
       <span class="svc-cs">Coming soon</span>
       <div class="svc-ic-wrap"><i class="ti ti-scale" aria-hidden="true"></i></div>
       <h3>Financial Advisory</h3>
       <p>
         Holistic financial planning that brings together investments, cash flow, insurance, and goal planning into one clear strategy, built around your complete financial picture and long term priorities.
       </p>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -1546,9 +1544,9 @@ a    { text-decoration: none; color: inherit; }
     <div class="ft-links">
       <div class="ft-col">
         <h5>Services</h5>
-        <a href="#services">Wealth Management</a>
-        <a href="#services">Financial Literacy</a>
-        <a href="#services">Advisory (coming soon)</a>
+        <a href="wealth-management.html">Wealth Management</a>
+        <a href="financial-literacy.html">Financial Literacy</a>
+        <a href="financial-advisory.html">Advisory (coming soon)</a>
       </div>
       <div class="ft-col">
         <h5>Resources</h5>
@@ -1567,7 +1565,7 @@ a    { text-decoration: none; color: inherit; }
         <h5>Connect</h5>
         <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener">Instagram</a>
         <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="#contact">Get in Touch</a>
+        <a href="#contact">Schedule a Meeting</a>
       </div>
     </div>
   </div>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wealth Management — Manan Dua</title>
+<meta name="description" content="Wealth management through goal-aligned mutual fund portfolios across equity, debt, and alternative investments, built for your risk and time horizon.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root{--forest:#2a4038;--forest-d:#1d2e28;--forest-m:#3a5448;--forest-l:#4a6858;--gold:#b8903a;--gold-l:#cfa54f;--gold-pale:#f0e6cc;--cream:#f5f0e8;--cream-d:#ede8de;--linen:#faf8f3;--warm:#7a6e60;--text:#1c1917;--soft:#4a4038;--mute:#8c8070;--border:rgba(42,64,56,0.10);--border-g:rgba(184,144,58,0.25);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--r:6px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--linen);color:var(--text);line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+.nav{background:var(--linen);border-bottom:0.5px solid var(--border);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;z-index:100;}
+.logo{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--forest-d);}
+.nav a.back{font-size:13.5px;color:var(--soft);}
+.svc-hero{background:var(--forest-d);padding:64px 3rem 56px;text-align:center;}
+.svc-badge{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold-l);margin-bottom:20px;}
+.svc-hero h1{font-family:var(--serif);font-size:52px;font-weight:400;color:#fff;line-height:1.15;margin-bottom:18px;}
+.svc-hero p{font-size:16px;font-weight:300;color:rgba(255,255,255,0.6);max-width:600px;margin:0 auto;line-height:1.85;}
+.wrap{max-width:760px;margin:0 auto;padding:64px 2rem 40px;}
+.wrap h2{font-family:var(--serif);font-size:30px;font-weight:500;color:var(--forest-d);margin-top:44px;margin-bottom:16px;}
+.wrap h2:first-child{margin-top:0;}
+.wrap p{font-size:15.5px;font-weight:300;color:var(--soft);margin-bottom:16px;line-height:1.85;}
+.wrap ul{padding-left:0;list-style:none;margin-bottom:20px;}
+.wrap ul li{font-size:15px;font-weight:300;color:var(--soft);margin-bottom:12px;line-height:1.75;padding-left:26px;position:relative;}
+.wrap ul li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--gold);}
+.callout{background:var(--cream-d);border:0.5px solid var(--border);border-left:3px solid var(--gold);border-radius:6px;padding:18px 20px;margin:24px 0;}
+.callout p{margin-bottom:0;font-size:14px;}
+.callout strong{color:var(--forest-d);}
+.process-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin:28px 0;}
+.process-mini div{border-top:2px solid var(--gold-pale);padding-top:16px;}
+.process-mini .n{font-family:var(--serif);font-size:26px;color:var(--gold);margin-bottom:6px;}
+.process-mini .t{font-size:12.5px;font-weight:500;color:var(--forest-d);margin-bottom:4px;}
+.process-mini .d{font-size:12px;color:var(--mute);line-height:1.6;}
+.cta-block{background:var(--forest-d);border-radius:12px;padding:40px;text-align:center;margin:48px 0 0;}
+.cta-block h3{font-family:var(--serif);font-size:26px;font-weight:400;color:#fff;margin-bottom:10px;}
+.cta-block p{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:22px;}
+.btn-gold-lg{display:inline-block;background:var(--gold);color:#fff;border:none;border-radius:var(--r);padding:14px 32px;font-size:13.5px;font-weight:500;cursor:pointer;}
+.footer{background:var(--forest-d);padding:40px 3rem;margin-top:0;text-align:center;}
+.footer p{color:rgba(255,255,255,0.35);font-size:12px;margin-bottom:6px;}
+.footer a{color:var(--gold-l);}
+@media(max-width:640px){.nav{padding:0 1.25rem;}.svc-hero{padding:48px 1.25rem 40px;}.svc-hero h1{font-size:36px;}.wrap{padding:44px 1.25rem 32px;}.process-mini{grid-template-columns:1fr 1fr;}.footer{padding:32px 1.25rem;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">Manan Dua</a>
+  <a href="index.html#services" class="back">&larr; All services</a>
+</nav>
+
+<section class="svc-hero">
+  <div class="svc-badge">AMFI Registered · MFD</div>
+  <h1>Wealth Management</h1>
+  <p>Goal-aligned mutual fund portfolios across equity, debt, and select alternative categories, structured around your risk profile, time horizon, and evolving priorities.</p>
+</section>
+
+<div class="wrap">
+  <h2>What this service covers</h2>
+  <p>Wealth management here is built around outcomes, not products. Every portfolio begins with a clear understanding of what you're working towards, how long you have, and the level of risk you're comfortable taking, before any investment is considered.</p>
+
+  <ul>
+    <li><strong style="color:var(--forest-d);">Goal-based portfolio construction</strong>: portfolios designed across equity, debt, and alternative categories, aligned to the specific requirements of each goal</li>
+    <li><strong style="color:var(--forest-d);">SIP and lump sum strategy</strong>: a disciplined approach combining systematic investments with timely allocations where appropriate</li>
+    <li><strong style="color:var(--forest-d);">Asset allocation framework</strong>: the right mix of assets based on your risk profile and time horizon, adjusted as your goals move closer</li>
+    <li><strong style="color:var(--forest-d);">Ongoing portfolio review</strong>: periodic reviews and rebalancing to ensure your portfolio stays aligned as markets and life evolve</li>
+  </ul>
+
+  <h2>How we work together</h2>
+  <div class="process-mini">
+    <div><div class="n">01</div><div class="t">Discovery Call</div><div class="d">Understanding your current financial position and what you want to achieve. No obligation.</div></div>
+    <div><div class="n">02</div><div class="t">Financial Snapshot</div><div class="d">A structured questionnaire covering goals, risk profile, and investment horizon.</div></div>
+    <div><div class="n">03</div><div class="t">Portfolio Proposal</div><div class="d">Curated mutual fund recommendations aligned to your requirements.</div></div>
+    <div><div class="n">04</div><div class="t">Ongoing Review</div><div class="d">Regular monitoring, rebalancing, and course correction as needed.</div></div>
+  </div>
+
+  <h2>Regulatory & disclosure</h2>
+  <p>Mutual fund schemes are distributed as an AMFI-registered Mutual Fund Distributor under a valid ARN (details available in the <a href="investor-charter.html" style="color:var(--gold);">Investor Charter</a>). Investments are offered under the Regular Plan option. Commission is received from Asset Management Companies for distribution, in accordance with the AMFI Code of Conduct.</p>
+  <div class="callout">
+    <p>Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully before investing.</p>
+  </div>
+
+  <div class="cta-block">
+    <h3>Let's talk about your goals.</h3>
+    <p>The first conversation is free, and there's no obligation to move forward.</p>
+    <a href="index.html#onboarding" class="btn-gold-lg">Request a Consultation</a>
+  </div>
+</div>
+
+<div class="footer">
+  <p>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</p>
+  <p><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="investor-charter.html">Investor Charter</a></p>
+</div>
+
+</body>
+</html>
