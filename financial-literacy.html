@@ -4,6 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Financial Literacy — Manan Dua</title>
+<!-- ── Google Analytics (GA4) — consent-gated, does not track before the user agrees ── -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'denied' });
+  window.__GA_ID__ = 'G-Q7EVG30XDV';
+  function __loadGA__() {
+    if (window.__gaLoaded__) return;
+    window.__gaLoaded__ = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.__GA_ID__;
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', window.__GA_ID__);
+  }
+  (function() {
+    var consent = localStorage.getItem('cookie_consent');
+    if (consent === 'granted') {
+      gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      __loadGA__();
+    }
+  })();
+</script>
+
 <meta name="description" content="Financial literacy workshops and sessions designed to help you think clearly about money, make better decisions, and build long-term wealth habits.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -102,6 +127,35 @@ a{text-decoration:none;color:inherit;}
   <p>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</p>
   <p><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="investor-charter.html">Investor Charter</a></p>
 </div>
+
+<!-- ── Cookie consent banner ── -->
+<div id="cookieBanner" style="display:none;position:fixed;left:16px;right:16px;bottom:16px;z-index:2000;max-width:520px;margin:0 auto;background:#faf8f3;border:1px solid rgba(42,64,56,0.15);border-radius:10px;padding:20px 22px;box-shadow:0 12px 40px rgba(28,25,23,0.18);font-family:'Inter',system-ui,sans-serif;">
+  <p style="font-size:13px;color:#4a4038;line-height:1.6;margin-bottom:14px;">This site uses cookies to understand how visitors use it. We only turn this on if you agree — see our <a href="privacy.html" style="color:#b8903a;">Privacy Policy</a> for details.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button onclick="__cookieAccept__()" style="background:#2a4038;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;">Accept</button>
+    <button onclick="__cookieDecline__()" style="background:transparent;color:#4a4038;border:1px solid rgba(42,64,56,0.25);border-radius:6px;padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;">Decline</button>
+  </div>
+</div>
+<script>
+  function __cookieAccept__() {
+    localStorage.setItem('cookie_consent', 'granted');
+    gtag('consent', 'update', { 'analytics_storage': 'granted' });
+    __loadGA__();
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+  function __cookieDecline__() {
+    localStorage.setItem('cookie_consent', 'denied');
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+  (function() {
+    var consent = localStorage.getItem('cookie_consent');
+    if (!consent) {
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('cookieBanner').style.display = 'block';
+      });
+    }
+  })();
+</script>
 
 </body>
 </html>
