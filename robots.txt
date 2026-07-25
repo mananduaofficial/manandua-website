@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /meridian-templates.html
+
+Sitemap: https://manandua.in/sitemap.xml

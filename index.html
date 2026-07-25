@@ -9,6 +9,7 @@
 <meta property="og:description" content="Independent financial guidance for Indian HNIs and aspiring affluent families. Wealth management, financial education and holistic planning.">
 <meta property="og:url" content="https://manandua.in">
 <meta property="og:type" content="website">
+<link rel="canonical" href="https://manandua.in/">
 <title>Manan Dua — Your Wealth, Thoughtfully Guided</title>
 <!-- ── Google Analytics (GA4) — consent-gated, does not track before the user agrees ── -->
 <script>
@@ -1040,27 +1041,28 @@ a    { text-decoration: none; color: inherit; }
         What we do <i class="ti ti-chevron-down" aria-hidden="true"></i>
       </a>
       <div class="dd-panel" role="menu">
-        <div class="dp-item" role="menuitem" tabindex="0">
+        <a class="dp-item" href="wealth-management.html" role="menuitem" tabindex="0">
           <div class="dp-ic"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
           <div class="dp-tt">Wealth Management</div>
           <div class="dp-dd">Goal aligned portfolios across equity, debt, and alternative investments. Built for your risk and time horizon.</div>
-        </div>
+        </a>
         <div class="dp-sep" aria-hidden="true"></div>
-        <div class="dp-item" role="menuitem" tabindex="0">
+        <a class="dp-item" href="financial-literacy.html" role="menuitem" tabindex="0">
           <div class="dp-ic"><i class="ti ti-school" aria-hidden="true"></i></div>
           <div class="dp-tt">Financial Literacy</div>
           <div class="dp-dd">Workshops and webinars for individuals, families and corporate teams.</div>
-        </div>
+        </a>
         <div class="dp-sep" aria-hidden="true"></div>
-        <div class="dp-item" role="menuitem" tabindex="0">
+        <a class="dp-item" href="financial-advisory.html" role="menuitem" tabindex="0">
           <div class="dp-ic"><i class="ti ti-scale" aria-hidden="true"></i></div>
           <div class="dp-tt">Financial Advisory</div>
           <div class="dp-dd">Holistic financial planning covering investments, cash flow, insurance, and goal planning. Built around your complete financial picture.</div>
           <span class="dp-tag">Coming soon</span>
-        </div>
+        </a>
       </div>
     </div>
     <a href="#resources" class="nav-link">Blog</a>
+    <a href="financial-tools.html" class="nav-link">Financial Tools</a>
     <a href="investor-charter.html" class="nav-link">Investor Charter</a>
     <a href="#contact" class="nav-link">Contact</a>
   </div>
@@ -1093,6 +1095,7 @@ a    { text-decoration: none; color: inherit; }
   <a href="financial-literacy.html">Financial Literacy</a>
   <a href="financial-advisory.html">Financial Advisory</a>
   <a href="#resources">Blog</a>
+  <a href="financial-tools.html">Financial Tools</a>
   <a href="investor-charter.html">Investor Charter</a>
   <a href="#contact">Contact</a>
   <button class="btn-book" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a Conversation</button>
@@ -1267,7 +1270,7 @@ a    { text-decoration: none; color: inherit; }
         <label for="nl-email">Email address</label>
         <input type="email" id="nl-email" placeholder="parag@example.com" autocomplete="email" required>
         <button type="submit" class="btn-gold">Subscribe to Meridian</button>
-        <p class="nl-note">Sent from contact@manandua.in · No spam, ever · Unsubscribe any time</p>
+        <p class="nl-note">Sent from newsletter@manandua.in · No spam, ever · Unsubscribe any time</p>
       </form>
     </div>
   </div>
@@ -1576,6 +1579,7 @@ a    { text-decoration: none; color: inherit; }
       <div class="ft-col">
         <h5>Resources</h5>
         <a href="#resources">Blog</a>
+        <a href="financial-tools.html">Financial Tools</a>
         <a href="#newsletter">Meridian</a>
         <a href="https://www.youtube.com/@mananduafinancial" target="_blank" rel="noopener">YouTube</a>
       </div>
@@ -1925,7 +1929,7 @@ function handleNL(e) {
     showToast('Thank you for subscribing to Meridian. Check your inbox to confirm.');
     e.target.reset();
   }).catch(function() {
-    showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');
+    showToast('Something went wrong sending that. Please try again or email newsletter@manandua.in directly.', 'error');
   }).finally(function() {
     btn.disabled = false; btn.textContent = orig;
   });
