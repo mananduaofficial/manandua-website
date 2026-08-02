@@ -4,11 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Free endowment policy surrender vs continue calculator by Manan Dua. Compare the IRR of continuing your endowment policy vs surrendering and investing in mutual funds.">
-<meta property="og:title" content="Endowment Surrender vs Continue Calculator — Manan Dua">
-<meta property="og:description" content="Free endowment policy surrender vs continue calculator by Manan Dua. Compare the IRR of continuing your endowment policy vs surrendering and investing in mutual funds.">
-<meta property="og:url" content="https://manandua.in/endowment-surrender-calculator.html">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://manandua.in/endowment-surrender-calculator.html">
 <title>Endowment Surrender vs Continue Calculator · Meridian Tools by Manan Dua</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
 
@@ -17,7 +12,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 :root {
@@ -357,6 +351,8 @@ input[type=range]::-moz-range-thumb {
               <div class="fld"><div class="fld-top"><label for="term">Policy term (years)</label></div><div class="fld-box wide"><input type="number" id="term" value="20"></div></div>
             </div>
 
+            <div class="fld"><div class="fld-top"><label for="premiumsPaid">Premiums paid so far (years)</label></div><div class="fld-box wide"><input type="number" id="premiumsPaid" value="2" min="1"></div></div>
+
             <div class="fld">
               <div class="fld-top"><label for="premiumType">Premium payment type</label></div>
               <select class="sel" id="premiumType">
@@ -366,7 +362,6 @@ input[type=range]::-moz-range-thumb {
               </select>
             </div>
             <div class="fld" id="pptField" style="display:none;"><div class="fld-top"><label for="ppt">Premium payment tenure (years)</label></div><div class="fld-box wide"><input type="number" id="ppt" value="10"></div></div>
-            <div class="fld" id="lastPremiumField"><div class="fld-top"><label for="lastPremiumYear">Last premium payment year</label></div><div class="fld-box wide"><input type="number" id="lastPremiumYear" value="2037"></div></div>
 
             <div class="panel-body grid2" style="margin-top:0;">
               <div class="fld"><div class="fld-top"><label for="sumAssured">Sum assured (₹)</label></div><div class="fld-box wide"><input type="number" id="sumAssured" value="1000000"></div></div>
@@ -384,10 +379,7 @@ input[type=range]::-moz-range-thumb {
             </div>
             <div class="fld" id="knownSVField" style="display:none;"><div class="fld-top"><label for="knownSV">Surrender value amount (₹)</label></div><div class="fld-box wide"><input type="number" id="knownSV" value="0"></div></div>
 
-            <div class="panel-body grid2" style="margin-top:0;">
-              <div class="fld"><div class="fld-top"><label for="surrenderYear">Surrender in year</label></div><div class="fld-box wide"><input type="number" id="surrenderYear" value="2026"></div></div>
-              <div class="fld"><div class="fld-top"><label for="mfReturn">MF expected return</label><div class="fld-box"><input type="number" id="mfReturn" value="12" step="0.1"><span>%</span></div></div></div>
-            </div>
+            <div class="fld"><div class="fld-top"><label for="mfReturn">MF expected return</label><div class="fld-box"><input type="number" id="mfReturn" value="12" step="0.1"><span>%</span></div></div></div>
 
             <div class="fld">
               <div class="fld-top"><label for="scenarioMode">Strategy</label></div>
@@ -416,6 +408,7 @@ input[type=range]::-moz-range-thumb {
           <div class="res-row"><span>Special Surrender Value (SSV)</span><span id="outSSV">—</span></div>
           <div class="res-row"><span>Guaranteed Surrender Value (GSV)</span><span id="outGSV">—</span></div>
           <div class="res-row tot"><span>Payout if surrendered</span><span id="outPayout">—</span></div>
+          <p id="gsvNote" style="display:none; margin-top:10px; font-size:11px; color:var(--bad); background:#fbeeec; border:0.5px solid rgba(168,72,58,0.25); border-radius:6px; padding:8px 10px; line-height:1.5;">GSV is not applicable in policy year 1. Only SSV applies to this payout.</p>
         </div>
 
         <div class="res-card">
@@ -427,9 +420,7 @@ input[type=range]::-moz-range-thumb {
         </div>
 
         <div style="display:flex; flex-direction:column; gap:10px;">
-          <button class="btn-gold-full" id="downloadJpegBtn"><i class="ti ti-photo" aria-hidden="true"></i> Download report as JPEG</button>
-          <button class="btn-outline-full" id="downloadHtmlBtn"><i class="ti ti-file-text" aria-hidden="true"></i> Download as HTML</button>
-          <p class="dl-note">Share the report with your advisor or on WhatsApp.</p>
+          <button class="btn-gold-full" id="downloadReportBtn"><i class="ti ti-file-text" aria-hidden="true"></i> Download report</button>
         </div>
       </div>
 
@@ -511,22 +502,22 @@ const DEFAULT_SVF = {1:0.0,2:0.3,3:0.35,4:0.5,5:0.5,6:0.52,7:0.54,8:0.56,9:0.58,
 const DEFAULT_GSV = {1:0,2:0.3,3:0.35,4:0.5,5:0.5,6:0.5,7:0.5,8:0.55,9:0.6,10:0.65,11:0.7,12:0.75,13:0.8,14:0.85,15:0.9};
 
 function gsvFactor(year) { if (year <= 0) return 0; if (year >= 15) return 0.9; return DEFAULT_GSV[year] ?? 0.5; }
-function svfFactor(year, term) { const idx = Math.min(year, term); return DEFAULT_SVF[idx] ?? 0.9; }
+function svfFactor(year, term) { if (year <= 0) return 0; const idx = Math.min(year, term); return DEFAULT_SVF[idx] ?? 0.9; }
 
-function premiumsPaidCount(i, asOfYear) {
-  if (i.premiumType === "single") return 1;
-  const last = Math.min(i.lastPremiumYear, asOfYear);
-  return Math.max(0, last - i.startYear + 1);
-}
 function premiumsPayableCount(i) {
   if (i.premiumType === "single") return 1;
   return i.lastPremiumYear - i.startYear + 1;
 }
+function premiumsPaidCount(i) {
+  if (i.premiumType === "single") return 1;
+  const payable = premiumsPayableCount(i);
+  // Can't have paid more premiums than are actually payable over the term/tenure.
+  return Math.max(0, Math.min(i.premiumsPaid, payable));
+}
 function calcSSV(i) {
   if (i.knownSurrenderValue !== undefined && i.knownSurrenderValue > 0) return i.knownSurrenderValue;
   const policyYear = i.surrenderYear - i.startYear + 1;
-  if (policyYear < 2 && i.premiumType !== "single") return 0;
-  const paid = premiumsPaidCount(i, i.surrenderYear);
+  const paid = premiumsPaidCount(i);
   const payable = premiumsPayableCount(i);
   const svf = svfFactor(policyYear, i.term);
   const base = (paid / payable) * i.sumAssured + i.accruedBonus;
@@ -534,7 +525,11 @@ function calcSSV(i) {
 }
 function calcGSV(i) {
   const policyYear = i.surrenderYear - i.startYear + 1;
-  const paid = premiumsPaidCount(i, i.surrenderYear);
+  // GSV is not applicable until at least 2 years of premiums have been paid
+  // (single-pay is the exception, since the whole premium is paid upfront).
+  // Only SSV governs in policy year 1.
+  if (policyYear < 2 && i.premiumType !== "single") return null;
+  const paid = premiumsPaidCount(i);
   const totalPremiumPaid = i.premiumType === "single" ? i.annualPremium : paid * i.annualPremium;
   return totalPremiumPaid * gsvFactor(policyYear) + i.accruedBonus * 0.5;
 }
@@ -558,7 +553,10 @@ function irr(cashflows) {
 
 function runCalculation(i) {
   const ssv = calcSSV(i), gsv = calcGSV(i);
-  const surrenderValue = i.knownSurrenderValue !== undefined && i.knownSurrenderValue > 0 ? i.knownSurrenderValue : Math.max(ssv, gsv);
+  const gsvApplicable = gsv !== null;
+  const surrenderValue = i.knownSurrenderValue !== undefined && i.knownSurrenderValue > 0
+    ? i.knownSurrenderValue
+    : (gsvApplicable ? Math.max(ssv, gsv) : ssv);
   const maturity = maturityValue(i);
   const maturityYear = i.startYear + i.term - 1;
   const policyYearOfSurrender = i.surrenderYear - i.startYear + 1;
@@ -581,9 +579,15 @@ function runCalculation(i) {
     if (absYear < i.surrenderYear) {
       if (premiumDue) sCF -= i.annualPremium;
     } else if (absYear === i.surrenderYear) {
-      sCF -= surrenderValue;
+      // Receiving the surrender value and immediately reinvesting it is a wash —
+      // it's money you already own via the policy, not new cash from your pocket —
+      // so it only seeds the MF balance here, it isn't charged again as an outflow.
       mfBal = surrenderValue;
-      if (premiumDue && reinvest) { sCF -= i.annualPremium; mfBal += i.annualPremium; }
+      // The premium for the surrender year itself is assumed paid, consistent with
+      // the paid-premium count already used by the SSV/GSV formulas above — this
+      // applies regardless of strategy (it's not a "future premium" choice, it's
+      // what was already paid to reach this surrender value).
+      if (premiumDue) sCF -= i.annualPremium;
     } else {
       mfBal = mfBal * (1 + r);
       if (premiumDue && absYear <= i.lastPremiumYear && reinvest) { sCF -= i.annualPremium; mfBal += i.annualPremium; }
@@ -595,7 +599,7 @@ function runCalculation(i) {
   }
 
   const continueIRR = irr(continueCFs), surrenderIRR = irr(investCFs);
-  return { ssv, gsv, surrenderValue, maturity, continueIRR, surrenderIRR, mfFinalValue: mfBal, rows, policyYearOfSurrender, yearsToMaturity: maturityYear - i.surrenderYear };
+  return { ssv, gsv, gsvApplicable, surrenderValue, maturity, continueIRR, surrenderIRR, mfFinalValue: mfBal, rows, policyYearOfSurrender, yearsToMaturity: maturityYear - i.surrenderYear };
 }
 
 const fmtINR = (n) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Math.round(isFinite(n) ? n : 0));
@@ -611,7 +615,6 @@ const str = (id) => $(id).value;
 function toggleFields() {
   const pt = str("premiumType");
   $("pptField").style.display = pt === "limited" ? "flex" : "none";
-  $("lastPremiumField").style.display = pt === "regular" ? "flex" : "none";
   const known = str("bonusMode") === "known";
   $("knownSVField").style.display = known ? "flex" : "none";
   $("scenarioHint").textContent = str("scenarioMode") === "reinvest"
@@ -619,22 +622,19 @@ function toggleFields() {
     : "The surrender path invests only the surrender value as a lump sum. Future premiums are not reinvested. Suitable for clients near retirement.";
 }
 
-$("premiumType").addEventListener("change", () => {
-  if (str("premiumType") === "limited") {
-    const v = num("ppt");
-    $("lastPremiumYear").value = num("startYear") + v - 1;
-  }
-  toggleFields(); render();
-});
-$("ppt").addEventListener("input", () => {
-  $("lastPremiumYear").value = num("startYear") + num("ppt") - 1;
-  render();
-});
+$("premiumType").addEventListener("change", () => { toggleFields(); render(); });
 $("bonusMode").addEventListener("change", () => { toggleFields(); render(); });
 $("scenarioMode").addEventListener("change", () => { toggleFields(); render(); });
 
-const plainIds = ["policyName", "startYear", "term", "lastPremiumYear", "sumAssured", "annualPremium", "accruedBonus", "knownSV", "surrenderYear", "mfReturn"];
+const plainIds = ["policyName", "startYear", "term", "premiumsPaid", "ppt", "sumAssured", "annualPremium", "accruedBonus", "knownSV", "mfReturn"];
 plainIds.forEach((id) => { const el = $(id); if (el) el.addEventListener("input", render); });
+
+/* Derives when premiums stop being due, from the current premium type. */
+function computeLastPremiumYear(premiumType, startYear, term, ppt) {
+  if (premiumType === "single") return startYear;
+  if (premiumType === "limited") return startYear + ppt - 1;
+  return startYear + term - 1; // regular pay runs the full term
+}
 
 /* ═══════════ Core compute + render ═══════════ */
 let LAST = null, chart = null;
@@ -642,17 +642,27 @@ let LAST = null, chart = null;
 function compute() {
   const premiumType = str("premiumType");
   const startYear = num("startYear");
+  const term = num("term");
+  const pptRaw = num("ppt");
+  // Premium payment tenure can't logically exceed the policy term.
+  const ppt = Math.max(1, Math.min(Math.round(pptRaw), term));
   const bonusMode = str("bonusMode");
   const knownSV = num("knownSV");
+  // At least 1 premium (whole years); can't exceed the policy term either —
+  // you can't be surrendering in a policy year beyond the term itself.
+  const premiumsPaid = Math.max(1, Math.min(Math.round(num("premiumsPaid")), term));
   const inputs = {
     startYear,
-    term: num("term"),
+    term,
     premiumType,
-    lastPremiumYear: premiumType === "single" ? startYear : num("lastPremiumYear"),
+    lastPremiumYear: computeLastPremiumYear(premiumType, startYear, term, ppt),
     sumAssured: num("sumAssured"),
     annualPremium: num("annualPremium"),
     accruedBonus: num("accruedBonus"),
-    surrenderYear: num("surrenderYear"),
+    premiumsPaid,
+    // Policy year at surrender = premiums paid so far (you're surrendering
+    // right after making that year's payment).
+    surrenderYear: startYear + premiumsPaid - 1,
     mfReturn: num("mfReturn"),
     knownSurrenderValue: bonusMode === "known" ? knownSV : undefined,
     reinvestSavedPremiums: str("scenarioMode") === "reinvest",
@@ -661,7 +671,7 @@ function compute() {
   const winner = result.continueIRR !== null && result.surrenderIRR !== null
     ? (result.surrenderIRR > result.continueIRR ? "surrender" : "continue")
     : null;
-  return { inputs, result, winner, policyName: str("policyName"), ppt: num("ppt"), scenarioMode: str("scenarioMode") };
+  return { inputs, result, winner, policyName: str("policyName"), ppt, scenarioMode: str("scenarioMode") };
 }
 
 function render() {
@@ -671,8 +681,9 @@ function render() {
   const { result, winner } = d;
 
   $("outSSV").textContent = fmtINR(result.ssv);
-  $("outGSV").textContent = fmtINR(result.gsv);
+  $("outGSV").textContent = result.gsvApplicable ? fmtINR(result.gsv) : "N/A";
   $("outPayout").textContent = fmtINR(result.surrenderValue);
+  $("gsvNote").style.display = result.gsvApplicable ? "none" : "block";
 
   $("outContinueIRR").textContent = fmtPct(result.continueIRR);
   $("outMaturity").textContent = fmtINR(result.maturity);
@@ -683,6 +694,9 @@ function render() {
     $("outReco").textContent = winner === "surrender" ? "Surrender & Invest" : "Continue the Policy";
     const diff = Math.abs((result.surrenderIRR - result.continueIRR) * 100).toFixed(2);
     $("outRecoSub").textContent = diff + "% higher IRR over " + result.yearsToMaturity + " year" + (result.yearsToMaturity === 1 ? "" : "s") + " to maturity";
+  } else if (result.surrenderValue <= 0 && result.continueIRR !== null) {
+    $("outReco").textContent = "Continue the Policy";
+    $("outRecoSub").textContent = "Surrender value is ₹0 this early — there's nothing to invest if you surrender now.";
   } else {
     $("outReco").textContent = "Not enough data";
     $("outRecoSub").textContent = "Adjust the inputs to see a recommendation.";
@@ -763,7 +777,7 @@ function buildReportHtml() {
   const revisitUrl = /^https?:\/\//i.test(rawHref) ? rawHref : "https://manandua.in/endowment-surrender-calculator.html";
 
   const statRows = [
-    ["Payout if surrendered", fmtINR(result.surrenderValue), "Max(SSV, GSV)"],
+    ["Payout if surrendered", fmtINR(result.surrenderValue), result.gsvApplicable ? "Max(SSV, GSV)" : "SSV only (GSV n/a in yr 1)"],
     ["Maturity value", fmtINR(result.maturity), "In " + result.yearsToMaturity + " yrs"],
     ["MF corpus if invested", fmtINR(result.mfFinalValue), "@ " + inputs.mfReturn + "% p.a."],
   ];
@@ -775,8 +789,7 @@ function buildReportHtml() {
     ["Sum assured", fmtINR(inputs.sumAssured)],
     ["Annual premium", fmtINR(inputs.annualPremium)],
     ["Accrued bonus", fmtINR(inputs.accruedBonus)],
-    ["Surrender year", String(inputs.surrenderYear)],
-    ["Policy year at surrender", String(result.policyYearOfSurrender)],
+    ["Premiums paid so far", inputs.premiumsPaid + " yrs"],
     ["MF expected return", inputs.mfReturn + "%"],
     ["Strategy", d.scenarioMode === "reinvest" ? "Reinvest saved premiums" : "Lump-sum only"],
   ];
@@ -790,7 +803,12 @@ function buildReportHtml() {
         <div class="reco-title">Recommendation: ${winner === "surrender" ? "Surrender &amp; Invest" : "Continue the Policy"}</div>
         <div class="reco-sub">${Math.abs((result.surrenderIRR - result.continueIRR) * 100).toFixed(2)}% higher IRR &middot; over ${result.yearsToMaturity} year${result.yearsToMaturity === 1 ? "" : "s"} to maturity</div>
       </div>`
-    : "";
+    : (result.surrenderValue <= 0 && result.continueIRR !== null
+        ? `<div class="reco forest">
+            <div class="reco-title">Recommendation: Continue the Policy</div>
+            <div class="reco-sub">Surrender value is ₹0 this early — there's nothing to invest if you surrender now.</div>
+          </div>`
+        : "");
 
   return `<!doctype html><html><head><meta charset="utf-8"><title>Endowment Surrender vs Continue Report · Meridian</title>
 <style>
@@ -834,6 +852,7 @@ tr:last-child td{border-bottom:none}
 <p class="lede">Continue vs Surrender analysis &middot; ${inputs.premiumType.charAt(0).toUpperCase() + inputs.premiumType.slice(1)} pay &middot; Term ${inputs.term} yrs &middot; Started ${inputs.startYear}</p>
 
 ${recoBlock}
+${result.gsvApplicable ? "" : '<p style="font-size:11.5px;color:#a8483a;background:#fbeeec;border:1px solid rgba(168,72,58,0.25);border-radius:8px;padding:10px 14px;margin-bottom:20px;">Note: GSV is not applicable in policy year 1. The payout figures below reflect SSV only.</p>'}
 
 <h2>Key figures</h2>
 <div class="stat-grid">
@@ -885,52 +904,8 @@ function downloadHtml() {
   URL.revokeObjectURL(url);
 }
 
-async function downloadJpeg() {
-  const btn = $("downloadJpegBtn");
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2" aria-hidden="true"></i> Generating JPEG…';
-  try {
-    if (typeof html2canvas === "undefined") throw new Error("html2canvas did not load");
-    const html = buildReportHtml();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const styleTag = doc.querySelector("style") ? doc.querySelector("style").outerHTML : "";
-    const bodyContent = doc.body.innerHTML;
-
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "fixed";
-    wrapper.style.top = "0";
-    wrapper.style.left = "-10000px";
-    wrapper.style.width = "860px";
-    wrapper.style.background = "#faf8f3";
-    wrapper.innerHTML = styleTag + '<div class="report-root">' + bodyContent + "</div>";
-    const scoped = wrapper.querySelector("style");
-    if (scoped) {
-      scoped.textContent = (scoped.textContent || "").replace(/(^|\})\s*body\s*\{/g, "$1 .report-root{");
-    }
-    document.body.appendChild(wrapper);
-
-    const canvas = await html2canvas(wrapper.querySelector(".report-root"), { backgroundColor: "#faf8f3", scale: 2, useCORS: true });
-    document.body.removeChild(wrapper);
-
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = "endowment-report-" + new Date().toISOString().slice(0, 10) + ".jpg";
-    document.body.appendChild(a); a.click(); a.remove();
-  } catch (err) {
-    console.error(err);
-    alert("Could not generate report: " + (err && err.message ? err.message : err));
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = orig;
-  }
-}
-
 /* ═══════════ Wire up buttons + nav (before first render) ═══════════ */
-$("downloadJpegBtn").addEventListener("click", downloadJpeg);
-$("downloadHtmlBtn").addEventListener("click", downloadHtml);
+$("downloadReportBtn").addEventListener("click", downloadHtml);
 
 const ham = $("ham"), mob = $("mobMenu");
 ham.addEventListener("click", function () {
