@@ -4,11 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Free retirement corpus calculator by Manan Dua. Map your assets, including EPF, NPS, PPF, mutual funds, stocks, and bonds, against your future lifestyle and see what it takes to retire comfortably.">
-<meta property="og:title" content="Retirement Corpus Calculator — Manan Dua">
-<meta property="og:description" content="Free retirement corpus calculator by Manan Dua. Map your assets, including EPF, NPS, PPF, mutual funds, stocks, and bonds, against your future lifestyle and see what it takes to retire comfortably.">
-<meta property="og:url" content="https://manandua.in/retirement-corpus-calculator.html">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://manandua.in/retirement-corpus-calculator.html">
 <title>Retirement Corpus Calculator · Meridian Tools by Manan Dua</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
 
@@ -16,7 +11,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 :root {
@@ -408,7 +402,7 @@ input[type=range]::-moz-range-thumb {
         <div class="panel">
           <div class="panel-hd">
             <h3>Passive income</h3>
-            <p class="panel-sub">Inflated at the same rate as expenses, then subtracted before computing corpus.</p>
+            <p class="panel-sub">Grows at its own rate, then subtracted (never below zero) before computing corpus.</p>
           </div>
           <div class="panel-body">
             <div class="income-row">
@@ -423,6 +417,7 @@ input[type=range]::-moz-range-thumb {
                 <select class="sel" id="otherFreq"><option value="monthly" selected>Monthly</option><option value="annually">Annually</option></select>
               </div>
             </div>
+            <div class="fld"><div class="fld-top"><label for="passiveGrowth">Passive income growth (expected)</label></div><div class="fld-box"><input type="number" id="passiveGrowth" value="6" step="0.1"><span>%</span></div></div>
           </div>
         </div>
 
@@ -448,7 +443,7 @@ input[type=range]::-moz-range-thumb {
                     <option value="min" selected>Minimum contribution (statutory)</option>
                     <option value="value">Enter value</option>
                   </select>
-                  <p class="fld-hint" id="epfMinHint">Assumes statutory minimum of ₹3,600/month (12% + 12% of ₹15,000 ceiling) at 8.25% p.a.</p>
+                  <p class="fld-hint" id="epfMinHint">Assumes statutory minimum of ₹3,600/month at 8.25% p.a.</p>
                 </div>
                 <div id="epfValueFields" style="display:none; flex-direction:column; gap:18px;">
                   <div class="fld">
@@ -473,11 +468,17 @@ input[type=range]::-moz-range-thumb {
                   <div class="fld-top"><label for="npsGrowth">Salary growth (expected)</label><div class="fld-box"><input type="number" id="npsGrowth" value="8" step="0.5"><span>%</span></div></div>
                   <input type="range" id="npsGrowthR" min="0" max="20" step="0.5" value="8">
                 </div>
-                <div class="fld"><div class="fld-top"><label for="npsTier1">Current NPS Tier 1 balance</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsTier1" value="0"></div></div>
-                <div class="fld"><div class="fld-top"><label for="npsTier2">Current NPS Tier 2 balance</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsTier2" value="0"></div></div>
-                <div class="fld"><div class="fld-top"><label for="npsMonthly">Monthly contribution</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsMonthly" value="10000"></div></div>
+                <div class="grid2">
+                  <div class="fld"><div class="fld-top"><label for="npsTier1">Current NPS Tier 1 balance</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsTier1" value="0"></div></div>
+                  <div class="fld"><div class="fld-top"><label for="npsTier1Monthly">Tier 1 monthly contribution</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsTier1Monthly" value="10000"></div></div>
+                </div>
+                <div class="grid2">
+                  <div class="fld"><div class="fld-top"><label for="npsTier2">Current NPS Tier 2 balance</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsTier2" value="0"></div></div>
+                  <div class="fld"><div class="fld-top"><label for="npsTier2Monthly">Tier 2 monthly contribution</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="npsTier2Monthly" value="0"></div></div>
+                </div>
+                <p class="fld-hint">Tier 2 has no lock-in, so it's assumed 100% Equity (12% p.a.) regardless of the lifecycle/active choice below, which applies to Tier 1 only.</p>
                 <div class="fld">
-                  <div class="fld-top"><label for="npsMode">Investment choice</label></div>
+                  <div class="fld-top"><label for="npsMode">Investment choice (Tier 1)</label></div>
                   <select class="sel" id="npsMode">
                     <option value="auto" selected>Auto choice (Lifecycle)</option>
                     <option value="active">Active choice</option>
@@ -489,9 +490,10 @@ input[type=range]::-moz-range-thumb {
                     <select class="sel" id="npsLc">
                       <option value="LC75" selected>Aggressive (LC75)</option>
                       <option value="LC50">Moderate (LC50)</option>
+                      <option value="BLC">Balanced (BLC — 50% equity till 45)</option>
                       <option value="LC25">Conservative (LC25)</option>
                     </select>
-                    <p class="fld-hint">E: 12% &middot; C: 9% &middot; G: 6% &middot; A: 8%</p>
+                    <p class="fld-hint">E: 12% &middot; C: 9% &middot; G: 6% (PFRDA glide path by age — Alternative Assets apply to Active Choice only)</p>
                   </div>
                 </div>
                 <div id="npsActiveFields" style="display:none;">
@@ -620,9 +622,7 @@ input[type=range]::-moz-range-thumb {
         </div>
 
         <div style="display:flex; flex-direction:column; gap:10px;">
-          <button class="btn-gold-full" id="downloadJpegBtn"><i class="ti ti-photo" aria-hidden="true"></i> Download report as JPEG</button>
-          <button class="btn-outline-full" id="downloadHtmlBtn"><i class="ti ti-file-text" aria-hidden="true"></i> Download as HTML</button>
-          <p class="dl-note">Share the report with your advisor or on WhatsApp.</p>
+          <button class="btn-gold-full" id="downloadReportBtn"><i class="ti ti-file-text" aria-hidden="true"></i> Download report</button>
         </div>
       </div>
 
@@ -688,21 +688,29 @@ function retirementCorpus(annualExpenses, lifeYears, inflationAfter, returnsAfte
   return pv * (1 + r);
 }
 
+// Official PFRDA lifecycle fund allocation table (E/C/G %), published age breakpoints.
+// Source: PFRDA circular / Ministry of Finance release on LC75, LC50, LC25 asset allocation.
+// Auto Choice / Lifecycle funds allocate only E/C/G — no Alternative Assets sleeve (that's Active Choice-only).
+const LC_TABLE = {
+  LC75: { 35: { E: 75, C: 10, G: 15 }, 40: { E: 55, C: 15, G: 30 }, 45: { E: 35, C: 20, G: 45 }, 50: { E: 20, C: 20, G: 60 }, 55: { E: 15, C: 10, G: 75 } },
+  LC50: { 35: { E: 50, C: 30, G: 20 }, 40: { E: 40, C: 25, G: 35 }, 45: { E: 30, C: 20, G: 50 }, 50: { E: 20, C: 15, G: 65 }, 55: { E: 10, C: 10, G: 80 } },
+  BLC: { 35: { E: 50, C: 30, G: 20 }, 40: { E: 50, C: 30, G: 20 }, 45: { E: 50, C: 30, G: 20 }, 50: { E: 40, C: 20, G: 40 }, 55: { E: 35, C: 10, G: 55 } },
+  LC25: { 35: { E: 25, C: 45, G: 30 }, 40: { E: 20, C: 35, G: 45 }, 45: { E: 15, C: 25, G: 60 }, 50: { E: 10, C: 15, G: 75 }, 55: { E: 5, C: 5, G: 90 } },
+};
 function lifecycleAlloc(age, lc) {
   const a = Math.min(Math.max(age, 18), 55);
-  if (lc === "LC75") {
-    if (a <= 35) return { E: 75, C: 10, G: 10, A: 5 };
-    const E = 75 - 3 * (a - 35), rest = 95 - E;
-    return { E, C: rest / 2, G: rest / 2, A: 5 };
+  const table = LC_TABLE[lc] || LC_TABLE.LC50;
+  const points = [35, 40, 45, 50, 55];
+  if (a <= 35) return { ...table[35], A: 0 };
+  for (let i = 0; i < points.length - 1; i++) {
+    const lo = points[i], hi = points[i + 1];
+    if (a >= lo && a <= hi) {
+      const t = (a - lo) / (hi - lo);
+      const p0 = table[lo], p1 = table[hi];
+      return { E: p0.E + (p1.E - p0.E) * t, C: p0.C + (p1.C - p0.C) * t, G: p0.G + (p1.G - p0.G) * t, A: 0 };
+    }
   }
-  if (lc === "LC50") {
-    if (a <= 35) return { E: 50, C: 30, G: 15, A: 5 };
-    const E = 50 - 2 * (a - 35), rest = 95 - E;
-    return { E, C: (rest * 2) / 3, G: rest / 3, A: 5 };
-  }
-  if (a <= 35) return { E: 25, C: 45, G: 25, A: 5 };
-  const E = 25 - (a - 35), rest = 95 - E;
-  return { E, C: (rest * 9) / 14, G: (rest * 5) / 14, A: 5 };
+  return { ...table[55], A: 0 };
 }
 const R = { E: 0.12, C: 0.09, G: 0.06, A: 0.08 };
 const weightedReturn = (al) => (al.E * R.E + al.C * R.C + al.G * R.G + al.A * R.A) / 100;
@@ -767,9 +775,9 @@ function linkSlider(numId, rangeId) {
 
 /* plain inputs / selects that trigger a re-render but have no paired slider */
 const plainIds = [
-  "currentExpenses", "rental", "rentalFreq", "otherIncome", "otherFreq",
+  "currentExpenses", "rental", "rentalFreq", "otherIncome", "otherFreq", "passiveGrowth",
   "useEpf", "epfOpening", "epfMode", "epfEmployer", "epfEmployee",
-  "useNps", "npsTier1", "npsTier2", "npsMonthly", "npsMode", "npsLc",
+  "useNps", "npsTier1", "npsTier2", "npsTier1Monthly", "npsTier2Monthly", "npsMode", "npsLc",
   "usePpf", "ppfOpening", "ppfAnnual",
   "useEquity", "eqOpening", "eqMonthly",
   "useStocks", "stOpening", "stMonthly",
@@ -815,8 +823,9 @@ function compute() {
   const rentalAnnual = rentalFreq === "monthly" ? rental * 12 : rental;
   const otherAnnual = otherFreq === "monthly" ? otherIncome * 12 : otherIncome;
 
+  const passiveGrowth = num("passiveGrowth");
   const annualAtRetirement = currentExpenses * Math.pow(1 + inflationTill / 100, years);
-  const passiveAtRetirement = (rentalAnnual + otherAnnual) * Math.pow(1 + inflationTill / 100, years);
+  const passiveAtRetirement = (rentalAnnual + otherAnnual) * Math.pow(1 + passiveGrowth / 100, years);
   const netAnnualAtRetirement = Math.max(0, annualAtRetirement - passiveAtRetirement);
   const corpus = retirementCorpus(netAnnualAtRetirement, lifeAfter, inflationAfter / 100, returnsAfter / 100);
 
@@ -825,15 +834,23 @@ function compute() {
   const epfMonthly = epfEmployer + epfEmployee;
   const epfCorpus = useEpf ? epfProjection({ years, openingBalance: epfOpening, mode: epfMode, monthlyContrib: epfMonthly, growth: epfGrowth }).balance : 0;
 
-  const useNps = $("useNps").checked, npsMonthly = num("npsMonthly"), npsGrowth = num("npsGrowth");
+  const useNps = $("useNps").checked, npsGrowth = num("npsGrowth");
   const npsMode = $("npsMode").value, npsLc = $("npsLc").value;
   const npsE = num("npsE"), npsG = num("npsG"), npsC = num("npsC");
   const npsTier1 = num("npsTier1"), npsTier2 = num("npsTier2");
-  const npsOpening = npsTier1 + npsTier2;
+  const npsTier1Monthly = num("npsTier1Monthly"), npsTier2Monthly = num("npsTier2Monthly");
   const npsActiveValid = Math.abs(npsE + npsG + npsC - 100) < 0.01;
-  const npsCorpus = useNps
-    ? (npsMode === "active" && !npsActiveValid ? 0 : npsProjection({ age, retirementAge, monthly: npsMonthly, growth: npsGrowth, mode: npsMode, lc: npsLc, active: { E: npsE, G: npsG, C: npsC }, openingBalance: npsOpening }))
+  // Tier 1 follows the lifecycle/active glide path selected below (it de-risks toward retirement,
+  // same as a real Lifecycle Fund). Tier 2 has no lock-in and no retirement de-risking requirement,
+  // so — matching common practice — it's treated as a pure-equity sleeve, independent of Tier 1's
+  // allocation, rather than being blended into one combined-allocation pool.
+  const npsTier1Corpus = useNps && !(npsMode === "active" && !npsActiveValid)
+    ? npsProjection({ age, retirementAge, monthly: npsTier1Monthly, growth: npsGrowth, mode: npsMode, lc: npsLc, active: { E: npsE, G: npsG, C: npsC }, openingBalance: npsTier1 })
     : 0;
+  const npsTier2Corpus = useNps
+    ? npsProjection({ age, retirementAge, monthly: npsTier2Monthly, growth: npsGrowth, mode: "active", lc: npsLc, active: { E: 100, G: 0, C: 0 }, openingBalance: npsTier2 })
+    : 0;
+  const npsCorpus = npsTier1Corpus + npsTier2Corpus;
 
   const usePpf = $("usePpf").checked, ppfOpening = num("ppfOpening"), ppfAnnual = num("ppfAnnual");
   const ppfCorpus = usePpf ? fvAnnual(ppfOpening, ppfAnnual, years, 0.071) : 0;
@@ -1084,54 +1101,8 @@ function downloadHtml() {
   URL.revokeObjectURL(url);
 }
 
-async function downloadJpeg() {
-  const btn = $("downloadJpegBtn");
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2" aria-hidden="true"></i> Generating JPEG…';
-  try {
-    if (typeof html2canvas === "undefined") throw new Error("html2canvas did not load");
-    const html = buildReportHtml();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const styleTag = doc.querySelector("style") ? doc.querySelector("style").outerHTML : "";
-    const bodyContent = doc.body.innerHTML;
-
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "fixed";
-    wrapper.style.top = "0";
-    wrapper.style.left = "-10000px";
-    wrapper.style.width = "860px";
-    wrapper.style.background = "#faf8f3";
-    wrapper.innerHTML = styleTag + '<div class="report-root">' + bodyContent + "</div>";
-    const scoped = wrapper.querySelector("style");
-    if (scoped) {
-      scoped.textContent = (scoped.textContent || "").replace(/(^|\})\s*body\s*\{/g, "$1 .report-root{");
-    }
-    document.body.appendChild(wrapper);
-
-    const canvas = await html2canvas(wrapper.querySelector(".report-root"), {
-      backgroundColor: "#faf8f3", scale: 2, useCORS: true,
-    });
-    document.body.removeChild(wrapper);
-
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = "retirement-readiness-" + new Date().toISOString().slice(0, 10) + ".jpg";
-    document.body.appendChild(a); a.click(); a.remove();
-  } catch (err) {
-    console.error(err);
-    alert("Could not generate report: " + (err && err.message ? err.message : err));
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = orig;
-  }
-}
-
 /* ═══════════ Wire up buttons + nav (before first render, so nothing here can be blocked) ═══════════ */
-$("downloadJpegBtn").addEventListener("click", downloadJpeg);
-$("downloadHtmlBtn").addEventListener("click", downloadHtml);
+$("downloadReportBtn").addEventListener("click", downloadHtml);
 
 const ham = $("ham"), mob = $("mobMenu");
 ham.addEventListener("click", function () {
