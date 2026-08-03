@@ -4,11 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Free goal-based financial planning calculator by Manan Dua. Pick a goal such as education, wedding, vehicle, or house, and see the SIP it takes to get there.">
-<meta property="og:title" content="Plan Your Goal — Manan Dua">
-<meta property="og:description" content="Free goal-based financial planning calculator by Manan Dua. Pick a goal such as education, wedding, vehicle, or house, and see the SIP it takes to get there.">
-<meta property="og:url" content="https://manandua.in/goal-planner.html">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://manandua.in/goal-planner.html">
 <title>Plan Your Goal · Meridian Tools by Manan Dua</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
 
@@ -16,7 +11,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 :root {
@@ -490,7 +484,7 @@ input[type=range]::-moz-range-thumb {
         </div>
 
         <div style="display:flex; flex-direction:column; gap:10px;">
-          <button class="btn-gold-full" id="downloadJpegBtn"><i class="ti ti-download" aria-hidden="true"></i> Download report</button>
+          <button class="btn-gold-full" id="downloadReportBtn"><i class="ti ti-download" aria-hidden="true"></i> Download report</button>
         </div>
       </div>
 
@@ -871,51 +865,19 @@ ${inputRows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}
 </body></html>`;
 }
 
-async function downloadJpeg() {
-  const btn = $("downloadJpegBtn");
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2" aria-hidden="true"></i> Generating JPEG…';
-  try {
-    if (typeof html2canvas === "undefined") throw new Error("html2canvas did not load");
-    const html = buildReportHtml();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const styleTag = doc.querySelector("style") ? doc.querySelector("style").outerHTML : "";
-    const bodyContent = doc.body.innerHTML;
-
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "fixed";
-    wrapper.style.top = "0";
-    wrapper.style.left = "-10000px";
-    wrapper.style.width = "860px";
-    wrapper.style.background = "#faf8f3";
-    wrapper.innerHTML = styleTag + '<div class="report-root">' + bodyContent + "</div>";
-    const scoped = wrapper.querySelector("style");
-    if (scoped) {
-      scoped.textContent = (scoped.textContent || "").replace(/(^|\})\s*body\s*\{/g, "$1 .report-root{");
-    }
-    document.body.appendChild(wrapper);
-
-    const canvas = await html2canvas(wrapper.querySelector(".report-root"), { backgroundColor: "#faf8f3", scale: 2, useCORS: true });
-    document.body.removeChild(wrapper);
-
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = "goal-report-" + str("goalType") + "-" + new Date().toISOString().slice(0, 10) + ".jpg";
-    document.body.appendChild(a); a.click(); a.remove();
-  } catch (err) {
-    console.error(err);
-    alert("Could not generate report: " + (err && err.message ? err.message : err));
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = orig;
-  }
+function downloadHtml() {
+  const html = buildReportHtml();
+  const blob = new Blob([html], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "goal-report-" + str("goalType") + "-" + new Date().toISOString().slice(0, 10) + ".html";
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
 }
 
 /* ═══════════ Wire up buttons + nav (before first render) ═══════════ */
-$("downloadJpegBtn").addEventListener("click", downloadJpeg);
+$("downloadReportBtn").addEventListener("click", downloadHtml);
 
 const ham = $("ham"), mob = $("mobMenu");
 ham.addEventListener("click", function () {
