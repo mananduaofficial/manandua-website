@@ -110,9 +110,10 @@ a:hover{color:var(--forest);}
 </div>
 
 <div class="footer">
-  <p>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</p>
+  <p>&copy; <span id="cyear">2026</span> Manan Dua &middot; manandua.in &middot; All rights reserved</p>
   <p><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="investor-charter.html">Investor Charter</a></p>
 </div>
+<script>document.getElementById('cyear').textContent = new Date().getFullYear();</script>
 
 <!-- ── Cookie consent banner ── -->
 <div id="cookieBanner" style="display:none;position:fixed;left:16px;right:16px;bottom:16px;z-index:2000;max-width:520px;margin:0 auto;background:#faf8f3;border:1px solid rgba(42,64,56,0.15);border-radius:10px;padding:20px 22px;box-shadow:0 12px 40px rgba(28,25,23,0.18);font-family:'Inter',system-ui,sans-serif;">

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Educational articles, free financial calculators, and the Meridian newsletter from Manan Dua — resources to help you think clearly about money.">
+<meta property="og:title" content="Resources — Manan Dua">
+<meta property="og:description" content="Educational articles, free financial calculators, and the Meridian newsletter from Manan Dua — resources to help you think clearly about money.">
+<meta property="og:url" content="https://manandua.in/resources.html">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://manandua.in/resources.html">
+<title>Resources — Manan Dua</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
+
+<style>
+:root {
+  --forest:    #2a4038;
+  --forest-d:  #1d2e28;
+  --forest-m:  #3a5448;
+  --forest-l:  #4a6858;
+  --gold:      #b8903a;
+  --gold-l:    #cfa54f;
+  --gold-pale: #f0e6cc;
+  --cream:     #f5f0e8;
+  --cream-d:   #ede8de;
+  --linen:     #faf8f3;
+  --warm:      #7a6e60;
+  --text:      #1c1917;
+  --soft:      #4a4038;
+  --mute:      #8c8070;
+  --border:    rgba(42,64,56,0.10);
+  --border-g:  rgba(184,144,58,0.25);
+  --copper:    #a8623e;
+  --copper-d:  #935233;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'Inter', system-ui, sans-serif;
+  --r:         6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--linen); color: var(--text); line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+
+/* ═══ NAV ═══ */
+.nav {
+  background: var(--linen); border-bottom: 0.5px solid var(--border); padding: 0 3rem;
+  display: flex; align-items: center; justify-content: space-between; height: 68px;
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand-txt { display: flex; flex-direction: column; line-height: 1.15; }
+.nav-brand-txt .nb-name { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--forest-d); letter-spacing: 0.2px; }
+.nav-brand-txt .nb-sub { font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--mute); }
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-link { font-size: 13.5px; font-weight: 400; color: var(--soft); cursor: pointer; transition: color .15s; }
+.nav-link:hover, .nav-link.active { color: var(--forest); }
+.nav-link.active { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.btn-book { font-family: var(--sans); font-size: 13px; font-weight: 500; background: var(--forest); color: #fff; border: none; border-radius: var(--r); padding: 11px 24px; cursor: pointer; transition: background .15s; }
+.btn-book:hover { background: var(--copper); }
+.btn-book:active { background: var(--copper-d); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
+.mob-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; background: var(--linen); border-bottom: 0.5px solid var(--border); padding: 1.5rem 2rem; z-index: 99; box-shadow: 0 8px 32px rgba(28,25,23,0.08); }
+.mob-menu a { display: block; font-size: 15px; color: var(--soft); padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+.mob-menu a:last-of-type { border-bottom: none; }
+.mob-menu .btn-book { display: block; width: 100%; text-align: center; margin-top: 16px; }
+
+/* ═══ HERO ═══ */
+.hero { background: var(--forest-d); padding: 64px 3rem 56px; position: relative; overflow: hidden; }
+.hero::after { content: ''; position: absolute; top: -40%; right: -8%; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(207,165,79,0.10) 0%, transparent 70%); pointer-events: none; }
+.hero-in { max-width: 1180px; margin: 0 auto; position: relative; }
+.crumb { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 6px; }
+.crumb:hover { color: var(--gold-l); }
+.hero-badge { display: inline-flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase; color: var(--gold-l); margin-bottom: 18px; }
+.hero-badge::before { content: ''; display: inline-block; width: 32px; height: 0.5px; background: var(--gold); }
+.hero h1 { font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.14; color: #fff; max-width: 640px; }
+.hero h1 em { color: var(--gold-l); font-style: italic; }
+.hero-sub { font-size: 14.5px; font-weight: 300; color: rgba(255,255,255,0.55); max-width: 560px; margin-top: 14px; line-height: 1.8; }
+
+/* ═══ SECTION ═══ */
+.sec { padding: 56px 3rem 88px; }
+.sec-in { max-width: 1180px; margin: 0 auto; }
+.group + .group { margin-top: 56px; }
+.group-hd { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+.group-hd-l { display: flex; align-items: baseline; gap: 14px; flex: 1; min-width: 200px; }
+.group-hd h2 { font-family: var(--serif); font-size: 24px; font-weight: 500; color: var(--forest-d); }
+.group-hd .line { flex: 1; height: 0.5px; background: var(--border); }
+.group-hd .count { font-size: 11.5px; color: var(--mute); }
+.btn-outline-forest {
+  font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--forest-d);
+  background: transparent; border: 0.5px solid var(--border); border-radius: var(--r);
+  padding: 10px 20px; cursor: pointer; transition: border-color .15s; white-space: nowrap;
+}
+.btn-outline-forest:hover { border-color: var(--border-g); color: var(--forest-m); }
+
+/* Articles */
+.blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.blog-card { background: #fff; border: 0.5px solid var(--border); border-radius: 10px; padding: 24px; transition: border-color .15s; cursor: pointer; display: block; }
+.blog-card:hover { border-color: var(--border-g); }
+.blog-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.blog-cat { font-size: 10px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: var(--gold); }
+.blog-date { font-size: 11px; color: var(--mute); }
+.blog-card h4 { font-family: var(--serif); font-size: 18px; font-weight: 500; color: var(--forest-d); line-height: 1.4; margin-bottom: 10px; }
+.blog-card p { font-size: 13px; font-weight: 300; color: var(--soft); line-height: 1.7; }
+.blog-read { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: var(--gold); margin-top: 16px; transition: gap .15s; }
+.blog-card:hover .blog-read { gap: 8px; }
+
+/* Tools preview */
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.tool-card {
+  background: #fff; border: 0.5px solid var(--border); border-radius: 12px; padding: 26px;
+  display: flex; flex-direction: column; gap: 14px; transition: transform .15s, box-shadow .15s, border-color .15s;
+}
+.tool-card:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(28,25,23,0.08); border-color: var(--border-g); }
+.tool-card .tc-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--forest-d); display: flex; align-items: center; justify-content: center; color: var(--gold-l); font-size: 20px; }
+.tool-card h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--forest-d); }
+.tool-card p { font-size: 13px; color: var(--soft); line-height: 1.7; flex: 1; }
+.tool-card .tc-link { font-size: 12.5px; font-weight: 500; color: var(--gold); display: inline-flex; align-items: center; gap: 6px; }
+.tool-card:hover .tc-link { color: var(--forest); }
+
+/* Newsletter */
+.nl-wrap { background: var(--forest-d); border-radius: 12px; padding: 52px 56px; display: flex; gap: 64px; align-items: flex-start; flex-wrap: wrap; }
+.nl-l { flex: 1; min-width: 220px; }
+.nl-l .ey { color: var(--gold-l); margin-bottom: 14px; }
+.nl-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.nl-brand svg { flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(207,165,79,0.35)); }
+.nl-l h3 { font-family: var(--serif); font-size: 44px; font-weight: 500; color: var(--gold-l); letter-spacing: 0.3px; line-height: 1.1; text-shadow: 0 0 24px rgba(207,165,79,0.25); }
+.nl-l p { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.85; margin-top: 18px; }
+.nl-r { flex: 1; min-width: 260px; }
+.nl-r label { font-size: 10px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); display: block; margin-bottom: 6px; margin-top: 16px; }
+.nl-r label:first-child { margin-top: 0; }
+.nl-r input { width: 100%; background: rgba(255,255,255,0.07); border: 0.5px solid rgba(255,255,255,0.12); border-radius: var(--r); padding: 11px 13px; color: #fff; font-size: 13.5px; font-family: var(--sans); font-weight: 300; }
+.nl-r input::placeholder { color: rgba(255,255,255,0.2); }
+.nl-r input:focus { outline: none; border-color: var(--gold); }
+.btn-gold { font-family: var(--sans); font-size: 13px; font-weight: 500; background: var(--gold); color: #fff; border: none; border-radius: var(--r); padding: 14px 32px; cursor: pointer; transition: background .15s; letter-spacing: 0.3px; }
+.btn-gold:hover { background: var(--gold-l); }
+.nl-r .btn-gold { width: 100%; margin-top: 18px; }
+.nl-note { font-size: 11px; color: rgba(255,255,255,0.20); margin-top: 10px; text-align: center; }
+
+.ey { font-size: 11px; font-weight: 500; letter-spacing: 1.6px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+
+/* Toast */
+.toast-stack { position: fixed; bottom: 28px; right: 28px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; max-width: 360px; }
+.toast { background: var(--forest-d); border: 0.5px solid rgba(184,144,58,0.35); border-left: 3px solid var(--gold); border-radius: 8px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 12px 32px rgba(28,25,23,0.25); transform: translateX(420px); opacity: 0; transition: transform .35s cubic-bezier(.2,.9,.3,1), opacity .35s; }
+.toast.show { transform: translateX(0); opacity: 1; }
+.toast.error { border-left-color: #c0654a; }
+.toast-ic { width: 22px; height: 22px; border-radius: 50%; background: rgba(207,165,79,0.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.toast.error .toast-ic { background: rgba(192,101,74,0.18); }
+.toast-ic .ti { font-size: 13px; color: var(--gold-l); }
+.toast.error .toast-ic .ti { color: #e0a48e; }
+.toast-msg { font-size: 13.5px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.6; }
+.toast-close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.35); font-size: 16px; line-height: 1; padding: 0; margin-left: auto; flex-shrink: 0; }
+.toast-close:hover { color: rgba(255,255,255,0.7); }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--forest-d); padding: 48px 3rem 28px; }
+.footer-in { max-width: 1180px; margin: 0 auto; }
+.footer-top { display: flex; gap: 56px; flex-wrap: wrap; padding-bottom: 28px; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.ft-brand { flex: 1.3; min-width: 200px; display: flex; align-items: flex-start; gap: 12px; }
+.ft-logo { font-family: var(--serif); font-size: 19px; font-weight: 500; color: #fff; }
+.ft-logo em { color: var(--gold-l); font-style: normal; }
+.ft-brand p { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.35); margin-top: 8px; line-height: 1.8; max-width: 240px; }
+.ft-links { display: flex; gap: 48px; flex-wrap: wrap; }
+.ft-col h5 { font-size: 10px; font-weight: 500; letter-spacing: 0.9px; text-transform: uppercase; color: rgba(255,255,255,0.30); margin-bottom: 12px; }
+.ft-col a { display: block; font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 8px; transition: color .15s; }
+.ft-col a:hover { color: var(--gold-l); }
+.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-top: 18px; align-items: flex-start; }
+.footer-bottom span { font-size: 11px; color: rgba(255,255,255,0.18); }
+.ft-disc { font-size: 10px; color: rgba(255,255,255,0.16); max-width: 500px; line-height: 1.6; }
+
+@media(max-width: 900px) {
+  .nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .hero { padding: 48px 1.5rem 44px; }
+  .hero h1 { font-size: 32px; }
+  .sec { padding: 40px 1.5rem 56px; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; }
+  .nl-wrap { padding: 36px 24px; }
+  .footer { padding: 40px 1.5rem 24px; }
+}
+@media(max-width: 640px) {
+  .toast-stack { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="index.html" class="nav-brand">
+    <svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true">
+      <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+      <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+      <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+      <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+    </svg>
+    <div class="nav-brand-txt">
+      <span class="nb-name">Manan Dua</span>
+      <span class="nb-sub">Resources</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="resources.html" class="nav-link active">Resources</a>
+    <a href="financial-tools.html" class="nav-link">Financial Tools</a>
+    <a href="index.html#contact" class="nav-link">Contact</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="index.html#contact" class="btn-book">Book a Call</a>
+    <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html">Home</a>
+  <a href="resources.html">Resources</a>
+  <a href="financial-tools.html">Financial Tools</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="index.html#contact" class="btn-book">Book a Call</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-in">
+    <a href="index.html" class="crumb"><i class="ti ti-arrow-left" aria-hidden="true"></i> manandua.in</a>
+    <div class="hero-badge">Resources</div>
+    <h1>Everything to help you <em>think clearly</em> about money.</h1>
+    <p class="hero-sub">Educational articles, free financial calculators, and the Meridian newsletter — an evergreen library you can come back to whenever you need it. Nothing here is a recommendation to buy or sell any product.</p>
+  </div>
+</header>
+
+<!-- ══ CONTENT ══ -->
+<section class="sec">
+  <div class="sec-in">
+
+    <div class="group">
+      <div class="group-hd">
+        <div class="group-hd-l"><h2>From the Blog</h2><div class="line"></div></div>
+      </div>
+      <div class="blog-grid" role="list" id="resBlogGrid">
+        <p style="font-size:13px;color:var(--mute);grid-column:1/-1;">Loading articles...</p>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-hd">
+        <div class="group-hd-l"><h2>Financial Tools</h2><div class="line"></div></div>
+        <a href="financial-tools.html"><button class="btn-outline-forest">View All Tools</button></a>
+      </div>
+      <div class="card-grid">
+        <a class="tool-card" href="goal-planner.html">
+          <div class="tc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg></div>
+          <h3>Plan Your Goal</h3>
+          <p>Pick a goal like education, wedding, vehicle, or house and see the monthly SIP it takes to get there.</p>
+          <span class="tc-link">Open calculator <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a class="tool-card" href="retirement-corpus-calculator.html">
+          <div class="tc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4" y1="12" x2="2" y2="12"/><line x1="22" y1="12" x2="20" y2="12"/><line x1="5" y1="5" x2="6.5" y2="6.5"/><line x1="17.5" y1="17.5" x2="19" y2="19"/><line x1="19" y1="5" x2="17.5" y2="6.5"/><line x1="6.5" y1="17.5" x2="5" y2="19"/></svg></div>
+          <h3>Retirement Corpus &amp; Readiness</h3>
+          <p>Map your assets against your future lifestyle and see what it takes to retire comfortably.</p>
+          <span class="tc-link">Open calculator <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a class="tool-card" href="emi-prepayment-calculator.html">
+          <div class="tc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="8" y2="11"/><line x1="12" y1="11" x2="12" y2="11"/><line x1="16" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="12" y1="15" x2="12" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
+          <h3>EMI &amp; Prepayment Calculator</h3>
+          <p>Work out your monthly EMI, then simulate a prepayment to see how much interest and time it can save you.</p>
+          <span class="tc-link">Open calculator <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a class="tool-card" href="term-insurance-calculator.html">
+          <div class="tc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5 -3 7.5 -7 9c-4 -1.5 -7 -4.5 -7 -9v-6z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+          <h3>Term Insurance Cover</h3>
+          <p>Estimate your ideal term insurance cover using the Human Life Value or Need Based method.</p>
+          <span class="tc-link">Open calculator <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="nl-wrap" id="newsletter">
+        <div class="nl-l">
+          <div class="ey">The Newsletter</div>
+          <div class="nl-brand">
+            <svg width="44" height="44" viewBox="0 0 200 200" aria-hidden="true">
+              <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="var(--linen)" opacity="0.3"/>
+              <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="var(--gold-l)"/>
+              <rect x="96" y="96" width="8" height="8" fill="var(--forest-d)" transform="rotate(45 100 100)"/>
+            </svg>
+            <h3>Meridian.</h3>
+          </div>
+          <p>Monthly writing on investing, money habits, and the things that actually matter for your wealth journey. Written personally by Manan Dua. Read by thoughtful investors across India.</p>
+        </div>
+        <div class="nl-r">
+          <form onsubmit="handleNL(event)" novalidate>
+            <label for="nl-name">First name</label>
+            <input type="text" id="nl-name" placeholder="Parag" autocomplete="given-name">
+            <label for="nl-email">Email address</label>
+            <input type="email" id="nl-email" placeholder="parag@example.com" autocomplete="email" required>
+            <button type="submit" class="btn-gold">Subscribe to Meridian</button>
+            <p class="nl-note">Sent from newsletter@manandua.in · No spam, ever · Unsubscribe any time</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-in">
+    <div class="footer-top">
+      <div class="ft-brand">
+        <svg width="30" height="30" viewBox="0 0 200 200" aria-hidden="true" style="flex-shrink:0;">
+          <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+          <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+          <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+          <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+        </svg>
+        <div>
+          <div class="ft-logo">Manan <em>Dua</em></div>
+          <p>AMFI-registered Mutual Fund Distributor helping you build wealth with clarity and purpose.</p>
+        </div>
+      </div>
+      <div class="ft-links">
+        <div class="ft-col">
+          <h5>Manan Dua</h5>
+          <a href="index.html">Home</a>
+          <a href="wealth-management.html">Wealth Management</a>
+          <a href="workshops-training.html">Workshops &amp; Training</a>
+        </div>
+        <div class="ft-col">
+          <h5>Resources</h5>
+          <a href="resources.html">Blog &amp; Articles</a>
+          <a href="financial-tools.html">Financial Tools</a>
+          <a href="#newsletter">Meridian</a>
+        </div>
+        <div class="ft-col">
+          <h5>Legal</h5>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="disclaimer.html">Disclaimer</a>
+          <a href="terms.html">Terms of Use</a>
+          <a href="investor-charter.html">Investor Charter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="cyear">2026</span> Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span class="ft-disc">Articles and calculators on this page are for general educational and illustrative purposes only and do not constitute personalised financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
+      <span>manandua.in</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script>
+document.getElementById('cyear').textContent = new Date().getFullYear();
+
+// ── Mobile menu ──
+var ham = document.getElementById('ham');
+var mob = document.getElementById('mobMenu');
+ham.addEventListener('click', function() {
+  var open = mob.style.display === 'block';
+  mob.style.display = open ? 'none' : 'block';
+  ham.setAttribute('aria-expanded', String(!open));
+});
+mob.querySelectorAll('a').forEach(function(el) {
+  el.addEventListener('click', function() { mob.style.display = 'none'; ham.setAttribute('aria-expanded', 'false'); });
+});
+window.addEventListener('scroll', function() {
+  document.querySelector('.nav').style.boxShadow = window.scrollY > 20 ? '0 2px 24px rgba(28,25,23,0.07)' : 'none';
+});
+
+// ── Toast notifications ──
+function showToast(message, type) {
+  var stack = document.getElementById('toastStack');
+  if (!stack) { window.alert(message); return; }
+  var toast = document.createElement('div');
+  toast.className = 'toast' + (type === 'error' ? ' error' : '');
+  var iconClass = type === 'error' ? 'ti-alert-triangle' : 'ti-circle-check';
+  toast.innerHTML =
+    '<div class="toast-ic"><i class="ti ' + iconClass + '" aria-hidden="true"></i></div>' +
+    '<div class="toast-msg"></div>' +
+    '<button class="toast-close" aria-label="Dismiss">&times;</button>';
+  toast.querySelector('.toast-msg').textContent = message;
+  stack.appendChild(toast);
+  requestAnimationFrame(function() { toast.classList.add('show'); });
+  var timer = setTimeout(function() { dismissToast(toast); }, 6000);
+  toast.querySelector('.toast-close').addEventListener('click', function() {
+    clearTimeout(timer);
+    dismissToast(toast);
+  });
+}
+function dismissToast(toast) {
+  toast.classList.remove('show');
+  setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 350);
+}
+
+// ── Newsletter (same Brevo integration used on the homepage) ──
+var BREVO_FORM_URL = 'https://c7d30daa.sibforms.com/serve/MUIFAKp0oopX-_6BjksgObWpxKMXdo7HuJYqDH3PqJ8CcyobxBN4BPomtYV9bXSOAr1ct13EEXuXuMYyNI0usP2m18h114IjhGGXAC1pIR0umw9slHhC82Vyqv9jeLloXi15wZfZQurKbk8d3q7WtVJgP1luuQM58WbehnJHL1FjZi9Mwz6BbKTkdtz8iDDLYFQMg9gJnmDIZOoNOg==';
+function handleNL(e) {
+  e.preventDefault();
+  var email = document.getElementById('nl-email').value.trim();
+  if (!email) { showToast('Please enter your email address.', 'error'); return; }
+  var btn = e.target.querySelector('button[type=submit]');
+  var orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  var body = new URLSearchParams();
+  body.append('EMAIL', email);
+  body.append('email_address_check', ''); // Brevo's spam honeypot field — must stay empty
+  body.append('locale', 'en');
+
+  fetch(BREVO_FORM_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  }).then(function() {
+    showToast('Thank you for subscribing to Meridian. Check your inbox to confirm.');
+    e.target.reset();
+  }).catch(function() {
+    showToast('Something went wrong sending that. Please try again or email newsletter@manandua.in directly.', 'error');
+  }).finally(function() {
+    btn.disabled = false; btn.textContent = orig;
+  });
+}
+
+// ── Articles (same published Google Sheet CSV used on the homepage — keep SHEET_CSV_URL in sync) ──
+var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1NVOfCjfmEQWtUBpC7mShp1v3zuV3KS4_5qXD4l3OBio/gviz/tq?tqx=out:csv&gid=316850898';
+
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+function slugify(str) {
+  return (str || '').toString().toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
+}
+function parseDateFlexible(str) {
+  if (!str) return null;
+  str = str.trim();
+  var m;
+  m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (m) return new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+  m = str.match(/^(\d{2})(\d{2})(\d{4})$/);
+  if (m) return new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+  m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+  var fallback = new Date(str);
+  return isNaN(fallback) ? null : fallback;
+}
+function parseCSV(text) {
+  var rows = [], row = [], field = '', inQuotes = false;
+  for (var i = 0; i < text.length; i++) {
+    var c = text[i];
+    if (inQuotes) {
+      if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; } }
+      else { field += c; }
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else { field += c; }
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+function loadBlogPosts() {
+  var grid = document.getElementById('resBlogGrid');
+  if (!SHEET_CSV_URL || SHEET_CSV_URL.indexOf('PASTE_YOUR') === 0) {
+    grid.innerHTML = '<p style="font-size:13px;color:var(--mute);grid-column:1/-1;">Articles will appear here once the Google Sheet is connected.</p>';
+    return;
+  }
+  fetch(SHEET_CSV_URL)
+    .then(function(res) { if (!res.ok) throw new Error('Could not load sheet'); return res.text(); })
+    .then(function(csvText) {
+      var rows = parseCSV(csvText);
+      if (rows.length < 2) {
+        grid.innerHTML = '<p style="font-size:13px;color:var(--mute);grid-column:1/-1;">No articles yet — check back soon.</p>';
+        return;
+      }
+      var header = rows[0].map(function(h) { return h.trim().toLowerCase(); });
+      var idx = {
+        title: header.indexOf('title'), category: header.indexOf('category'), date: header.indexOf('date'),
+        excerpt: header.indexOf('excerpt'), url: header.indexOf('url'), content: header.indexOf('content')
+      };
+      var posts = rows.slice(1)
+        .filter(function(r) { return r.some(function(cell) { return cell.trim() !== ''; }); })
+        .map(function(r) {
+          return {
+            title: idx.title > -1 ? r[idx.title] : '', category: idx.category > -1 ? r[idx.category] : '',
+            date: idx.date > -1 ? r[idx.date] : '', excerpt: idx.excerpt > -1 ? r[idx.excerpt] : '',
+            url: idx.url > -1 ? r[idx.url] : '', content: idx.content > -1 ? r[idx.content] : ''
+          };
+        });
+      posts.sort(function(a, b) {
+        var da = parseDateFlexible(a.date), db = parseDateFlexible(b.date);
+        return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
+      });
+      grid.innerHTML = posts.map(function(p) {
+        var parsedDate = parseDateFlexible(p.date);
+        var dateLabel = parsedDate ? parsedDate.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
+        var inner =
+          '<div class="blog-top"><div class="blog-cat">' + escapeHtml(p.category) + '</div><div class="blog-date">' + escapeHtml(dateLabel) + '</div></div>' +
+          '<h4>' + escapeHtml(p.title) + '</h4>' +
+          '<p>' + escapeHtml(p.excerpt) + '</p>' +
+          '<div class="blog-read">Read Article <i class="ti ti-arrow-right" aria-hidden="true"></i></div>';
+        var linkHref = '';
+        if (p.url && p.url.trim()) { linkHref = p.url.trim(); }
+        else if (p.content && p.content.trim()) { linkHref = 'article.html?post=' + encodeURIComponent(slugify(p.title)); }
+        if (linkHref) {
+          return '<a class="blog-card" role="listitem" href="' + escapeHtml(linkHref) + '">' + inner + '</a>';
+        }
+        return '<article class="blog-card" role="listitem">' + inner + '</article>';
+      }).join('');
+    })
+    .catch(function() {
+      grid.innerHTML = '<p style="font-size:13px;color:var(--mute);grid-column:1/-1;">Articles could not be loaded right now.</p>';
+    });
+}
+loadBlogPosts();
+</script>
+
+</body>
+</html>
