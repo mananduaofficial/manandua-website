@@ -21,6 +21,8 @@
   --gold:      #b8903a;
   --gold-l:    #cfa54f;
   --gold-pale: #f0e6cc;
+  --copper:    #a8623e;
+  --copper-d:  #935233;
   --cream:     #f5f0e8;
   --cream-d:   #ede8de;
   --linen:     #faf8f3;
@@ -71,7 +73,8 @@ a    { text-decoration: none; color: inherit; }
   border: none; border-radius: var(--r); padding: 11px 24px;
   cursor: pointer; transition: background .15s; letter-spacing: 0.2px;
 }
-.btn-book:hover { background: var(--forest-m); }
+.btn-book:hover { background: var(--copper); }
+.btn-book:active { background: var(--copper-d); }
 .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
 .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
 .mob-menu {
@@ -507,7 +510,7 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span>&copy; <span id="cyear">2026</span> Manan Dua &middot; manandua.in &middot; All rights reserved</span>
       <span class="ft-disc">This calculator is for illustrative purposes only and does not constitute financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
       <span>manandua.in</span>
     </div>
@@ -666,7 +669,7 @@ function buildReportHtml() {
 
   const insight = active.additional <= 0
     ? "Based on the inputs provided, your existing cover and savings already meet or exceed your calculated need. Review this annually, especially after income changes, new liabilities, or new dependents."
-    : "We recommend closing this gap with a pure term insurance plan, which offers the highest cover at the lowest cost. Consider running both the HLV and Need Based methods and choosing the higher figure as your target cover.";
+    : "There is a gap between your existing cover and your calculated need. Running both the HLV and Need Based methods and comparing the two figures can help you understand the range for your target cover.";
 
   return `<!doctype html><html><head><meta charset="utf-8"><title>Term Insurance Cover Report · Meridian</title>
 <style>
@@ -756,6 +759,7 @@ function downloadHtml() {
 /* ═══════════ Wire up buttons + nav (before first render) ═══════════ */
 $("downloadReportBtn").addEventListener("click", downloadHtml);
 
+document.getElementById("cyear").textContent = new Date().getFullYear();
 const ham = $("ham"), mob = $("mobMenu");
 ham.addEventListener("click", function () {
   const open = mob.style.display === "block";

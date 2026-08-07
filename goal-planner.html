@@ -21,6 +21,8 @@
   --gold:      #b8903a;
   --gold-l:    #cfa54f;
   --gold-pale: #f0e6cc;
+  --copper:    #a8623e;
+  --copper-d:  #935233;
   --cream:     #f5f0e8;
   --cream-d:   #ede8de;
   --linen:     #faf8f3;
@@ -71,7 +73,8 @@ a    { text-decoration: none; color: inherit; }
   border: none; border-radius: var(--r); padding: 11px 24px;
   cursor: pointer; transition: background .15s; letter-spacing: 0.2px;
 }
-.btn-book:hover { background: var(--forest-m); }
+.btn-book:hover { background: var(--copper); }
+.btn-book:active { background: var(--copper-d); }
 .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
 .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
 .mob-menu {
@@ -531,7 +534,7 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2025 Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span>&copy; <span id="cyear">2026</span> Manan Dua &middot; manandua.in &middot; All rights reserved</span>
       <span class="ft-disc">This calculator is for illustrative purposes only and does not constitute financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
       <span>manandua.in</span>
     </div>
@@ -879,6 +882,7 @@ function downloadHtml() {
 /* ═══════════ Wire up buttons + nav (before first render) ═══════════ */
 $("downloadReportBtn").addEventListener("click", downloadHtml);
 
+document.getElementById("cyear").textContent = new Date().getFullYear();
 const ham = $("ham"), mob = $("mobMenu");
 ham.addEventListener("click", function () {
   const open = mob.style.display === "block";
