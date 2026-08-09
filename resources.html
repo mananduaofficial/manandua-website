@@ -303,9 +303,9 @@ a { text-decoration: none; color: inherit; }
         <div class="nl-r">
           <form onsubmit="handleNL(event)" novalidate>
             <label for="nl-name">First name</label>
-            <input type="text" id="nl-name" placeholder="Parag" autocomplete="given-name">
+            <input type="text" id="nl-name" placeholder="Susham G" autocomplete="given-name">
             <label for="nl-email">Email address</label>
-            <input type="email" id="nl-email" placeholder="parag@example.com" autocomplete="email" required>
+            <input type="email" id="nl-email" placeholder="susham@example.com" autocomplete="email" required>
             <button type="submit" class="btn-gold">Subscribe to Meridian</button>
             <p class="nl-note">Sent from newsletter@manandua.in · No spam, ever · Unsubscribe any time</p>
           </form>
@@ -524,7 +524,7 @@ function loadBlogPosts() {
           '<div class="blog-read">Read Article <i class="ti ti-arrow-right" aria-hidden="true"></i></div>';
         var linkHref = '';
         if (p.url && p.url.trim()) { linkHref = p.url.trim(); }
-        else if (p.content && p.content.trim()) { linkHref = 'article.html?post=' + encodeURIComponent(slugify(p.title)); }
+        else if (p.content && p.content.trim()) { linkHref = 'articles.html?post=' + encodeURIComponent(slugify(p.title)); }
         if (linkHref) {
           return '<a class="blog-card" role="listitem" href="' + escapeHtml(linkHref) + '">' + inner + '</a>';
         }
