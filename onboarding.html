@@ -396,7 +396,7 @@ function render() {
   var firmEl = document.getElementById('hdr-firm');
   if(firmEl) firmEl.textContent = FIRM();
   var regEl = document.getElementById('hdr-reg');
-  if(regEl) regEl.textContent = 'AMFI MFD · ' + CFG.arn + ' · EUIN ' + CFG.euin;
+  if(regEl) regEl.textContent = 'AMFI MFD · ' + CFG.arn;
   document.getElementById('hdr-badge').textContent = S.stage==='done' ? 'COMPLETED' : 'CLIENT ONBOARDING';
 
   let html = '';
