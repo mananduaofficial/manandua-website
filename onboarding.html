@@ -447,7 +447,7 @@ function pgDetails(){
     <div class="r2">
       <div class="fg">
         <label class="fl" for="d-name">Full name <em>*</em><span class="hint">As per PAN card</span></label>
-        <input id="d-name" class="${e.name?'err':''}" value="${esc(d.name||'')}" placeholder="Kapil Dev Kumar" oninput="setD('name',this.value)">
+        <input id="d-name" class="${e.name?'err':''}" value="${esc(d.name||'')}" placeholder="John Doe" oninput="setD('name',this.value)">
         ${e.name?`<div class="err-msg">${e.name}</div>`:''}
       </div>
       <div class="fg">
@@ -479,7 +479,7 @@ function pgDetails(){
       </div>
       <div class="fg">
         <label class="fl" for="d-email">Email address <em>*</em></label>
-        <input type="email" id="d-email" class="${e.email?'err':''}" value="${esc(d.email||'')}" placeholder="kapil@email.com" oninput="setD('email',this.value)">
+        <input type="email" id="d-email" class="${e.email?'err':''}" value="${esc(d.email||'')}" placeholder="john.doe@example.com" oninput="setD('email',this.value)">
         ${e.email?`<div class="err-msg">${e.email}</div>`:''}
       </div>
     </div>
@@ -536,7 +536,7 @@ function pgDisclosures(){
     <p class="card-sub">Please read the following disclosures carefully. These reflect applicable SEBI regulations and circulars, AMFI guidelines, SEBI KYC norms, and the Prevention of Money Laundering Act, 2002, as amended from time to time.</p>
     <div class="ntc ntc-blue" style="margin-bottom:18px">
       <i class="ti ti-info-circle"></i>
-      <span>You are onboarding with <strong>${FIRM()}</strong> as a mutual fund investor, served by AMFI-registered distributor ARN ${CFG.arn}. This onboarding follows applicable SEBI and AMFI regulations.</span>
+      <span>You are onboarding with <strong>${FIRM()}</strong> as a mutual fund investor, served by AMFI-registered distributor ${CFG.arn}. This onboarding follows applicable SEBI and AMFI regulations.</span>
     </div>
     ${getDisclosures().map(d=>`<div class="disc-item">
       <div class="disc-title"><i class="ti ti-file-certificate"></i>${d.t}</div>
@@ -679,7 +679,7 @@ function pgCKYC(){
       <span><strong>Note:</strong> The distributor will verify your KYC status independently by checking your PAN on <a href="https://www.cvlkra.com/KYCInquiry.aspx" target="_blank" style="color:var(--amber)">CVL KRA</a> or <a href="https://www.camskra.com/" target="_blank" style="color:var(--amber)">CAMS KRA</a>. Please ensure your details match your KRA records.</span>
     </div>
     <div class="ckyc-consent-text">
-      <strong>I, ${esc(S.details.name||'[Name]')}</strong> (PAN: <strong>${esc((S.details.pan||'[PAN]').toUpperCase())}</strong>), give my consent to <strong>${FIRM()}</strong> (AMFI ARN ${CFG.arn}) to:<br><br>
+      <strong>I, ${esc(S.details.name||'[Name]')}</strong> (PAN: <strong>${esc((S.details.pan||'[PAN]').toUpperCase())}</strong>), give my consent to <strong>${FIRM()}</strong> (AMFI ${CFG.arn}) to:<br><br>
       (a) access, fetch, view and download my KYC records available with the CKYCR / any KRA using my KYC Identifier and/or PAN;<br>
       (b) assist in verifying, updating or modifying my KYC records with the CKYCR / KRA where required, on my instructions; and<br>
       (c) use such KYC information solely to facilitate mutual fund transactions under SEBI Circular on KYC norms and the AMFI Code of Conduct.<br><br>
@@ -754,7 +754,7 @@ function pgReport(){
   return `<div>
     <div class="report-hero">
       
-      <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">${esc(S.details.name)} · ${FIRM()}</div>
+      <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">${esc(S.details.name)}</div>
       <div class="report-profile" style="color:var(--gold2)">${profile}</div>
       <div class="report-score">Weighted risk score: ${r.ws.toFixed(1)} / 100 · ${TODAY}</div>
       <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:8px;line-height:1.6">Scheme suitability will be assessed separately based on the relevant scheme characteristics, your investment objective, time horizon and other applicable information.</div>
@@ -777,7 +777,7 @@ function pgReport(){
       <div class="declaration">
         <p>I, <strong>${esc(S.details.name)}</strong> (PAN: ${esc((S.details.pan||'').toUpperCase())}), confirm that:</p>
         <p>1. I have answered all questions truthfully to the best of my knowledge and understanding.</p>
-        <p>2. I have read and understood all regulatory disclosures provided by ${FIRM()} (AMFI ARN ${CFG.arn}).</p>
+        <p>2. I have read and understood all regulatory disclosures provided by ${FIRM()} (AMFI ${CFG.arn}).</p>
         <p>3. I have reviewed my assessed risk profile of <strong>${profile}</strong> and understand that it is based on the information I have provided. I understand that scheme suitability will be assessed separately based on my investment objective, time horizon and other applicable information.</p>
         <p>4. I consent to this data being collected, stored and processed for the purpose of mutual fund distribution services, and retained as required under SEBI KYC norms, the AMFI Code of Conduct, and the Prevention of Money Laundering Act, 2002. I am aware of my rights under the Digital Personal Data Protection Act, 2023.</p>
         <p>5. I understand that this risk profile should be reviewed periodically and whenever there is a material change in my financial circumstances, investment objectives or risk preferences.</p>
@@ -803,10 +803,17 @@ function pgReport(){
               <input id="esign-type-input" placeholder="Type your full name" style="font-family:'Cormorant Garamond',serif;font-size:22px;padding:16px;border:none;outline:none;width:100%" oninput="updateSignStatus()">
               <div class="esign-bar"><span id="esign-status-type">Type your name above</span></div>
             </div>
-            <div id="esign-upload-wrap" style="display:none;padding:16px;text-align:center;cursor:pointer;background:var(--bg3)" onclick="document.getElementById('esign-upload-input').click()">
-              <i class="ti ti-signature" style="font-size:28px;color:var(--text3);display:block;margin-bottom:6px"></i>
-              <div style="font-size:12px;color:var(--text2)" id="esign-upload-label">Tap to upload a photo of your signature</div>
+            <div id="esign-upload-wrap" style="display:none;padding:16px;text-align:center;background:var(--bg3)">
+              <div id="esign-upload-prompt" onclick="document.getElementById('esign-upload-input').click()" style="cursor:pointer">
+                <i class="ti ti-signature" style="font-size:28px;color:var(--text3);display:block;margin-bottom:6px"></i>
+                <div style="font-size:12px;color:var(--text2)" id="esign-upload-label">Tap to upload a photo of your signature</div>
+              </div>
               <img id="esign-upload-preview" style="max-height:80px;max-width:100%;display:none;margin-top:8px;border-radius:4px">
+              <div id="esign-upload-actions" style="display:none;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap">
+                <button type="button" class="btn btn-ghost bsm" onclick="previewSigUpload()"><i class="ti ti-eye" style="font-size:11px"></i> Preview</button>
+                <button type="button" class="btn btn-ghost bsm" onclick="document.getElementById('esign-upload-input').click()"><i class="ti ti-refresh" style="font-size:11px"></i> Change</button>
+                <button type="button" class="btn btn-ghost bsm" onclick="removeSigUpload()"><i class="ti ti-trash" style="font-size:11px"></i> Remove</button>
+              </div>
               <input type="file" id="esign-upload-input" accept="image/*" style="display:none" onchange="handleSigUpload(this)">
               <div class="esign-bar" style="justify-content:center"><span id="esign-status-upload">Upload a signature image above</span></div>
             </div>
@@ -819,7 +826,7 @@ function pgReport(){
           <div class="sig-box">
             <div class="sig-line"></div>
             <div style="font-size:11px;color:var(--text3);margin-top:6px">${CFG.distributor}</div>
-            <div style="font-size:11px;color:var(--text3)">AMFI ARN ${CFG.arn} · EUIN ${CFG.euin}</div>
+            <div style="font-size:11px;color:var(--text3)">AMFI ${CFG.arn}</div>
             <div style="font-size:11px;color:var(--text3)">${TODAY} · ${FIRM()}</div>
           </div>
           <div class="ntc ntc-blue" style="margin-top:8px;font-size:11px">
@@ -852,8 +859,8 @@ function pgDone(){
   const r=S.result;
   const kycLabel = S.ekyc==='kyc_done' ? 'Stated as already verified \u2014 pending confirmation by the distributor'
     : S.ekyc==='kyc_ekyc' ? 'eKYC just completed \u2014 pending confirmation by the distributor'
-    : S.ekyc==='kyc_pending' ? 'Documents submitted \u2014 in process'
-    : 'Not yet started \u2014 distributor will initiate';
+    : S.ekyc==='kyc_pending' ? 'Currently in process'
+    : 'Not yet completed';
   return `<div class="success-screen">
     <div class="success-icon"><i class="ti ti-circle-check"></i></div>
     <div class="success-title">Onboarding submitted</div>
@@ -867,7 +874,7 @@ function pgDone(){
         <tr><td>Engagement type</td><td>Mutual Fund Distribution (AMFI MFD)</td></tr>
         <tr><td>Risk profile</td><td><strong>${r?.profile||'\u2014'}</strong></td></tr>
         <tr><td>Onboarding date</td><td>${TODAY}</td></tr>
-        <tr><td>Distributor</td><td>${CFG.distributor} \u00b7 AMFI ARN ${CFG.arn} \u00b7 EUIN ${CFG.euin}</td></tr>
+        <tr><td>Distributor</td><td>${CFG.distributor} \u00b7 AMFI ${CFG.arn}</td></tr>
         <tr><td>Risk-profile review</td><td>Periodically, and whenever there is a material change in your financial circumstances, investment objectives or risk preferences.</td></tr>
         <tr><td>KYC status</td><td>${kycLabel}</td></tr>
       </table>
@@ -878,6 +885,7 @@ function pgDone(){
     </div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button class="btn btn-gold" onclick="downloadPDF()"><i class="ti ti-file-download"></i> Download PDF</button>
+      <button class="btn btn-sec" onclick="emailPDFToManan()"><i class="ti ti-mail"></i> Email PDF to Manan</button>
       <button class="btn btn-ghost" onclick="startOver()"><i class="ti ti-refresh"></i> New onboarding</button>
     </div>
   </div>`;
@@ -1057,6 +1065,8 @@ function exportForCRM(){
     onboardedAt: TODAY_ISO,
     engagement: 'MFD',
     distributor: CFG.distributor,
+    arn: CFG.arn,
+    euin: CFG.euin,
     name:        d.name||'',
     phone:       d.mobile||'',
     email:       d.email||'',
@@ -1102,8 +1112,8 @@ function emailSummary() {
     `Client: ${esc(d.name||"")}\nMobile: ${String(d.mobile||"")}\n` +
     `Engagement: Mutual Fund Distribution (AMFI MFD)\n` +
     `Risk Profile: ${r?.profile||'—'}\n` +
-    `KYC status: ${S.ekyc==='kyc_done'?'Stated as verified, pending confirmation':S.ekyc==='kyc_pending'?'In progress':'New client'}\n` +
-    `Date: ${TODAY}\n\nDistributor: ${CFG.distributor} · AMFI ARN ${CFG.arn}`
+    `KYC status: ${S.ekyc==='kyc_done'?'Stated as verified, pending confirmation':S.ekyc==='kyc_ekyc'?'eKYC just completed':S.ekyc==='kyc_pending'?'In progress':'Not yet completed'}\n` +
+    `Date: ${TODAY}\n\nDistributor: ${CFG.distributor} · AMFI ${CFG.arn}`
   );
   window.location.href = `mailto:${CFG.email}?subject=${subj}&body=${body}`;
 }
@@ -1160,15 +1170,11 @@ function pgEKYC() {
       <i class="ti ti-info-circle"></i>
       <span><strong>If your KYC is not complete:</strong> please contact the distributor to complete KYC through the applicable authorised KYC process. Identity documents should not be uploaded through this page.</span>
     </div>
-    <div class="sec-label">KYC reference number</div>
-    <div class="fg" style="margin-bottom:14px">
-      <label class="fl" for="ekyc-ref">Enter your KYC reference number (if already verified)</label>
-      <input id="ekyc-ref" value="${S.ckycData.kycRef||''}" placeholder="e.g. CVLKRA/2024/XXXXXXXX" oninput="setCKYC('kycRef',this.value)">
-    </div>
     <div class="sec-label">KYC status</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-      ${[['kyc_done','My KYC is already verified (I have the reference number above)'],['kyc_ekyc','I have just completed eKYC using the link above'],['kyc_pending','My documents are submitted (with the distributor or a KRA) and KYC is in process'],['kyc_new','I am new — the distributor will initiate KYC on my behalf']].map(([val,label])=>`<div class="q-opt${S.ekyc===val?' sel':''}" data-ekyc="${val}" onclick="setEKYC('${val}')"><div class="q-dot"></div><span>${label}</span></div>`).join('')}
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+      ${[['kyc_done','My KYC is already verified'],['kyc_ekyc','I have just completed eKYC'],['kyc_pending','My KYC is currently in process'],['kyc_not_done','My KYC is not yet completed']].map(([val,label])=>`<div class="q-opt${S.ekyc===val?' sel':''}" data-ekyc="${val}" onclick="setEKYC('${val}')"><div class="q-dot"></div><span>${label}</span></div>`).join('')}
     </div>
+    <div id="ekyc-ref-wrap">${renderEkycRef()}</div>
     <div class="ntc ntc-gold">
       <i class="ti ti-alert-triangle"></i>
       <span>KYC verification is mandatory before any transaction. If KYC is pending, onboarding can still be submitted, but services cannot commence until KYC is independently confirmed.</span>
@@ -1180,6 +1186,18 @@ function pgEKYC() {
   </div>`;
 }
 
+function renderEkycRef(){
+  if(S.ekyc==='kyc_not_done' || !S.ekyc) return '';
+  const required = S.ekyc==='kyc_done';
+  const e = S._ekycErrs||{};
+  return `<div class="sec-label">KYC reference number</div>
+    <div class="fg" style="margin-bottom:14px">
+      <label class="fl" for="ekyc-ref">KYC reference number ${required?'<em>*</em>':'<span class="hint">(optional)</span>'}</label>
+      <input id="ekyc-ref" class="${e.kycRef?'err':''}" value="${esc(S.ckycData.kycRef||'')}" placeholder="e.g. CVLKRA/2024/XXXXXXXX" oninput="setCKYC('kycRef',this.value)">
+      ${e.kycRef?`<div class="err-msg">${e.kycRef}</div>`:''}
+    </div>`;
+}
+
 function setEKYC(val) {
   S.ekyc = val;
   // Update ekyc options in-place
@@ -1189,12 +1207,28 @@ function setEKYC(val) {
     var dot=el.querySelector('.q-dot');
     if(dot) dot.innerHTML=isSelected?'<i class="ti ti-check" style="font-size:10px"></i>':'';
   });
+  // Update the KYC reference number field in place (shown/hidden/required by status)
+  S._ekycErrs = {};
+  var refWrap = document.getElementById('ekyc-ref-wrap');
+  if(refWrap) refWrap.innerHTML = renderEkycRef();
   // Update the continue button text
   var btn=document.getElementById('ekyc-continue-btn');
   if(btn) btn.textContent=val?'Complete onboarding →':'Select KYC status above to continue';
 }
 
 function finishOnboarding() {
+  if(!S.ekyc){
+    showObModal({kind:'warn', title:'KYC status required', body:'Please select your KYC status before continuing.'});
+    return;
+  }
+  if(S.ekyc==='kyc_done' && !(S.ckycData.kycRef||'').trim()){
+    S._ekycErrs = {kycRef: 'Please enter your KYC reference number to continue.'};
+    var refWrap = document.getElementById('ekyc-ref-wrap');
+    if(refWrap) refWrap.innerHTML = renderEkycRef();
+    showObModal({kind:'err', title:'KYC reference number required', body:'Please enter your KYC reference number to continue.'});
+    return;
+  }
+  S._ekycErrs = {};
   exportForCRM();
   go('done');
 }
@@ -1374,8 +1408,164 @@ function printFullReport() {
 }
 
 // ── PDF GENERATION ─────────────────────────────────────────────────────────
-// Opens a clean print-friendly version — user clicks Save as PDF in dialog
-// Works on Chrome mobile (Share → Print → Save as PDF) and desktop
+// Generates a real, standalone onboarding-record PDF client-side using jsPDF
+// (loaded on demand from a CDN — not bundled, to keep the base page light).
+// Nothing here is transmitted anywhere; the PDF exists only in the browser's
+// memory for this session until the person shares, downloads, or emails it.
+var _jspdfLoading = null;
+function loadJsPDF(){
+  if(window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+  if(_jspdfLoading) return _jspdfLoading;
+  _jspdfLoading = new Promise(function(resolve, reject){
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/jspdf@4.2.1/dist/jspdf.umd.min.js';
+    s.onload = function(){ resolve(); };
+    s.onerror = function(){ _jspdfLoading = null; reject(new Error('load-failed')); };
+    document.head.appendChild(s);
+  });
+  return _jspdfLoading;
+}
+
+function buildOnboardingPDF(){
+  var jsPDFCtor = window.jspdf.jsPDF;
+  var doc = new jsPDFCtor({unit:'pt', format:'a4'});
+  var pageW = doc.internal.pageSize.getWidth();
+  var pageH = doc.internal.pageSize.getHeight();
+  var margin = 48;
+  var y = margin;
+
+  function addText(text, opts){
+    opts = opts || {};
+    doc.setFont('helvetica', opts.bold ? 'bold' : 'normal');
+    doc.setFontSize(opts.size || 10);
+    doc.setTextColor(opts.color || '#1c1917');
+    var lines = doc.splitTextToSize(String(text), pageW - margin*2);
+    lines.forEach(function(line){
+      if(y > pageH - margin){ doc.addPage(); y = margin; }
+      doc.text(line, margin, y);
+      y += opts.lineH || (opts.size ? opts.size*1.5 : 15);
+    });
+  }
+  function addRule(){
+    doc.setDrawColor(220,214,200);
+    doc.line(margin, y, pageW-margin, y);
+    y += 14;
+  }
+
+  var r = S.result, d = S.details;
+
+  addText(CFG.distributor, {bold:true, size:16});
+  addText('AMFI Registered Mutual Fund Distributor \u00b7 ' + CFG.arn, {size:9, color:'#8c8070'});
+  y += 6;
+  addText('Mutual Fund Onboarding \u2014 Risk Profile Assessment Record', {bold:true, size:13});
+  addText('Date: ' + TODAY, {size:9, color:'#8c8070'});
+  y += 4; addRule();
+
+  addText('Client Details', {bold:true, size:11}); y += 2;
+  addText('Name: ' + (d.name||''));
+  addText('PAN: ' + ((d.pan||'').toUpperCase()));
+  addText('Date of birth: ' + (d.dob||''));
+  addText('Mobile: ' + (d.mobile||''));
+  addText('Email: ' + (d.email||''));
+  addText('City: ' + (d.city||''));
+  y += 6; addRule();
+
+  addText('Risk Profile Assessment', {bold:true, size:11}); y += 2;
+  addText('Assessed risk profile: ' + (r ? r.profile : '\u2014'), {bold:true});
+  addText('This reflects the client\u2019s stated risk capacity, tolerance, objectives and experience. It is not an asset allocation or investment recommendation. Scheme suitability is assessed separately.', {size:9});
+  y += 6; addRule();
+
+  var kycText = S.ekyc==='kyc_done' ? 'Stated as already verified (pending confirmation by the distributor)'
+    : S.ekyc==='kyc_ekyc' ? 'eKYC just completed (pending confirmation by the distributor)'
+    : S.ekyc==='kyc_pending' ? 'Currently in process'
+    : 'Not yet completed';
+  var nomText = S.ckycData.nomination==='submit' ? 'Nominee(s) provided \u2014 captured for onboarding; formal nomination to be completed via the applicable AMC/RTA process.'
+    : S.ckycData.nomination==='optout' ? 'Opted out of nomination \u2014 prescribed opt-out declaration to be completed via the applicable process.'
+    : 'Not specified';
+  addText('KYC & Nomination', {bold:true, size:11}); y += 2;
+  addText('KYC status: ' + kycText);
+  if(S.ckycData.kycRef) addText('KYC reference number: ' + S.ckycData.kycRef);
+  addText('Nomination: ' + nomText);
+  y += 6; addRule();
+
+  addText('Declaration', {bold:true, size:11}); y += 2;
+  addText('I, ' + (d.name||'') + ' (PAN: ' + ((d.pan||'').toUpperCase()) + '), confirm that:', {size:9});
+  addText('1. I have answered all questions truthfully to the best of my knowledge and understanding.', {size:9});
+  addText('2. I have read and understood all regulatory disclosures provided by ' + CFG.distributor + ' (AMFI ' + CFG.arn + ').', {size:9});
+  addText('3. I have reviewed my assessed risk profile of ' + (r?r.profile:'') + ' and understand that it is based on the information I have provided. Scheme suitability will be assessed separately based on my investment objective, time horizon and other applicable information.', {size:9});
+  addText('4. I consent to this data being collected, stored and processed for the purpose of mutual fund distribution services, retained as required under SEBI KYC norms, the AMFI Code of Conduct, and the Prevention of Money Laundering Act, 2002. I am aware of my rights under the Digital Personal Data Protection Act, 2023.', {size:9});
+  addText('5. I understand that this risk profile should be reviewed periodically and whenever there is a material change in my financial circumstances, investment objectives or risk preferences.', {size:9});
+  y += 10;
+
+  addText('Signature / Acknowledgement', {bold:true, size:11}); y += 6;
+  var sig = S._signCapture;
+  if(sig && sig.type==='image'){
+    try{
+      if(y > pageH - 100){ doc.addPage(); y = margin; }
+      doc.addImage(sig.data, 'PNG', margin, y, 140, 50);
+      y += 58;
+    }catch(e){ addText('[Signature image could not be embedded]', {size:9}); }
+  } else if(sig && sig.type==='text'){
+    doc.setFont('times', 'italic');
+    doc.setFontSize(20);
+    doc.text(sig.data, margin, y+16);
+    y += 34;
+  } else {
+    addText('[No acknowledgement captured]', {size:9});
+  }
+  addText((d.name||'') + ' \u00b7 PAN: ' + ((d.pan||'').toUpperCase()) + ' \u00b7 ' + TODAY, {size:8, color:'#8c8070'});
+
+  return doc.output('blob');
+}
+
+function pdfFilename(){
+  var slug = (S.details.name||'client').trim().replace(/[^a-zA-Z0-9]+/g,'-');
+  return 'Onboarding-' + slug + '-' + TODAY_ISO + '.pdf';
+}
+
+// Nothing here is faked: if native share-with-file isn't supported, this downloads
+// the real generated PDF and opens a prefilled email draft telling the client to
+// attach it — it never claims the PDF was sent unless the share sheet actually
+// confirms the handoff.
+function emailPDFToManan(){
+  var name = S.details.name||'';
+  loadJsPDF().then(function(){
+    var blob = buildOnboardingPDF();
+    var file = new File([blob], pdfFilename(), {type:'application/pdf'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      navigator.share({
+        files: [file],
+        title: 'Mutual Fund Onboarding \u2013 ' + name,
+        text: 'Hi Manan,\n\nPlease find attached my completed mutual fund onboarding form.\n\nRegards,\n' + name
+      }).catch(function(err){
+        if(err && err.name === 'AbortError') return; // person cancelled the share sheet — not an error
+        toast('Could not open the share sheet. Please use Download PDF instead.', true);
+      });
+      return;
+    }
+    // Fallback: browser can't share a file directly — download the real PDF, then
+    // open a prefilled email draft asking the client to attach it themselves.
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = pdfFilename();
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    showObModal({
+      kind: 'info',
+      title: 'PDF downloaded',
+      body: 'Your onboarding PDF has been downloaded. Your email app will now open with the message ready \u2014 please attach the downloaded PDF before sending.',
+      confirmLabel: 'Open email',
+      onConfirm: function(){
+        var subj = encodeURIComponent('Mutual Fund Onboarding \u2013 ' + name);
+        var body = encodeURIComponent('Hi Manan,\n\nPlease find attached my completed mutual fund onboarding form.\n\nRegards,\n' + name);
+        window.location.href = 'mailto:' + CFG.email + '?subject=' + subj + '&body=' + body;
+      }
+    });
+  }).catch(function(){
+    toast('Could not load the PDF generator. Please check your connection and try Download PDF instead.', true);
+  });
+}
+
 function downloadPDF() {
   // Show the full transcript before printing
   const el = document.getElementById('print-transcript');
@@ -1396,6 +1586,23 @@ function downloadPDF() {
 // printFullReport is just an alias now
 function printFullReport() { downloadPDF(); }
 
+function getSignatureForPDF() {
+  // Captures the acknowledgement as an image/text pair for PDF generation.
+  // Must be called while the report page's DOM (canvas/upload preview) still
+  // exists — held only in memory (S._signCapture) for this session, never
+  // written to any browser storage.
+  if(_signMode==='draw' && _signCanvas && _signHasData) return {type:'image', data:_signCanvas.toDataURL('image/png')};
+  if(_signMode==='upload' && _signHasData){
+    var img = document.getElementById('esign-upload-preview');
+    if(img && img.src) return {type:'image', data:img.src};
+  }
+  if(_signMode==='type'){
+    var typed = (document.getElementById('esign-type-input')||{}).value||'';
+    if(typed.trim()) return {type:'text', data:typed.trim()};
+  }
+  return null;
+}
+
 function proceedToCKYC() {
   var signDone = false;
   if(_signMode === 'draw' && _signHasData) signDone = true;
@@ -1411,6 +1618,7 @@ function proceedToCKYC() {
     return;
   }
   S._signCaptured = true;
+  S._signCapture = getSignatureForPDF(); // in-memory only for this session, used later to embed in the generated PDF
   go('ckyc');
 }
 
@@ -1419,16 +1627,35 @@ function handleSigUpload(input) {
   var reader = new FileReader();
   reader.onload = function(e){
     var img = document.getElementById('esign-upload-preview');
-    var lbl = document.getElementById('esign-upload-label');
+    var prompt = document.getElementById('esign-upload-prompt');
+    var actions = document.getElementById('esign-upload-actions');
     if(img){ img.src=e.target.result; img.style.display='block'; }
-    if(lbl) lbl.textContent = '✓ '+file.name;
+    if(prompt) prompt.style.display='none';
+    if(actions) actions.style.display='flex';
     _signHasData = true;
     updateSignStatus();
   };
   reader.readAsDataURL(file);
 }
 
+function previewSigUpload(){
+  var img = document.getElementById('esign-upload-preview');
+  if(!img || !img.src) return;
+  showObModal({kind:'info', title:'Signature preview', body:'<img src="'+img.src+'" style="max-width:100%;border-radius:4px">', confirmLabel:'Close'});
+}
 
+function removeSigUpload(){
+  var img = document.getElementById('esign-upload-preview');
+  var prompt = document.getElementById('esign-upload-prompt');
+  var actions = document.getElementById('esign-upload-actions');
+  var input = document.getElementById('esign-upload-input');
+  if(img){ img.src=''; img.style.display='none'; }
+  if(prompt) prompt.style.display='';
+  if(actions) actions.style.display='none';
+  if(input) input.value='';
+  _signHasData = false;
+  updateSignStatus();
+}
 
 
 
