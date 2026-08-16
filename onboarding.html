@@ -174,7 +174,6 @@ textarea{resize:vertical;min-height:72px}
 
 /* ── PRINT ── */
 @media print{
-  #print-transcript{ display:block!important; }
   .header,.progress-wrap,.btn-row,.btn,.no-print{display:none!important}
   @page{ margin:15mm; size:A4; }
   .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
@@ -644,11 +643,11 @@ function renderNomExtra(){
         </div>
       `).join('')}
       ${nominees.length<3?`<button type="button" class="btn btn-ghost bsm" style="margin-top:10px" onclick="addNominee()"><i class="ti ti-plus"></i> Add another nominee (optional, up to 3)</button>`:''}
-      <p style="font-size:11px;color:var(--text3);margin-top:10px">Nomination details captured for onboarding. Formal nomination will be completed through the applicable AMC/RTA process.</p>
+      <p style="font-size:11px;color:var(--text3);margin-top:10px">You’ll formally register this with the AMC as part of your KYC.</p>
     </div>`;
   }
   if(d.nomination==='optout'){
-    return `<div class="ntc ntc-blue" style="margin-bottom:16px"><i class="ti ti-info-circle"></i><span>Opt-out preference recorded. The prescribed opt-out declaration will be completed through the applicable AMC/RTA process.</span></div>`;
+    return `<div class="ntc ntc-blue" style="margin-bottom:16px"><i class="ti ti-info-circle"></i><span>You’ll formally record this opt-out with the AMC as part of your KYC.</span></div>`;
   }
   return '';
 }
@@ -735,6 +734,21 @@ function pgCKYC(){
       <div class="q-opt${d.nomination==='optout'?' sel':''}" data-nom="optout" onclick="setCKYC('nomination','optout')"><div class="q-dot"></div><span>I wish to opt out of nomination — I understand that in the event of death without a nominee, the folio will be subject to transmission procedures</span></div>
     </div>
     <div id="nom-extra">${renderNomExtra()}</div>
+    <div class="sec-label" style="margin-top:8px">FATCA / CRS self-certification</div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">This is a regulatory requirement for mutual fund investors under CBDT Rules 114F\u2013114H, used to determine tax residency status for information-sharing purposes. It does not affect your tax liability.</p>
+    <label class="fl">Is India your only country of citizenship and tax residency? <em>*</em></label>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:6px 0 4px">
+      <div class="q-opt${d.fatcaIndiaOnly==='yes'?' sel':''}" data-fatca-india="yes" onclick="setFatca('fatcaIndiaOnly','yes')"><div class="q-dot"></div><span>Yes, India only</span></div>
+      <div class="q-opt${d.fatcaIndiaOnly==='no'?' sel':''}" data-fatca-india="no" onclick="setFatca('fatcaIndiaOnly','no')"><div class="q-dot"></div><span>No, I am also a citizen and/or tax resident of another country</span></div>
+    </div>
+    ${e.fatcaIndiaOnly?`<div class="err-msg" style="margin-bottom:8px">${e.fatcaIndiaOnly}</div>`:''}
+    <div id="fatca-extra">${renderFatcaExtra()}</div>
+    <label class="fl" style="margin-top:14px;display:block">Are you a citizen, resident, or Green Card holder of the United States? <em>*</em></label>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:6px 0 4px">
+      <div class="q-opt${d.fatcaUSPerson==='yes'?' sel':''}" data-fatca-us="yes" onclick="setFatca('fatcaUSPerson','yes')"><div class="q-dot"></div><span>Yes</span></div>
+      <div class="q-opt${d.fatcaUSPerson==='no'?' sel':''}" data-fatca-us="no" onclick="setFatca('fatcaUSPerson','no')"><div class="q-dot"></div><span>No</span></div>
+    </div>
+    ${e.fatcaUSPerson?`<div class="err-msg" style="margin-bottom:8px">${e.fatcaUSPerson}</div>`:''}
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="go('rpq')"><i class="ti ti-arrow-left"></i> Back</button>
       <div style="display:flex;gap:8px">
@@ -742,6 +756,40 @@ function pgCKYC(){
       </div>
     </div>
   </div>`;
+}
+
+function renderFatcaExtra(){
+  const d=S.ckycData, e=S._ckycErrs||{};
+  if(d.fatcaIndiaOnly!=='no') return '';
+  return `<div class="card" style="background:var(--bg3);margin-bottom:12px">
+    <div class="r2">
+      <div class="fg">
+        <label class="fl" for="fatca-country">Country of tax residency (other than India) <em>*</em></label>
+        <input id="fatca-country" class="${e.fatcaCountry?'err':''}" value="${esc(d.fatcaCountry||'')}" placeholder="e.g. United States" oninput="setCKYC('fatcaCountry',this.value)">
+        ${e.fatcaCountry?`<div class="err-msg">${e.fatcaCountry}</div>`:''}
+      </div>
+      <div class="fg">
+        <label class="fl" for="fatca-tin">Tax Identification Number (TIN) <em>*</em></label>
+        <input id="fatca-tin" class="${e.fatcaTIN?'err':''}" value="${esc(d.fatcaTIN||'')}" placeholder="Enter &quot;Not applicable&quot; if not issued" oninput="setCKYC('fatcaTIN',this.value)">
+        ${e.fatcaTIN?`<div class="err-msg">${e.fatcaTIN}</div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function setFatca(k,v){
+  S.ckycData[k]=v;
+  var attr = k==='fatcaIndiaOnly' ? 'data-fatca-india' : 'data-fatca-us';
+  document.querySelectorAll('['+attr+']').forEach(function(el){
+    var isSelected = el.getAttribute(attr)===v;
+    el.classList.toggle('sel',isSelected);
+    var dot=el.querySelector('.q-dot');
+    if(dot) dot.innerHTML=isSelected?'<i class="ti ti-check" style="font-size:10px"></i>':'';
+  });
+  if(k==='fatcaIndiaOnly'){
+    var extra=document.getElementById('fatca-extra');
+    if(extra) extra.innerHTML=renderFatcaExtra();
+  }
 }
 
 // ── PAGE: REPORT ──────────────────────────────────────────────────────────────
@@ -837,12 +885,6 @@ function pgReport(){
       </div>
     </div>
 
-    <!-- PRINT-ONLY FULL TRANSCRIPT -->
-    <div id="print-transcript" style="display:none">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:4px">Risk Profile Assessment — Complete Record</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px">AMFI / SEBI Mutual Fund Suitability Assessment · ${FIRM()} · ${TODAY}</div>
-      <div id="qa-transcript"></div>
-    </div>
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="go('rpq')"><i class="ti ti-arrow-left"></i> Back to questionnaire</button>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -881,11 +923,11 @@ function pgDone(){
     </div>
     <div class="ntc ntc-green" style="max-width:480px;margin:0 auto 20px">
       <i class="ti ti-info-circle"></i>
-      <span>Please download this page as a PDF and email it to <strong>${CFG.email}</strong>. The distributor will countersign it and send you a copy within 1 to 3 business days.</span>
+      <span>Your onboarding has been submitted. You can download a copy for your records or share the completed PDF with us.</span>
     </div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button class="btn btn-gold" onclick="downloadPDF()"><i class="ti ti-file-download"></i> Download PDF</button>
-      <button class="btn btn-sec" onclick="emailPDFToManan()"><i class="ti ti-mail"></i> Email PDF to Manan</button>
+      <button class="btn btn-sec" onclick="sharePDF()"><i class="ti ti-share-2"></i> Share PDF</button>
       <button class="btn btn-ghost" onclick="startOver()"><i class="ti ti-refresh"></i> New onboarding</button>
     </div>
   </div>`;
@@ -1031,25 +1073,34 @@ function finishRPQ(){
 }
 
 function submitCKYC(){
-  // Validation — nomination preference is required for single holdings; optional for joint holdings
+  var errs = {};
+  // Nomination — required for single holdings; optional for joint holdings
   if(S.ckycData.holdingType!=='joint' && !S.ckycData.nomination){
-    showObModal({kind:'warn', title:'Nomination required', body:'Please select your nomination preference (register a nominee or opt out) before proceeding.'});
-    return;
+    errs.nomination = 'Please select your nomination preference (register a nominee or opt out).';
   }
   if(S.ckycData.nomination==='submit'){
-    var errs = {};
     var nominees = S.ckycData.nominees && S.ckycData.nominees.length ? S.ckycData.nominees : [{name:'',relation:''}];
     nominees.forEach(function(n,i){
       if(!n.name || n.name.trim().length<2) errs['nomName'+i] = 'Please enter nominee ' + (i+1) + '\u2019s full name.';
       if(!n.relation) errs['nomRelation'+i] = 'Please select nominee ' + (i+1) + '\u2019s relationship to you.';
     });
-    if(Object.keys(errs).length){
-      S._ckycErrs = errs;
-      var extra = document.getElementById('nom-extra');
-      if(extra) extra.innerHTML = renderNomExtra();
-      showObModal({kind:'err', title:'Nominee details incomplete', body:'\u2022 ' + Object.values(errs).join('\n\u2022 ')});
-      return;
-    }
+  }
+  // FATCA / CRS self-certification — mandatory for every client
+  if(!S.ckycData.fatcaIndiaOnly){
+    errs.fatcaIndiaOnly = 'Please answer whether India is your only country of citizenship and tax residency.';
+  }
+  if(S.ckycData.fatcaIndiaOnly==='no'){
+    if(!S.ckycData.fatcaCountry || !S.ckycData.fatcaCountry.trim()) errs.fatcaCountry = 'Please enter your country of tax residency.';
+    if(!S.ckycData.fatcaTIN || !S.ckycData.fatcaTIN.trim()) errs.fatcaTIN = 'Please enter your Tax Identification Number, or \u201cNot applicable\u201d if none is issued.';
+  }
+  if(!S.ckycData.fatcaUSPerson){
+    errs.fatcaUSPerson = 'Please answer whether you are a US citizen, resident, or Green Card holder.';
+  }
+  if(Object.keys(errs).length){
+    S._ckycErrs = errs;
+    render();
+    showObModal({kind:'err', title:'Please complete the following', body:'\u2022 ' + Object.values(errs).join('\n\u2022 ')});
+    return;
   }
   S._ckycErrs = {};
   // Export data to JSON for CRM import
@@ -1095,6 +1146,10 @@ function exportForCRM(){
     holdingType: S.ckycData.holdingType||'single',
     nomination: S.ckycData.nomination||'',
     nominees: S.ckycData.nomination==='submit' ? (S.ckycData.nominees||[]).filter(function(n){return n.name;}) : [],
+    fatcaIndiaOnly: S.ckycData.fatcaIndiaOnly||'',
+    fatcaCountry: S.ckycData.fatcaIndiaOnly==='no' ? (S.ckycData.fatcaCountry||'') : '',
+    fatcaTIN: S.ckycData.fatcaIndiaOnly==='no' ? (S.ckycData.fatcaTIN||'') : '',
+    fatcaUSPerson: S.ckycData.fatcaUSPerson||'',
     kycId: S.ckycData.kycId||'',
     kra: S.ckycData.kra||'',
   };
@@ -1363,50 +1418,6 @@ function showObModal(opts) {
   overlay.onclick = function(e){ if(e.target === overlay && opts.cancelLabel){ overlay.remove(); if(opts.onCancel) opts.onCancel(); } };
 }
 
-// ── PRINTABLE RISK PROFILE ASSESSMENT ────────────────────────────────────────────────
-// Called from pgReport to render the full question/answer transcript for print
-function reportFullQATranscript() {
-  return SECTIONS.map(sec => {
-    const meta = SEC_META[sec];
-    const qs = QUESTIONS.filter(q=>q.sec===sec);
-    return `<div style="margin-bottom:20px;break-inside:avoid">
-      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)">
-        Section ${meta.tag} — ${meta.title} (Weight: ${meta.weight*100|0}%)
-      </div>
-      ${qs.map((q,qi)=>{
-        const ans = S.answers[q.id];
-        const selectedOpts = q.multi
-          ? (Array.isArray(ans)?ans:[]).map(i=>q.opts[i])
-          : ans!=null?[q.opts[ans]]:[];
-        return `<div style="margin-bottom:12px">
-          <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px">${QUESTIONS.indexOf(q)+1}. ${q.label}</div>
-          ${selectedOpts.length
-            ? selectedOpts.map(opt=>`<div style="display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--navy);border-radius:5px;margin-bottom:3px">
-                <i class="ti ti-check" style="font-size:11px;color:var(--gold2);flex-shrink:0;margin-top:2px"></i>
-                <span style="font-size:11px;color:#fff">${opt[0]} <span style="color:rgba(255,255,255,.5)">(score: ${opt[1]})</span></span>
-              </div>`).join('')
-            : `<div style="font-size:11px;color:var(--red);padding:4px 8px">Not answered</div>`
-          }
-        </div>`;
-      }).join('')}
-    </div>`;
-  }).join('');
-}
-
-
-function printFullReport() {
-  const el = document.getElementById('print-transcript');
-  if (el) {
-    el.style.display = '';
-    // Re-render QA transcript
-    const qaEl = document.getElementById('qa-transcript');
-    if (qaEl) qaEl.innerHTML = reportFullQATranscript();
-  }
-  downloadPDF();
-  // Hide again after print dialog
-  setTimeout(() => { if(el) el.style.display='none'; }, 1000);
-}
-
 // ── PDF GENERATION ─────────────────────────────────────────────────────────
 // Generates a real, standalone onboarding-record PDF client-side using jsPDF
 // (loaded on demand from a CDN — not bundled, to keep the base page light).
@@ -1434,7 +1445,15 @@ function buildOnboardingPDF(){
   var margin = 48;
   var y = margin;
 
+  function pdfSafe(text){
+    // jsPDF's built-in fonts (WinAnsi encoding) don't include ₹ or ✓ — substitute
+    // plain-text equivalents so nothing renders as a blank or stray character.
+    return String(text)
+      .replace(/\u20B9/g, 'Rs. ')
+      .replace(/\u2713/g, '-');
+  }
   function addText(text, opts){
+    text = pdfSafe(text);
     opts = opts || {};
     doc.setFont('helvetica', opts.bold ? 'bold' : 'normal');
     doc.setFontSize(opts.size || 10);
@@ -1446,58 +1465,195 @@ function buildOnboardingPDF(){
       y += opts.lineH || (opts.size ? opts.size*1.5 : 15);
     });
   }
+  function addHeading(text){
+    text = pdfSafe(text);
+    if(y > pageH - margin - 30){ doc.addPage(); y = margin; }
+    y += 6;
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor('#1d2e28');
+    doc.text(text, margin, y);
+    y += 8;
+    doc.setDrawColor(184,144,58); doc.setLineWidth(1);
+    doc.line(margin, y, margin+40, y);
+    y += 16;
+  }
+  function addSubheading(text){
+    text = pdfSafe(text);
+    if(y > pageH - margin - 20){ doc.addPage(); y = margin; }
+    doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor('#2a4038');
+    doc.text(text, margin, y);
+    y += 14;
+  }
   function addRule(){
-    doc.setDrawColor(220,214,200);
+    doc.setDrawColor(220,214,200); doc.setLineWidth(0.5);
     doc.line(margin, y, pageW-margin, y);
     y += 14;
   }
+  function addKVTable(rows){
+    var colW1 = 190, colW2 = pageW - margin*2 - colW1;
+    rows.forEach(function(row){
+      doc.setFont('helvetica','bold'); doc.setFontSize(9);
+      var labelLines = doc.splitTextToSize(pdfSafe(row[0]), colW1-14);
+      doc.setFont('helvetica','normal'); doc.setFontSize(9);
+      var valueLines = doc.splitTextToSize(pdfSafe(row[1]||'\u2014'), colW2-14);
+      var lineCount = Math.max(labelLines.length, valueLines.length, 1);
+      var rowH = lineCount*12 + 8;
+      if(y + rowH > pageH - margin){ doc.addPage(); y = margin; }
+      doc.setDrawColor(220,214,200); doc.setLineWidth(0.5);
+      doc.rect(margin, y, colW1, rowH);
+      doc.rect(margin+colW1, y, colW2, rowH);
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor('#4a4038');
+      labelLines.forEach(function(line,i){ doc.text(line, margin+7, y+13+i*11); });
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor('#1c1917');
+      valueLines.forEach(function(line,i){ doc.text(line, margin+colW1+7, y+13+i*11); });
+      y += rowH;
+    });
+    y += 10;
+  }
+  function pageFooter(){
+    var pageCount = doc.internal.getNumberOfPages();
+    for(var i=1;i<=pageCount;i++){
+      doc.setPage(i);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor('#8c8070');
+      doc.text(CFG.distributor + ' \u00b7 AMFI ' + CFG.arn + ' \u00b7 Page ' + i + ' of ' + pageCount, margin, pageH-24);
+    }
+  }
 
   var r = S.result, d = S.details;
-
-  addText(CFG.distributor, {bold:true, size:16});
-  addText('AMFI Registered Mutual Fund Distributor \u00b7 ' + CFG.arn, {size:9, color:'#8c8070'});
-  y += 6;
-  addText('Mutual Fund Onboarding \u2014 Risk Profile Assessment Record', {bold:true, size:13});
-  addText('Date: ' + TODAY, {size:9, color:'#8c8070'});
-  y += 4; addRule();
-
-  addText('Client Details', {bold:true, size:11}); y += 2;
-  addText('Name: ' + (d.name||''));
-  addText('PAN: ' + ((d.pan||'').toUpperCase()));
-  addText('Date of birth: ' + (d.dob||''));
-  addText('Mobile: ' + (d.mobile||''));
-  addText('Email: ' + (d.email||''));
-  addText('City: ' + (d.city||''));
-  y += 6; addRule();
-
-  addText('Risk Profile Assessment', {bold:true, size:11}); y += 2;
-  addText('Assessed risk profile: ' + (r ? r.profile : '\u2014'), {bold:true});
-  addText('This reflects the client\u2019s stated risk capacity, tolerance, objectives and experience. It is not an asset allocation or investment recommendation. Scheme suitability is assessed separately.', {size:9});
-  y += 6; addRule();
-
   var kycText = S.ekyc==='kyc_done' ? 'Stated as already verified (pending confirmation by the distributor)'
     : S.ekyc==='kyc_ekyc' ? 'eKYC just completed (pending confirmation by the distributor)'
     : S.ekyc==='kyc_pending' ? 'Currently in process'
-    : 'Not yet completed';
-  var nomText = S.ckycData.nomination==='submit' ? 'Nominee(s) provided \u2014 captured for onboarding; formal nomination to be completed via the applicable AMC/RTA process.'
-    : S.ckycData.nomination==='optout' ? 'Opted out of nomination \u2014 prescribed opt-out declaration to be completed via the applicable process.'
+    : S.ekyc==='kyc_not_done' ? 'Not yet completed' : 'Not specified';
+  var nomText = S.ckycData.nomination==='submit' ? 'Nominee(s) provided'
+    : S.ckycData.nomination==='optout' ? 'Opted out'
     : 'Not specified';
-  addText('KYC & Nomination', {bold:true, size:11}); y += 2;
-  addText('KYC status: ' + kycText);
-  if(S.ckycData.kycRef) addText('KYC reference number: ' + S.ckycData.kycRef);
-  addText('Nomination: ' + nomText);
+
+  // ── PAGE 1: Cover / Summary ──
+  addText(CFG.distributor, {bold:true, size:17});
+  addText('AMFI Registered Mutual Fund Distributor \u00b7 ' + CFG.arn, {size:9, color:'#8c8070'});
+  y += 6;
+  addText('Mutual Fund Onboarding \u2014 Complete Record', {bold:true, size:14});
+  addText('Date: ' + TODAY, {size:9, color:'#8c8070'});
   y += 6; addRule();
 
-  addText('Declaration', {bold:true, size:11}); y += 2;
+  addHeading('Summary');
+  addKVTable([
+    ['Name', d.name],
+    ['PAN', (d.pan||'').toUpperCase()],
+    ['Mobile', d.mobile],
+    ['Email', d.email],
+    ['Engagement type', 'Mutual Fund Distribution (AMFI MFD)'],
+    ['Risk profile', r ? r.profile : '\u2014'],
+    ['KYC status', kycText],
+    ['Nomination', nomText],
+    ['Distributor', CFG.distributor + ' \u00b7 AMFI ' + CFG.arn],
+    ['Onboarding date', TODAY],
+    ['Risk-profile review', 'Periodically, and whenever there is a material change in financial circumstances, investment objectives or risk preferences.'],
+  ]);
+
+  // ── Client Details ──
+  doc.addPage(); y = margin;
+  addHeading('Client Details');
+  addKVTable([
+    ['Full name', d.name],
+    ['PAN', (d.pan||'').toUpperCase()],
+    ['Date of birth', d.dob],
+    ['Residential status', d.resStatus||'RI'],
+    ['Mobile', d.mobile],
+    ['Email', d.email],
+    ['City / Place', d.city],
+    ['Occupation', d.occupation||'\u2014'],
+  ]);
+
+  // ── Regulatory Disclosures Acknowledged ──
+  addHeading('Regulatory Disclosures Acknowledged');
+  getDisclosures().forEach(function(item){
+    addSubheading(item.t);
+    item.b.forEach(function(line){ addText('\u2022 ' + line, {size:9}); });
+    y += 6;
+  });
+
+  // ── Complete Risk Profile Questionnaire ──
+  doc.addPage(); y = margin;
+  addHeading('Complete Risk Profile Questionnaire \u2014 Responses');
+  SECTIONS.forEach(function(sec){
+    var meta = SEC_META[sec];
+    var qs = QUESTIONS.filter(function(q){ return q.sec===sec; });
+    addSubheading('Section ' + meta.tag + ' \u2014 ' + meta.title + ' (Weight: ' + Math.round(meta.weight*100) + '%)');
+    y += 2;
+    qs.forEach(function(q){
+      var ans = S.answers[q.id];
+      var selectedOpts = q.multi ? (Array.isArray(ans)?ans:[]).map(function(i){ return q.opts[i]; })
+                                  : (ans!=null ? [q.opts[ans]] : []);
+      addText((QUESTIONS.indexOf(q)+1) + '. ' + q.label, {bold:true, size:9.5});
+      if(selectedOpts.length){
+        selectedOpts.forEach(function(opt){
+          addText('\u2713 ' + opt[0] + ' (score: ' + opt[1] + ')', {size:9, color:'#4a4038'});
+        });
+      } else {
+        addText('Not answered', {size:9, color:'#991B1B'});
+      }
+      y += 4;
+    });
+    y += 6;
+  });
+
+  // ── Risk Profile Result ──
+  doc.addPage(); y = margin;
+  addHeading('Risk Profile Result');
+  addText('Assessed risk profile: ' + (r ? r.profile : '\u2014'), {bold:true, size:12});
+  y += 4;
+  addText('This reflects the client\u2019s stated risk capacity, tolerance, objectives and experience. It is not an asset allocation or investment recommendation. Scheme suitability is assessed separately based on the relevant scheme characteristics, investment objective, time horizon and other applicable information.', {size:9});
+  if(r && r.capCap){ y+=4; addText('Risk-capacity safeguard: financial circumstances have been considered in determining the overall risk profile, which has been capped accordingly.', {size:9}); }
+  if(r && r.tolAdj){ y+=4; addText('Risk-profile adjustment: responses showed a material difference between stated risk tolerance and other responses. The lower result has been used for the overall assessment.', {size:9}); }
+  y += 10; addRule();
+
+  addHeading('KYC Status');
+  addKVTable([
+    ['KYC status', kycText],
+    ['KYC reference number', S.ckycData.kycRef || '\u2014'],
+  ]);
+
+  addHeading('Nomination');
+  addKVTable([
+    ['Holding type', S.ckycData.holdingType==='joint' ? 'Joint' : 'Single'],
+    ['Nomination preference', nomText],
+  ]);
+  if(S.ckycData.nomination==='submit' && S.ckycData.nominees && S.ckycData.nominees.length){
+    S.ckycData.nominees.forEach(function(n,i){
+      if(n.name) addText('Nominee ' + (i+1) + ': ' + n.name + ' (' + (n.relation||'\u2014') + ')', {size:9});
+    });
+    y += 6;
+    addText('You\u2019ll formally register this with the AMC as part of your KYC.', {size:8, color:'#8c8070'});
+  } else if(S.ckycData.nomination==='optout'){
+    addText('You\u2019ll formally record this opt-out with the AMC as part of your KYC.', {size:8, color:'#8c8070'});
+  }
+  y += 10; addRule();
+
+  addHeading('FATCA / CRS Self-Certification');
+  var fatcaResidency = S.ckycData.fatcaIndiaOnly==='yes' ? 'India only'
+    : S.ckycData.fatcaIndiaOnly==='no' ? 'Also a citizen and/or tax resident of another country' : 'Not specified';
+  var fatcaRows = [
+    ['India-only tax residency', fatcaResidency],
+    ['US citizen / resident / Green Card holder', S.ckycData.fatcaUSPerson==='yes' ? 'Yes' : S.ckycData.fatcaUSPerson==='no' ? 'No' : 'Not specified'],
+  ];
+  if(S.ckycData.fatcaIndiaOnly==='no'){
+    fatcaRows.push(['Country of tax residency (other than India)', S.ckycData.fatcaCountry||'\u2014']);
+    fatcaRows.push(['Tax Identification Number (TIN)', S.ckycData.fatcaTIN||'\u2014']);
+  }
+  addKVTable(fatcaRows);
+  y += 10; addRule();
+
+  // ── Declaration & Signature ──
+  addHeading('Declaration');
   addText('I, ' + (d.name||'') + ' (PAN: ' + ((d.pan||'').toUpperCase()) + '), confirm that:', {size:9});
   addText('1. I have answered all questions truthfully to the best of my knowledge and understanding.', {size:9});
   addText('2. I have read and understood all regulatory disclosures provided by ' + CFG.distributor + ' (AMFI ' + CFG.arn + ').', {size:9});
   addText('3. I have reviewed my assessed risk profile of ' + (r?r.profile:'') + ' and understand that it is based on the information I have provided. Scheme suitability will be assessed separately based on my investment objective, time horizon and other applicable information.', {size:9});
   addText('4. I consent to this data being collected, stored and processed for the purpose of mutual fund distribution services, retained as required under SEBI KYC norms, the AMFI Code of Conduct, and the Prevention of Money Laundering Act, 2002. I am aware of my rights under the Digital Personal Data Protection Act, 2023.', {size:9});
   addText('5. I understand that this risk profile should be reviewed periodically and whenever there is a material change in my financial circumstances, investment objectives or risk preferences.', {size:9});
-  y += 10;
+  y += 12;
 
-  addText('Signature / Acknowledgement', {bold:true, size:11}); y += 6;
+  addHeading('Signature / Acknowledgement');
   var sig = S._signCapture;
   if(sig && sig.type==='image'){
     try{
@@ -1506,8 +1662,7 @@ function buildOnboardingPDF(){
       y += 58;
     }catch(e){ addText('[Signature image could not be embedded]', {size:9}); }
   } else if(sig && sig.type==='text'){
-    doc.setFont('times', 'italic');
-    doc.setFontSize(20);
+    doc.setFont('times', 'italic'); doc.setFontSize(20); doc.setTextColor('#1c1917');
     doc.text(sig.data, margin, y+16);
     y += 34;
   } else {
@@ -1515,6 +1670,7 @@ function buildOnboardingPDF(){
   }
   addText((d.name||'') + ' \u00b7 PAN: ' + ((d.pan||'').toUpperCase()) + ' \u00b7 ' + TODAY, {size:8, color:'#8c8070'});
 
+  pageFooter();
   return doc.output('blob');
 }
 
@@ -1523,11 +1679,10 @@ function pdfFilename(){
   return 'Onboarding-' + slug + '-' + TODAY_ISO + '.pdf';
 }
 
-// Nothing here is faked: if native share-with-file isn't supported, this downloads
-// the real generated PDF and opens a prefilled email draft telling the client to
-// attach it — it never claims the PDF was sent unless the share sheet actually
-// confirms the handoff.
-function emailPDFToManan(){
+// Nothing here is faked: the native share sheet only opens with the PDF actually
+// attached where the browser supports it. Where it doesn't, this simply downloads
+// the same real PDF — it never claims anything was emailed or sent automatically.
+function sharePDF(){
   var name = S.details.name||'';
   loadJsPDF().then(function(){
     var blob = buildOnboardingPDF();
@@ -1535,52 +1690,38 @@ function emailPDFToManan(){
     if(navigator.canShare && navigator.canShare({files:[file]})){
       navigator.share({
         files: [file],
-        title: 'Mutual Fund Onboarding \u2013 ' + name,
-        text: 'Hi Manan,\n\nPlease find attached my completed mutual fund onboarding form.\n\nRegards,\n' + name
+        title: 'Mutual Fund Onboarding \u2013 ' + name
       }).catch(function(err){
         if(err && err.name === 'AbortError') return; // person cancelled the share sheet — not an error
         toast('Could not open the share sheet. Please use Download PDF instead.', true);
       });
       return;
     }
-    // Fallback: browser can't share a file directly — download the real PDF, then
-    // open a prefilled email draft asking the client to attach it themselves.
+    // Fallback: this browser can't share a file directly — just download the same PDF.
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url; a.download = pdfFilename();
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
-    showObModal({
-      kind: 'info',
-      title: 'PDF downloaded',
-      body: 'Your onboarding PDF has been downloaded. Your email app will now open with the message ready \u2014 please attach the downloaded PDF before sending.',
-      confirmLabel: 'Open email',
-      onConfirm: function(){
-        var subj = encodeURIComponent('Mutual Fund Onboarding \u2013 ' + name);
-        var body = encodeURIComponent('Hi Manan,\n\nPlease find attached my completed mutual fund onboarding form.\n\nRegards,\n' + name);
-        window.location.href = 'mailto:' + CFG.email + '?subject=' + subj + '&body=' + body;
-      }
-    });
+    toast('Sharing isn\u2019t supported on this browser \u2014 your PDF has been downloaded instead.');
   }).catch(function(){
     toast('Could not load the PDF generator. Please check your connection and try Download PDF instead.', true);
   });
 }
 
+// Download PDF and Share PDF both generate the same complete onboarding record —
+// this one just saves it directly instead of opening the share sheet.
 function downloadPDF() {
-  // Show the full transcript before printing
-  const el = document.getElementById('print-transcript');
-  if (el) {
-    el.style.display = '';
-    const qaEl = document.getElementById('qa-transcript');
-    if (qaEl) qaEl.innerHTML = reportFullQATranscript();
-  }
-  // Small delay so DOM updates, then trigger print dialog
-  // On Chrome/mobile: Print → Save as PDF (no printer needed)
-  // On Safari/iOS: Share → Print → pinch-zoom to PDF
-  setTimeout(() => {
-    window.print();
-    setTimeout(() => { if(el) el.style.display='none'; }, 2000);
-  }, 150);
+  loadJsPDF().then(function(){
+    var blob = buildOnboardingPDF();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = pdfFilename();
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+  }).catch(function(){
+    toast('Could not load the PDF generator. Please check your connection and try again.', true);
+  });
 }
 
 // printFullReport is just an alias now
