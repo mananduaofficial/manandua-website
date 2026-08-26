@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
 <title>Client Onboarding — Manan Dua</title>
+<meta name="description" content="Mutual fund onboarding — Manan Dua, AMFI Registered Mutual Fund Distributor, ARN-365491">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Client Onboarding — Manan Dua">
+<meta property="og:description" content="Complete your mutual fund onboarding with Manan Dua, AMFI Registered Mutual Fund Distributor, ARN-365491">
+<meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
@@ -132,8 +137,8 @@ textarea{resize:vertical;min-height:72px}
 .disc-badge{display:inline-flex;align-items:center;gap:5px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--red)}
 
 /* ── SIGNATURE ── */
-.sig-box{border:1.5px dashed var(--border2);border-radius:var(--r);padding:20px;text-align:center;margin-top:12px;background:var(--bg3)}
-.sig-line{height:60px;border-bottom:1.5px solid var(--border2);margin-bottom:8px}
+/* sig-box and sig-line removed — distributor signature box removed from workflow */
+.bsm{font-size:12px!important;padding:5px 12px!important;min-width:auto!important}
 .sig-label{font-size:11px;color:var(--text3)}
 
 /* ── CKYC FORM ── */
@@ -222,20 +227,15 @@ textarea{resize:vertical;min-height:72px}
 <script>
 // ═══════════════════════════ CONFIG — UPDATE THESE ══════════════════════════
 const CFG = {
-  firm:        'Manan Dua',   // sole proprietorship — Meridian is the newsletter/workshop brand only, not used here
+  firm:        'Manan Dua',
   distributor: 'Manan Dua',
-  arn:         'ARN-365491',     // AMFI ARN, valid 16-Jul-2026 to 19-Jun-2029
-  euin:        'E699297',        // applicable — this is an individual ARN holder acting as the seller
+  arn:         'ARN-365491',
+  euin:        'E699297',
   email:       'wealth@manandua.in',
-  phone:       '+91 XXXXXXXXXX',  // ← your phone
-  // ── BACKEND (Google Apps Script Web App) ──
-  // 1. Deploy Code.gs as a Web App (Execute as: Me, Who has access: Anyone).
-  // 2. Paste the /exec URL below.
-  // 3. Set the same string as the SHARED_SECRET Script Property in Apps Script.
-  //    This is a light abuse-deterrent, not a real access-control boundary —
-  //    the backend independently validates and authorises every submission.
-  webAppUrl:    'https://script.google.com/macros/s/AKfycbw49VrIIGPCmgXpZosNfBDuZZKqw_T8tC5-ZRyKCCKIw1qt3WKhQ3FVWfuz8AHGp-bs/exec',
-  sharedSecret: '@c@YTGC^vWsHKgEVNFBisWdfvX!xLX9KGLhYMXYN',
+  phone:       '9310361206',
+  // Backend endpoint — the server independently validates every submission.
+  // No secret is stored here; the backend is the security boundary.
+  webAppUrl:   'https://script.google.com/macros/s/AKfycbw49VrIIGPCmgXpZosNfBDuZZKqw_T8tC5-ZRyKCCKIw1qt3WKhQ3FVWfuz8AHGp-bs/exec',
 };
 
 function FIRM(){ return CFG.firm; }
@@ -695,10 +695,9 @@ function pgKYC(){
     <div class="sec-label" style="margin-top:8px">CKYC / KRA data-access consent</div>
     <div class="ckyc-consent-text">
       <strong>I, ${esc(S.details.name||'[Name]')}</strong> (PAN: <strong>${esc((S.details.pan||'[PAN]').toUpperCase())}</strong>), give my consent to <strong>${FIRM()}</strong> (AMFI ${CFG.arn}) to:<br><br>
-      (a) access, fetch, view and download my KYC records available with the CKYCR / any KRA using my KYC Identifier and/or PAN;<br>
-      (b) assist in verifying, updating or modifying my KYC records with the CKYCR / KRA where required, on my instructions; and<br>
-      (c) use such KYC information solely to facilitate mutual fund transactions under SEBI Circular on KYC norms and the AMFI Code of Conduct.<br><br>
-      I acknowledge that the CKYCR / KRA may send an SMS / e-mail notification each time such records are accessed. This consent shall remain valid until withdrawn by me in writing.
+      (a) access, fetch, view and download my KYC records available with the CKYCR / any KRA using my KYC Identifier and/or PAN, for the purpose of verifying my KYC status;<br>
+      (b) use such KYC information solely to facilitate mutual fund transactions and distribution services under SEBI regulations on KYC norms and the AMFI Code of Conduct.<br><br>
+      I acknowledge that the CKYCR / KRA may send an SMS / e-mail notification when my records are accessed. This consent shall remain valid until withdrawn by me in writing.
     </div>
     <div class="sec-label">Confirm your details for CKYC</div>
     <div class="r2">
@@ -713,8 +712,9 @@ function pgKYC(){
     </div>
     <div class="r2">
       <div class="fg">
-        <label class="fl" for="ck-id">KYC Identifier (CKYC number, if known)</label>
+        <label class="fl" for="ck-id">CKYC Number <span class="hint">(14-digit, if known)</span></label>
         <input id="ck-id" value="${esc(d.kycId||'')}" placeholder="14-digit CKYC number" oninput="setCKYC('kycId',this.value)">
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">This is the 14-digit number on your CKYC acknowledgement, separate from your KRA reference number above.</div>
       </div>
       <div class="fg">
         <label class="fl" for="ck-kra">KYC Registration Agency (KRA)</label>
@@ -750,16 +750,16 @@ function pgKYC(){
       <div class="q-opt${d.nomination==='optout'?' sel':''}" data-nom="optout" onclick="setCKYC('nomination','optout')"><div class="q-dot"></div><span>I wish to opt out of nomination — I understand that in the event of death without a nominee, the folio will be subject to transmission procedures</span></div>
     </div>
     <div id="nom-extra">${renderNomExtra()}</div>
-    <div class="sec-label" style="margin-top:8px">FATCA / CRS self-certification</div>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">This is a regulatory requirement for mutual fund investors under CBDT Rules 114F\u2013114H, used to determine tax residency status for information-sharing purposes. It does not affect your tax liability.</p>
-    <label class="fl">Is India your only country of citizenship and tax residency? <em>*</em></label>
+    <div class="sec-label" style="margin-top:8px">FATCA / CRS preliminary screening</div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">This is a preliminary screening under CBDT Rules 114F–114H to help identify your tax residency status for regulatory reporting purposes. A formal FATCA/CRS self-declaration will be completed separately through the AMC/RTA as part of your folio opening process. Your tax residency is determined by the tax laws of each country — it is not necessarily the same as your citizenship.</p>
+    <label class="fl">Are you a tax resident of India only, or also of another country? <em>*</em></label>
     <div style="display:flex;flex-direction:column;gap:8px;margin:6px 0 4px">
-      <div class="q-opt${d.fatcaIndiaOnly==='yes'?' sel':''}" data-fatca-india="yes" onclick="setFatca('fatcaIndiaOnly','yes')"><div class="q-dot"></div><span>Yes, India only</span></div>
-      <div class="q-opt${d.fatcaIndiaOnly==='no'?' sel':''}" data-fatca-india="no" onclick="setFatca('fatcaIndiaOnly','no')"><div class="q-dot"></div><span>No, I am also a citizen and/or tax resident of another country</span></div>
+      <div class="q-opt${d.fatcaIndiaOnly==='yes'?' sel':''}" data-fatca-india="yes" onclick="setFatca('fatcaIndiaOnly','yes')"><div class="q-dot"></div><span>India only — I am not a tax resident of any other country</span></div>
+      <div class="q-opt${d.fatcaIndiaOnly==='no'?' sel':''}" data-fatca-india="no" onclick="setFatca('fatcaIndiaOnly','no')"><div class="q-dot"></div><span>I am also a tax resident of another country</span></div>
     </div>
     ${e.fatcaIndiaOnly?`<div class="err-msg" style="margin-bottom:8px">${e.fatcaIndiaOnly}</div>`:''}
     <div id="fatca-extra">${renderFatcaExtra()}</div>
-    <label class="fl" style="margin-top:14px;display:block">Are you a citizen, resident, or Green Card holder of the United States? <em>*</em></label>
+    <label class="fl" style="margin-top:14px;display:block">Are you a US person for FATCA purposes (US citizen, US tax resident, or US Green Card holder)? <em>*</em></label>
     <div style="display:flex;flex-direction:column;gap:8px;margin:6px 0 4px">
       <div class="q-opt${d.fatcaUSPerson==='yes'?' sel':''}" data-fatca-us="yes" onclick="setFatca('fatcaUSPerson','yes')"><div class="q-dot"></div><span>Yes</span></div>
       <div class="q-opt${d.fatcaUSPerson==='no'?' sel':''}" data-fatca-us="no" onclick="setFatca('fatcaUSPerson','no')"><div class="q-dot"></div><span>No</span></div>
@@ -791,7 +791,8 @@ function renderEkycRef(){
   return `<div class="sec-label">KYC reference number</div>
     <div class="fg" style="margin-bottom:14px">
       <label class="fl" for="ekyc-ref">KYC reference number ${required?'<em>*</em>':'<span class="hint">(optional)</span>'}</label>
-      <input id="ekyc-ref" class="${e.kycRef?'err':''}" value="${esc(S.ckycData.kycRef||'')}" placeholder="e.g. CVLKRA/2024/XXXXXXXX" oninput="setCKYC('kycRef',this.value)">
+      <input id="ekyc-ref" class="${e.kycRef?'err':''}" value="${esc(S.ckycData.kycRef||'')}" placeholder="e.g. CVLKRA/2024/XXXXXXXX or KIN/XXXXXX" oninput="setCKYC('kycRef',this.value)">
+      <div style="font-size:11px;color:var(--text3);margin-top:3px">This is the reference number from your KRA confirmation / KYC acknowledgement letter. It is different from your 14-digit CKYC number — enter whichever you have.</div>
       ${e.kycRef?`<div class="err-msg">${e.kycRef}</div>`:''}
     </div>`;
 }
@@ -863,7 +864,7 @@ function submitKYC(){
     });
   }
   if(!S.ckycData.fatcaIndiaOnly){
-    errs.fatcaIndiaOnly = 'Please answer whether India is your only country of citizenship and tax residency.';
+    errs.fatcaIndiaOnly = 'Please indicate whether you are a tax resident of India only, or also of another country.';
   }
   if(S.ckycData.fatcaIndiaOnly==='no'){
     if(!S.ckycData.fatcaCountry || !S.ckycData.fatcaCountry.trim()) errs.fatcaCountry = 'Please enter your country of tax residency.';
@@ -947,7 +948,7 @@ function pgReport(){
     </div>
     <div class="card">
       <div class="sec-label">Regulatory disclosures — client acknowledgement</div>
-      ${getDisclosures().slice(0,4).map(d=>`<div class="disc-item"><div class="disc-title"><i class="ti ti-file-certificate"></i>${d.t}</div></div>`).join('')}
+      ${getDisclosures().map(d=>`<div class="disc-item"><div class="disc-title"><i class="ti ti-file-certificate"></i>${d.t}</div></div>`).join('')}
       <div class="declaration">
         <p>I, <strong>${esc(S.details.name)}</strong> (PAN: ${esc((S.details.pan||'').toUpperCase())}), confirm that:</p>
         <p>1. I have answered all questions truthfully to the best of my knowledge and understanding.</p>
@@ -988,7 +989,7 @@ function pgReport(){
                 <button type="button" class="btn btn-ghost bsm" onclick="document.getElementById('esign-upload-input').click()"><i class="ti ti-refresh" style="font-size:11px"></i> Change</button>
                 <button type="button" class="btn btn-ghost bsm" onclick="removeSigUpload()"><i class="ti ti-trash" style="font-size:11px"></i> Remove</button>
               </div>
-              <input type="file" id="esign-upload-input" accept="image/*" style="display:none" onchange="handleSigUpload(this)">
+              <input type="file" id="esign-upload-input" accept="image/jpeg,image/png" style="display:none" onchange="handleSigUpload(this)">
               <div class="esign-bar" style="justify-content:center"><span id="esign-status-upload">Upload a signature image above</span></div>
             </div>
           </div>
@@ -996,16 +997,15 @@ function pgReport(){
           <div style="font-size:11px;color:var(--text2);margin-top:4px">${esc(S.details.name||'')} · PAN: ${esc((S.details.pan||'').toUpperCase())} · ${TODAY} · ${FIRM()}</div>
         </div>
         <div>
-          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">For ${FIRM()}</div>
-          <div class="sig-box">
-            <div class="sig-line"></div>
-            <div style="font-size:11px;color:var(--text3);margin-top:6px">${CFG.distributor}</div>
-            <div style="font-size:11px;color:var(--text3)">AMFI ${CFG.arn}</div>
-            <div style="font-size:11px;color:var(--text3)">${TODAY} · ${FIRM()}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Distributed by</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8">
+            <div style="font-weight:600;color:var(--navy)">${CFG.distributor}</div>
+            <div>AMFI Registered Mutual Fund Distributor</div>
+            <div>AMFI ${CFG.arn} · EUIN ${CFG.euin}</div>
           </div>
-          <div class="ntc ntc-blue" style="margin-top:8px;font-size:11px">
+          <div class="ntc ntc-blue" style="margin-top:10px;font-size:11px">
             <i class="ti ti-info-circle"></i>
-            <span>The distributor will countersign this record and send you a copy before any transaction commences.</span>
+            <span>The distributor will review your submission and be in touch before any transaction is initiated.</span>
           </div>
         </div>
       </div>
@@ -1022,15 +1022,24 @@ function pgReport(){
 
 // ── PAGE: DONE ────────────────────────────────────────────────────────────────
 function pgDone(){
-  const r=S.result;
-  const kycLabel = S.ekyc==='kyc_done' ? 'Stated as already verified \u2014 pending confirmation by the distributor'
-    : S.ekyc==='kyc_ekyc' ? 'eKYC just completed \u2014 pending confirmation by the distributor'
-    : S.ekyc==='kyc_pending' ? 'Currently in process'
-    : 'Not yet completed';
+  var r = S.result;
+  // S._serverProfile is the authoritative result returned by the backend.
+  // Fall back to the client-computed profile only if the server hasn't responded yet
+  // (should not happen on this screen, but defensive).
+  var displayProfile = S._serverProfile || (r && r.profile) || '\u2014';
+  var profileMismatch = S._serverProfile && r && r.profile && S._serverProfile !== r.profile;
+  var kycLabel = S.ekyc==='kyc_done'    ? 'Stated as already verified \u2014 pending confirmation by the distributor'
+               : S.ekyc==='kyc_ekyc'    ? 'eKYC just completed \u2014 pending confirmation by the distributor'
+               : S.ekyc==='kyc_pending' ? 'Currently in process'
+               : 'Not yet completed';
   return `<div class="success-screen">
     <div class="success-icon"><i class="ti ti-circle-check"></i></div>
     <div class="success-title">Onboarding submitted successfully</div>
     <p class="success-sub">Thank you${S.details.name?', '+esc(S.details.name):''}. Your completed onboarding has been received${S._submissionId?' (reference '+esc(S._submissionId)+')':''}. ${esc(CFG.distributor)} will confirm your KYC status and be in touch shortly. Services cannot commence until KYC is independently confirmed.</p>
+    ${profileMismatch ? `<div class="ntc ntc-gold" style="max-width:480px;margin:0 auto 16px;text-align:left">
+      <i class="ti ti-alert-triangle"></i>
+      <span>Your risk profile was independently verified by our system. The confirmed profile is <strong>${esc(S._serverProfile)}</strong> (your session showed <strong>${esc(r.profile)}</strong>). Your downloaded documents reflect the confirmed profile.</span>
+    </div>` : ''}
     <div class="card" style="text-align:left;max-width:480px;margin:0 auto 24px">
       <div class="sec-label">Summary</div>
       <table class="summary-table">
@@ -1039,7 +1048,7 @@ function pgDone(){
         <tr><td>PAN</td><td>${esc((S.details.pan||'').toUpperCase())}</td></tr>
         <tr><td>Mobile</td><td>${esc(S.details.mobile||'\u2014')}</td></tr>
         <tr><td>Engagement type</td><td>Mutual Fund Distribution (AMFI MFD)</td></tr>
-        <tr><td>Risk profile</td><td><strong>${r?.profile||'\u2014'}</strong></td></tr>
+        <tr><td>Risk profile</td><td><strong>${esc(displayProfile)}</strong>${S._serverWs?' <span style="font-size:11px;color:var(--text3)">(score: '+S._serverWs+'/100)</span>':''}</td></tr>
         <tr><td>Onboarding date</td><td>${TODAY}</td></tr>
         <tr><td>Distributor</td><td>${CFG.distributor} \u00b7 AMFI ${CFG.arn}</td></tr>
         <tr><td>Risk-profile review</td><td>Periodically, and whenever there is a material change in your financial circumstances, investment objectives or risk preferences.</td></tr>
@@ -1048,11 +1057,15 @@ function pgDone(){
     </div>
     <div class="ntc ntc-green" style="max-width:480px;margin:0 auto 20px">
       <i class="ti ti-info-circle"></i>
-      <span>Both documents below are the official signed records — they include your submission ID, your signature and the full questionnaire responses. Downloads are optional; the records are already safely stored and nothing is lost if you close this page now.</span>
+      <span>Downloads are optional. Both documents are already safely stored — nothing is lost if you close this page now.</span>
     </div>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px">
-      ${S._downloadPdfBase64 ? `<button class="btn btn-gold" onclick="downloadOnboardingCopy('complete')"><i class="ti ti-file-download"></i> Download complete onboarding</button>` : ''}
-      ${S._downloadRiskPdfBase64 ? `<button class="btn btn-sec" onclick="downloadOnboardingCopy('risk')"><i class="ti ti-file-analytics"></i> Download risk profile</button>` : ''}
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px">
+      ${S._downloadPdfBase64 ? `<button class="btn btn-gold" onclick="downloadOnboardingCopy('complete')"><i class="ti ti-file-download"></i> Complete Onboarding</button>` : ''}
+      ${S._downloadRiskPdfBase64 ? `<button class="btn btn-sec" onclick="downloadOnboardingCopy('risk')"><i class="ti ti-file-analytics"></i> Risk Profile Assessment</button>` : ''}
+    </div>
+    <div style="max-width:480px;margin:0 auto 16px;display:flex;flex-direction:column;gap:4px">
+      ${S._downloadPdfBase64 ? `<div style="font-size:11px;color:var(--text3);text-align:center"><strong>Complete Onboarding</strong> — Your complete submitted onboarding record including all disclosures, KYC information and acknowledgement.</div>` : ''}
+      ${S._downloadRiskPdfBase64 ? `<div style="font-size:11px;color:var(--text3);text-align:center"><strong>Risk Profile Assessment</strong> — Your risk-profile questionnaire responses, assessed profile and related acknowledgement.</div>` : ''}
     </div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button class="btn btn-ghost" onclick="startOver()"><i class="ti ti-refresh"></i> New onboarding</button>
@@ -1064,11 +1077,9 @@ function pgDone(){
 function go(stage){S.stage=stage;render();}
 
 function rpqNext() {
-  console.log('rpqNext called, section:', S.rpqSection, 'of', SECTIONS.length-1);
   var sec = SECTIONS[S.rpqSection];
   var qs = QUESTIONS.filter(function(q){ return q.sec === sec; });
   var complete = qs.every(function(q){ return S.answers[q.id] != null; });
-  console.log('section:', sec, 'questions:', qs.length, 'complete:', complete);
   if (!complete) {
     toast('Please answer all questions in this section before continuing');
     qs.forEach(function(q){
@@ -1199,71 +1210,6 @@ function finishRPQ(){
   }
 }
 
-function exportForCRM(){
-  const r=S.result;
-  const d=S.details;
-  const payload={
-    source: 'Onboarding Portal',
-    onboardedAt: TODAY_ISO,
-    engagement: 'MFD',
-    distributor: CFG.distributor,
-    arn: CFG.arn,
-    euin: CFG.euin,
-    name:        d.name||'',
-    phone:       d.mobile||'',
-    email:       d.email||'',
-    city:        d.city||'',
-    pan:         (d.pan||'').toUpperCase(),
-    dob:         d.dob||'',
-    resStatus:   d.resStatus||'RI',
-    occupation:  d.occupation||'',
-    income:      d.income||'',
-    networth:    d.networth||'',
-    surplus:     d.surplus||'',
-    segment:     r?r.ws>=65?'HNI':'Retail':'Retail',
-    risk:        r?r.profile.toLowerCase().replace(' ','_'):'moderate',
-    status:      'prospect',
-    kyc:         S.ekyc||'not_confirmed',
-    rpDate:      TODAY_ISO,
-    nextReview:  null, // no automatic date calculated — review is periodic/circumstance-based, not a fixed schedule
-    notes:       `Onboarded via portal on ${TODAY}. Risk profile: ${r?.profile||'—'}. Score: ${r?.ws?.toFixed(1)||'—'}.`,
-    dpdpaConsent:{date:TODAY_ISO,method:'Online onboarding portal — explicit consent given'},
-    rpqResult:   r?{
-      profile:r.profile,score:r.ws,
-      sections:{capacity:r.cap.norm,tolerance:r.tol.norm,behavioral:r.beh.norm,requirement:r.req.norm,experience:r.exp.norm},
-      overrides:{capacityCapApplied:r.capCap,toleranceAdjusted:r.tolAdj,goalMismatch:r.goalMismatch},
-    }:null,
-    // CKYC — no document data is collected by this page; see the KYC page for guidance instead
-    holdingType: S.ckycData.holdingType||'single',
-    nomination: S.ckycData.nomination||'',
-    nominees: S.ckycData.nomination==='submit' ? (S.ckycData.nominees||[]).filter(function(n){return n.name;}) : [],
-    fatcaIndiaOnly: S.ckycData.fatcaIndiaOnly||'',
-    fatcaCountry: S.ckycData.fatcaIndiaOnly==='no' ? (S.ckycData.fatcaCountry||'') : '',
-    fatcaTIN: S.ckycData.fatcaIndiaOnly==='no' ? (S.ckycData.fatcaTIN||'') : '',
-    fatcaUSPerson: S.ckycData.fatcaUSPerson||'',
-    kycId: S.ckycData.kycId||'',
-    kra: S.ckycData.kra||'',
-  };
-  S._exportPayload=JSON.stringify(payload,null,2); // kept in memory only for this session — not persisted to browser storage
-}
-
-// Internal/admin integration point only — no longer exposed in the client-facing UI.
-// Retained here as a ready hook for a future backend/CRM integration.
-function emailSummary() {
-  const r = S.result;
-  const d = S.details;
-  const subj = encodeURIComponent(`Onboarding Summary — ${esc(d.name||"")}`);
-  const body = encodeURIComponent(
-    `${FIRM()} — Client Onboarding Summary\n\n` +
-    `Client: ${esc(d.name||"")}\nMobile: ${String(d.mobile||"")}\n` +
-    `Engagement: Mutual Fund Distribution (AMFI MFD)\n` +
-    `Risk Profile: ${r?.profile||'—'}\n` +
-    `KYC status: ${S.ekyc==='kyc_done'?'Stated as verified, pending confirmation':S.ekyc==='kyc_ekyc'?'eKYC just completed':S.ekyc==='kyc_pending'?'In progress':'Not yet completed'}\n` +
-    `Date: ${TODAY}\n\nDistributor: ${CFG.distributor} · AMFI ${CFG.arn}`
-  );
-  window.location.href = `mailto:${CFG.email}?subject=${subj}&body=${body}`;
-}
-
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -1276,33 +1222,30 @@ function bindEvents(){
 // No client data is persisted between visits — the app always starts fresh.
 render();
 
-// ── CRM IMPORT HELPER ─────────────────────────────────────────────────────────
-// Internal/admin integration point only — not called from the client-facing UI.
-// Kept here as a ready hook for a future backend/CRM integration; the exported
-// data lives only in memory (S._exportPayload) for the current session.
-function downloadCRMExport() {
-  if (!S._exportPayload) exportForCRM();
-  const blob = new Blob([S._exportPayload], {type: 'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'onboarding_' + (S.details.pan||'client').toUpperCase() + '_' + TODAY_ISO + '.json';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-
 // ── ESIGN CANVAS ──────────────────────────────────────────────────────────────
-let _signMode = 'draw';   // 'draw' | 'type'
+let _signMode = 'draw';
 let _signCanvas = null;
 let _signing = false;
 let _signHasData = false;
+let _signAbortCtrl = null; // AbortController for removing canvas event listeners
 
 function initSignCanvas() {
-  const canvas = document.getElementById('esign-canvas');
+  var canvas = document.getElementById('esign-canvas');
   if (!canvas) return;
+
+  // Idempotency: abort any previously attached listeners before re-attaching.
+  // This guarantees exactly one set of listeners regardless of how many times
+  // initSignCanvas is called (e.g. Draw → Type → Draw → Type → Draw).
+  if (_signAbortCtrl) {
+    _signAbortCtrl.abort();
+  }
+  _signAbortCtrl = new AbortController();
+  var signal = _signAbortCtrl.signal;
+
   _signCanvas = canvas;
-  const ctx = canvas.getContext('2d');
-  // Scale for retina
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
   canvas.width = rect.width * dpr;
   canvas.height = rect.height * dpr;
   ctx.scale(dpr, dpr);
@@ -1312,17 +1255,28 @@ function initSignCanvas() {
   ctx.lineJoin = 'round';
 
   function getPos(e) {
-    const r = canvas.getBoundingClientRect();
-    const src = e.touches ? e.touches[0] : e;
-    return { x: (src.clientX - r.left), y: (src.clientY - r.top) };
+    var r = canvas.getBoundingClientRect();
+    var src = e.touches ? e.touches[0] : e;
+    return { x: src.clientX - r.left, y: src.clientY - r.top };
   }
-  canvas.addEventListener('mousedown',  e => { _signing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); });
-  canvas.addEventListener('mousemove',  e => { if(!_signing) return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); _signHasData=true; updateSignStatus(); });
-  canvas.addEventListener('mouseup',    () => _signing=false);
-  canvas.addEventListener('mouseleave', () => _signing=false);
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); _signing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); }, {passive:false});
-  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if(!_signing) return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); _signHasData=true; updateSignStatus(); }, {passive:false});
-  canvas.addEventListener('touchend',   () => _signing=false);
+
+  canvas.addEventListener('mousedown', function(e) {
+    _signing = true; ctx.beginPath(); var p = getPos(e); ctx.moveTo(p.x, p.y);
+  }, { signal: signal });
+  canvas.addEventListener('mousemove', function(e) {
+    if (!_signing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
+    _signHasData = true; updateSignStatus();
+  }, { signal: signal });
+  canvas.addEventListener('mouseup',    function() { _signing = false; }, { signal: signal });
+  canvas.addEventListener('mouseleave', function() { _signing = false; }, { signal: signal });
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault(); _signing = true; ctx.beginPath(); var p = getPos(e); ctx.moveTo(p.x, p.y);
+  }, { passive: false, signal: signal });
+  canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault(); if (!_signing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
+    _signHasData = true; updateSignStatus();
+  }, { passive: false, signal: signal });
+  canvas.addEventListener('touchend', function() { _signing = false; }, { signal: signal });
 }
 
 function clearSign() {
@@ -1334,35 +1288,94 @@ function clearSign() {
 }
 
 function setSignMode(mode) {
-  _signMode = mode;
-  const tabs = document.querySelectorAll('.esign-tab');
-  tabs.forEach(t => t.classList.toggle('on', t.dataset.mode === mode));
-  const drawWrap   = document.getElementById('esign-draw-wrap');
-  const typeWrap   = document.getElementById('esign-type-wrap');
-  const uploadWrap = document.getElementById('esign-upload-wrap');
-  if (drawWrap)   drawWrap.style.display   = mode==='draw'   ? '' : 'none';
-  if (typeWrap)   typeWrap.style.display   = mode==='type'   ? '' : 'none';
-  if (uploadWrap) uploadWrap.style.display = mode==='upload' ? '' : 'none';
-  if (mode === 'draw') setTimeout(initSignCanvas, 50);
-  updateSignStatus();
+  if(_signMode === mode) return; // already on this tab, nothing to do
+
+  // If a signature already exists on the current method, warn before clearing.
+  var hasExisting = false;
+  if(_signMode === 'draw' && _signHasData) hasExisting = true;
+  if(_signMode === 'type' && (document.getElementById('esign-type-input')?.value||'').trim().length > 1) hasExisting = true;
+  if(_signMode === 'upload' && _signHasData) hasExisting = true;
+
+  function doSwitch() {
+    // Abort canvas listeners immediately when leaving draw mode.
+    if (_signAbortCtrl) { _signAbortCtrl.abort(); _signAbortCtrl = null; }
+    // Reset all signature state when switching modes.
+    _signMode = mode;
+    _signHasData = false;
+    _signing = false;
+    _signCanvas = null;
+
+    // Clear typed input
+    var ti = document.getElementById('esign-type-input');
+    if(ti) ti.value = '';
+
+    // Clear upload preview
+    var prev = document.getElementById('esign-upload-preview');
+    var acts = document.getElementById('esign-upload-actions');
+    var inp  = document.getElementById('esign-upload-input');
+    var lbl  = document.getElementById('esign-upload-label');
+    if(prev){ prev.src=''; prev.style.display='none'; }
+    if(acts) acts.style.display='none';
+    if(inp)  inp.value='';
+    if(lbl)  lbl.textContent='Tap to upload a photo of your signature';
+
+    // Update tab visual state
+    document.querySelectorAll('.esign-tab').forEach(function(t){
+      t.classList.toggle('on', t.dataset.mode === mode);
+    });
+
+    // Show/hide panels
+    var drawWrap   = document.getElementById('esign-draw-wrap');
+    var typeWrap   = document.getElementById('esign-type-wrap');
+    var uploadWrap = document.getElementById('esign-upload-wrap');
+    if(drawWrap)   drawWrap.style.display   = mode==='draw'   ? '' : 'none';
+    if(typeWrap)   typeWrap.style.display   = mode==='type'   ? '' : 'none';
+    if(uploadWrap) uploadWrap.style.display = mode==='upload' ? '' : 'none';
+
+    if(mode === 'draw') setTimeout(initSignCanvas, 50);
+    updateSignStatus();
+  }
+
+  if(hasExisting) {
+    showObModal({
+      kind: 'warn',
+      title: 'Change signature method?',
+      body: 'Switching to a different method will clear your current signature. You will need to sign again.',
+      confirmLabel: 'Continue',
+      cancelLabel: 'Keep current',
+      onConfirm: doSwitch,
+    });
+  } else {
+    doSwitch();
+  }
+}
+
+function isCanvasBlank(canvas) {
+  // Returns true if the canvas contains no drawn pixels (all transparent/white).
+  if(!canvas) return true;
+  var ctx = canvas.getContext('2d');
+  var data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  for(var i = 3; i < data.length; i += 4) {
+    if(data[i] > 10) return false; // found a non-transparent pixel
+  }
+  return true;
 }
 
 function updateSignStatus() {
-  const hasTyped = (document.getElementById('esign-type-input')?.value||'').trim().length > 1;
-  const ok = (_signMode==='draw' && _signHasData) || (_signMode==='type' && hasTyped) || (_signMode==='upload' && _signHasData);
-  const elId = _signMode==='draw' ? 'esign-status-draw' : _signMode==='type' ? 'esign-status-type' : 'esign-status-upload';
-  const el = document.getElementById(elId);
-  if (el) {
+  var hasTyped = (document.getElementById('esign-type-input')?.value||'').trim().length > 1;
+  // For draw mode, verify the canvas actually has pixels — _signHasData alone
+  // is insufficient because the canvas may have been re-initialised after switching.
+  var drawValid = _signMode==='draw' && _signHasData && _signCanvas && !isCanvasBlank(_signCanvas);
+  var ok = drawValid || (_signMode==='type' && hasTyped) || (_signMode==='upload' && _signHasData);
+  // Sync _signHasData with reality for draw mode
+  if(_signMode==='draw') _signHasData = drawValid;
+  var elId = _signMode==='draw' ? 'esign-status-draw' : _signMode==='type' ? 'esign-status-type' : 'esign-status-upload';
+  var el = document.getElementById(elId);
+  if(el) {
     el.textContent = ok ? '✓ Acknowledgement captured' : (_signMode==='draw' ? 'Draw your signature above' : _signMode==='type' ? 'Type your name above' : 'Upload a signature image above');
     el.style.color = ok ? 'var(--green)' : 'var(--text3)';
   }
   S._signDone = ok;
-}
-
-function getSignDataURL() {
-  if (_signMode === 'draw' && _signCanvas) return _signCanvas.toDataURL('image/png');
-  const typed = (document.getElementById('esign-type-input')?.value||'').trim();
-  return typed ? 'typed:' + typed : null;
 }
 
 function toast(msg, isErr) {
@@ -1408,17 +1421,21 @@ function showObModal(opts) {
 
 // ── SIGNATURE CAPTURE FOR SUBMISSION ────────────────────────────────────────
 function getSignatureForPDF() {
-  // Captures the acknowledgement as an image/text pair to send to the backend,
-  // which embeds it in the generated Complete Onboarding PDF and stores it as
-  // Signature.png. Held only in memory (S._signCapture) until submission.
-  if(_signMode==='draw' && _signCanvas && _signHasData) return {type:'image', data:_signCanvas.toDataURL('image/png')};
+  if(_signMode==='draw'){
+    if(_signCanvas && _signHasData && !isCanvasBlank(_signCanvas)){
+      return {type:'image', data:_signCanvas.toDataURL('image/png')};
+    }
+    return null;
+  }
   if(_signMode==='upload' && _signHasData){
     var img = document.getElementById('esign-upload-preview');
-    if(img && img.src) return {type:'image', data:img.src};
+    if(img && img.src && img.src.indexOf('data:image/') === 0) return {type:'image', data:img.src};
+    return null;
   }
   if(_signMode==='type'){
     var typed = (document.getElementById('esign-type-input')||{}).value||'';
-    if(typed.trim()) return {type:'text', data:typed.trim()};
+    if(typed.trim().length > 1) return {type:'text', data:typed.trim()};
+    return null;
   }
   return null;
 }
@@ -1505,47 +1522,49 @@ function setSubmitBusy(isBusy, label){
 }
 
 function submitOnboarding() {
-  var signDone = false;
-  if(_signMode === 'draw' && _signHasData) signDone = true;
-  if(_signMode === 'type') {
-    var typed = (document.getElementById('esign-type-input')||{}).value||'';
-    if(typed.trim().length > 1) signDone = true;
-  }
-  if(_signMode === 'upload' && _signHasData) signDone = true;
-  if(!signDone) {
+  // Validate signature first — before capturing, to catch blank canvas correctly.
+  var sigPreview = getSignatureForPDF();
+  if(!sigPreview){
     var sigWrap = document.querySelector('.esign-wrap');
     if(sigWrap){ sigWrap.style.outline='2px solid var(--red)'; setTimeout(function(){ sigWrap.style.outline=''; },2000); }
-    toast('Please sign the risk profile before continuing.');
+    toast('Please complete your signature before submitting.');
     return;
   }
   if(!CFG.webAppUrl || CFG.webAppUrl.indexOf('PASTE_YOUR_DEPLOYMENT_ID')>-1){
-    showObModal({kind:'err', title:'Backend not configured', body:'The onboarding backend URL has not been set up yet (CFG.webAppUrl). Please contact the site administrator.'});
+    showObModal({kind:'err', title:'Backend not configured', body:'The onboarding backend URL has not been set up yet. Please contact the site administrator.'});
     return;
   }
-  S._signCapture = getSignatureForPDF();
-  if(!S._clientRequestId) S._clientRequestId = generateRequestId(); // stable across retries of this same attempt
+  S._signCapture = sigPreview; // already validated above
+  if(!S._clientRequestId) S._clientRequestId = generateRequestId();
 
   setSubmitBusy(true, 'Submitting…');
   var payload = buildSubmissionPayload();
+  // Guard token: if the user somehow navigates before this fetch resolves,
+  // the response is ignored — it will not fire go('done') on wrong state.
+  var submitToken = S._clientRequestId;
 
   fetch(CFG.webAppUrl, {
     method: 'POST',
-    headers: {'Content-Type': 'text/plain;charset=utf-8'}, // avoids a CORS preflight against Apps Script
-    body: JSON.stringify({ sharedSecret: CFG.sharedSecret, payload: payload }),
+    headers: {'Content-Type': 'text/plain;charset=utf-8'},
+    body: JSON.stringify({ payload: payload }),
   })
   .then(function(res){ return res.json(); })
   .then(function(data){
+    if(S._clientRequestId !== submitToken) return; // stale — user navigated
     setSubmitBusy(false);
     if(!data || data.ok !== true){
       showObModal({kind:'err', title:'Submission could not be completed', body:(data && data.error) || 'Please check your connection and try again. Nothing has been lost — your answers are still on this page.'});
       return;
     }
     S._submissionId = data.submissionId;
+    S._serverProfile = data.serverProfile || null;
+    S._serverWs = data.serverWs || null;
     S._downloadPdfBase64 = data.completePdfBase64 || null;
     S._downloadRiskPdfBase64 = data.riskPdfBase64 || null;
     go('done');
   })
   .catch(function(err){
+    if(S._clientRequestId !== submitToken) return;
     setSubmitBusy(false);
     showObModal({kind:'err', title:'Could not reach the server', body:'Please check your internet connection and try again. Nothing has been lost — your answers are still on this page, and it is safe to press Submit again.'});
   });
@@ -1574,13 +1593,34 @@ function downloadOnboardingCopy(type) {
 
 
 function handleSigUpload(input) {
-  var file = input.files[0]; if(!file) return;
+  var file = input.files[0];
+  if(!file) return;
+  // Client-side validation — type and size (backend independently enforces both)
+  var allowedTypes = ['image/jpeg','image/jpg','image/png'];
+  if(allowedTypes.indexOf(file.type) === -1){
+    showObModal({kind:'err', title:'Unsupported file type', body:'Please upload a JPG or PNG image of your signature. Other file types are not accepted.'});
+    input.value = '';
+    return;
+  }
+  var maxBytes = 1 * 1024 * 1024; // 1 MB
+  if(file.size > maxBytes){
+    showObModal({kind:'err', title:'File too large', body:'The signature image must be under 1 MB. Please use a smaller or compressed image.'});
+    input.value = '';
+    return;
+  }
   var reader = new FileReader();
-  reader.onload = function(e){
+  reader.onload = function(ev){
+    var result = ev.target.result;
+    // Verify the data URL starts with an expected image prefix as a secondary check
+    if(!result || result.indexOf('data:image/jpeg') !== 0 && result.indexOf('data:image/jpg') !== 0 && result.indexOf('data:image/png') !== 0){
+      showObModal({kind:'err', title:'Invalid image', body:'The file could not be read as a valid image. Please try a different file.'});
+      input.value = '';
+      return;
+    }
     var img = document.getElementById('esign-upload-preview');
     var prompt = document.getElementById('esign-upload-prompt');
     var actions = document.getElementById('esign-upload-actions');
-    if(img){ img.src=e.target.result; img.style.display='block'; }
+    if(img){ img.src=result; img.style.display='block'; }
     if(prompt) prompt.style.display='none';
     if(actions) actions.style.display='flex';
     _signHasData = true;
