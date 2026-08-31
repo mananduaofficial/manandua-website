@@ -1084,7 +1084,7 @@ a    { text-decoration: none; color: inherit; }
       </div>
     </div>
     <a href="investor-charter.html" class="nav-link">Investor Charter</a>
-    <a href="#contact" class="nav-link">Contact</a>
+    <a href="contact.html" class="nav-link">Contact</a>
   </div>
 
   <div class="nav-right">
@@ -1116,7 +1116,7 @@ a    { text-decoration: none; color: inherit; }
   <a href="resources.html">Resources</a>
   <a href="financial-tools.html">Financial Tools</a>
   <a href="investor-charter.html">Investor Charter</a>
-  <a href="#contact">Contact</a>
+  <a href="contact.html">Contact</a>
   <button class="btn-book" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a Conversation</button>
 </div>
 
@@ -1282,12 +1282,13 @@ a    { text-decoration: none; color: inherit; }
       <p>Monthly writing on investing, money habits, and the things that actually matter for your wealth journey. Written personally by Manan Dua. Read by thoughtful investors across India.</p>
     </div>
     <div class="nl-r">
-      <form onsubmit="handleNL(event)" novalidate>
+      <form onsubmit="handleNL(event)" novalidate id="nl-form">
         <label for="nl-name">First name</label>
-        <input type="text" id="nl-name" placeholder="Susham G" autocomplete="given-name">
-        <label for="nl-email">Email address</label>
-        <input type="email" id="nl-email" placeholder="susham@example.com" autocomplete="email" required>
-        <button type="submit" class="btn-gold">Subscribe to Meridian</button>
+        <input type="text" id="nl-name" placeholder="Susham" autocomplete="given-name">
+        <label for="nl-email">Email address <span style="color:#c0654a;font-size:11px">*</span></label>
+        <input type="email" id="nl-email" placeholder="susham@example.com" autocomplete="email" required aria-describedby="nl-email-err">
+        <div id="nl-email-err" role="alert" aria-live="polite" style="display:none;font-size:12px;color:#c0654a;margin-top:-8px;margin-bottom:8px"><i class="ti ti-alert-circle" style="font-size:12px"></i> Please enter a valid email address.</div>
+        <button type="submit" class="btn-gold" id="nl-btn">Subscribe to Meridian</button>
         <p class="nl-note">Sent from newsletter@manandua.in · No spam, ever · Unsubscribe any time</p>
       </form>
     </div>
@@ -1927,10 +1928,25 @@ var BREVO_FORM_URL = 'https://c7d30daa.sibforms.com/serve/MUIFAKp0oopX-_6BjksgOb
 
 function handleNL(e) {
   e.preventDefault();
-  var email = document.getElementById('nl-email').value.trim();
+  var emailInput = document.getElementById('nl-email');
+  var emailErr   = document.getElementById('nl-email-err');
+  var email = emailInput.value.trim();
   var name  = document.getElementById('nl-name').value.trim();
-  if (!email) { showToast('Please enter your email address.', 'error'); return; }
-  var btn = e.target.querySelector('button[type=submit]');
+
+  // Clear previous error state
+  emailInput.style.borderColor = '';
+  if(emailErr) emailErr.style.display = 'none';
+
+  // Validate — show inline error on the field itself, not just a toast
+  var emailOk = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if(!emailOk) {
+    emailInput.style.borderColor = '#c0654a';
+    emailInput.focus();
+    if(emailErr) emailErr.style.display = 'block';
+    return;
+  }
+
+  var btn = document.getElementById('nl-btn');
   var orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Submitting...';
 
@@ -1939,8 +1955,6 @@ function handleNL(e) {
   body.append('email_address_check', ''); // Brevo's spam honeypot field — must stay empty
   body.append('locale', 'en');
 
-  // Brevo's form endpoint doesn't return a readable response from the browser (cross-site request),
-  // so we fire the submission and optimistically confirm — network failures are still caught below.
   fetch(BREVO_FORM_URL, {
     method: 'POST',
     mode: 'no-cors',
@@ -1949,8 +1963,10 @@ function handleNL(e) {
   }).then(function() {
     showToast('Thank you for subscribing to Meridian. Check your inbox to confirm.');
     e.target.reset();
+    emailInput.style.borderColor = '';
+    if(emailErr) emailErr.style.display = 'none';
   }).catch(function() {
-    showToast('Something went wrong sending that. Please try again or email newsletter@manandua.in directly.', 'error');
+    showToast('Something went wrong. Please try again or email newsletter@manandua.in directly.', 'error');
   }).finally(function() {
     btn.disabled = false; btn.textContent = orig;
   });
