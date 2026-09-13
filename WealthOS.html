@@ -269,7 +269,8 @@ function defaultState() {
       { id: nid(), name: "Fixed Salary", amount: 1200000, freq: "Annual" },
       { id: nid(), name: "Incentive / Bonus", amount: 300000, freq: "Annual" },
       { id: nid(), name: "Rental Income", amount: 75000, freq: "Quarterly" },
-      { id: nid(), name: "Freelance / Business", amount: 2100000, freq: "Annual" },
+      { id: nid(), name: "Professional / Freelance Income (44ADA)", amount: 2100000, freq: "Annual" },
+      { id: nid(), name: "Business / Trading Income (44AD)", amount: 0, freq: "Annual" },
       { id: nid(), name: "Dividend Income", amount: 0, freq: "Annual" },
       { id: nid(), name: "Interest Income", amount: 0, freq: "Annual" },
       { id: nid(), name: "Other Income", amount: 0, freq: "Monthly" },
@@ -393,6 +394,14 @@ function newRegimeTax(taxable) {
   if (taxable <= 2400000) return (taxable - 2000000) * 0.25 + 200000;
   return (taxable - 2400000) * 0.30 + 300000;
 }
+// Tax after Sec 87A rebate + marginal relief (nil up to ₹12L; capped so tax never
+// exceeds the income in excess of ₹12L, until it converges with the normal slab tax).
+function newRegimeNetTax(taxable) {
+  const gross = newRegimeTax(taxable);
+  if (taxable <= 1200000) return 0;
+  const excess = taxable - 1200000;
+  return gross > excess ? excess : gross;
+}
 /* PFRDA-style lifecycle allocation, extended to 5 risk tiers (real NPS only
    names 3 — LC75/LC50/LC25 — the two "Moderately" tiers are sensible blends
    between them). "A" (Alternative Investments/REITs/InvITs) is fixed at 5%
@@ -423,8 +432,9 @@ function compute(s) {
   const grossAnnual = sumA(s.income);
   const salaryAnnual = annualOf(s.income[0]) + annualOf(s.income[1]);
   const rentalAnnual = annualOf(s.income[2]);
-  const businessAnnual = annualOf(s.income[3]);
-  const otherIncomeAnnual = annualOf(s.income[4]) + annualOf(s.income[5]) + annualOf(s.income[6]);
+  const professionalAnnual = annualOf(s.income[3]);
+  const businessAnnual = annualOf(s.income[4]);
+  const otherIncomeAnnual = annualOf(s.income[5]) + annualOf(s.income[6]) + annualOf(s.income[7]);
 
   const stdDeduction = 75000;
   const basicAnnual = s.basicSalary * 12;
@@ -434,16 +444,51 @@ function compute(s) {
   const epfDed = basicAnnual * 0.12;
   const profDeductions = stdDeduction + npsDed;
   const taxableNew = Math.max(0, salaryAnnual - epfDed - profDeductions);
-  const taxableTotal = taxableNew + rentalAnnual * 0.7 + businessAnnual * 0.5 + otherIncomeAnnual;
+  // Presumptive PGBP: 44ADA (specified professionals) taxes 50% of gross receipts; 44AD
+  // (trading/business, non-professional) taxes only 6-8% of turnover — these are NOT the same
+  // scheme and must not share a rate. 8% (the non-digital-receipts rate) is used as the
+  // conservative default for business/trading income since receipt mode isn't captured here;
+  // actual liability may be lower if receipts are mostly digital/banking-channel (6%).
+  // Neither rate applies once gross receipts exceed the presumptive-scheme eligibility caps
+  // (₹75L for 44ADA, ₹3Cr for 44AD, each halved if >5% of receipts are in cash) — figures above
+  // those caps require actual books-based profit, not a flat presumptive rate.
+  const businessPresumptiveRate = 0.08;
+  const taxableTotal = taxableNew + rentalAnnual * 0.7 + professionalAnnual * 0.5 + businessAnnual * businessPresumptiveRate + otherIncomeAnnual;
   let grossTax = newRegimeTax(taxableTotal);
-  const rebate = taxableTotal <= 1200000 ? grossTax : 0;
+  // Sec 87A rebate + marginal relief (FY2025-26): tax is fully rebated (nil) up to ₹12L
+  // taxable income. Just above ₹12L, marginal relief caps the tax so it can never exceed
+  // the amount of income in excess of ₹12L — avoiding a cliff-edge jump in tax payable.
+  let rebate = 0;
+  if (taxableTotal <= 1200000) {
+    rebate = grossTax;
+  } else {
+    const excessOver12L = taxableTotal - 1200000;
+    if (grossTax > excessOver12L) rebate = grossTax - excessOver12L;
+  }
   let netTax = grossTax - rebate;
-  const gti = salaryAnnual + rentalAnnual + businessAnnual + otherIncomeAnnual;
+  const gti = salaryAnnual + rentalAnnual + professionalAnnual + businessAnnual + otherIncomeAnnual;
   let surcharge = 0;
   // New regime surcharge (FY2025-26): >50L=10%, >1Cr=15%, >2Cr=25% (capped — no further step at 5Cr, unlike the old regime's 37%).
-  if (gti > 20000000) surcharge = netTax * 0.25;
-  else if (gti > 10000000) surcharge = netTax * 0.15;
-  else if (gti > 5000000) surcharge = netTax * 0.10;
+  // Each threshold carries its own marginal relief: crossing a threshold can never raise total
+  // tax+surcharge by more than the income that pushed you over it. "gap" approximates how much
+  // of this client's GTI doesn't end up as taxable income (deductions/exemptions/presumptive
+  // exclusions), so we can estimate their taxable income *at* the threshold itself.
+  const gap = gti - taxableTotal;
+  const surchargeBands = [
+    { limit: 20000000, rate: 0.25 },
+    { limit: 10000000, rate: 0.15 },
+    { limit: 5000000, rate: 0.10 },
+  ];
+  for (const band of surchargeBands) {
+    if (gti > band.limit) {
+      const uncapped = netTax * band.rate;
+      const taxableAtLimit = Math.max(0, band.limit - gap);
+      const taxAtLimit = newRegimeNetTax(taxableAtLimit);
+      const maxAllowedSurcharge = Math.max(0, (taxAtLimit + (gti - band.limit)) - netTax);
+      surcharge = Math.min(uncapped, maxAllowedSurcharge);
+      break;
+    }
+  }
   const taxAfterSur = netTax + surcharge;
   const cess = taxAfterSur * 0.04;
   const taxNewRegime = taxAfterSur + cess;
@@ -565,7 +610,7 @@ function compute(s) {
   const debtAssetRatio = totalAssets === 0 ? 0 : totalLiabilities / totalAssets;
 
   return {
-    age, yrsToRet, incomeRows, grossMonthly, grossAnnual, salaryAnnual, rentalAnnual, businessAnnual,
+    age, yrsToRet, incomeRows, grossMonthly, grossAnnual, salaryAnnual, rentalAnnual, professionalAnnual, businessAnnual,
     annualIncomeTax, taxNewRegime, taxableTotal, grossTax, rebate, netTax, surcharge, cess, gti, effRate,
     netMonthly, netAnnual, fixedExpRows, varExpRows, fixedMonthly, fixedAnnual, varMonthly, varAnnual,
     totalExpMonthly, surplusMonthly, savingsRate, expenseRatio,
@@ -1873,7 +1918,8 @@ function renderCalcTab(tab) {
     ]) + '<div class="wos-card" style="margin-top:14px;"><table class="wos-table"><tbody>' +
       '<tr><td>Salary Income</td><td class="num tabular-nums">' + fmtINR(c.salaryAnnual) + '</td></tr>' +
       '<tr><td>Rental Income (70% taxable)</td><td class="num tabular-nums">' + fmtINR(c.rentalAnnual) + '</td></tr>' +
-      '<tr><td>Business Income (50% taxable, presumptive)</td><td class="num tabular-nums">' + fmtINR(c.businessAnnual) + '</td></tr>' +
+      '<tr><td>Professional / Freelance Income (44ADA, 50% taxable, presumptive)</td><td class="num tabular-nums">' + fmtINR(c.professionalAnnual) + '</td></tr>' +
+      '<tr><td>Business / Trading Income (44AD, 8% taxable, presumptive)</td><td class="num tabular-nums">' + fmtINR(c.businessAnnual) + '</td></tr>' +
       '<tr><td>Standard Deduction</td><td class="num tabular-nums text-neg">− ' + fmtINR(75000) + '</td></tr>' +
       '<tr><td>NPS Deduction (14% of Basic, 80CCD(2))</td><td class="num tabular-nums text-neg">− ' + fmtINR(STATE.basicSalary * 12 * 0.14) + '</td></tr>' +
       '<tr style="font-weight:700;background:var(--card2);"><td>Taxable Income</td><td class="num tabular-nums">' + fmtINR(c.taxableTotal) + '</td></tr>' +
@@ -1882,7 +1928,7 @@ function renderCalcTab(tab) {
       '<tr><td>Health & Education Cess (4%)</td><td class="num tabular-nums">' + fmtINR(c.cess) + '</td></tr>' +
       '<tr style="font-weight:700;background:var(--card2);border-top:2px solid var(--accent);"><td>Total Tax Payable</td><td class="num tabular-nums text-neg">' + fmtINR(c.taxNewRegime) + '</td></tr>' +
       '</tbody></table></div>' +
-      '<p style="font-size:11px;color:var(--subtext);margin-top:10px;">New Tax Regime, FY2025-26 slabs. Rebate under 87A applies fully if taxable income ≤ ₹12L.</p>';
+      '<p style="font-size:11px;color:var(--subtext);margin-top:10px;">New Tax Regime, FY2025-26 slabs. Rebate under 87A applies fully if taxable income ≤ ₹12L, with marginal relief tapering it off for income just above ₹12L.</p>';
   }
 
   if (tab === "retirement") {
