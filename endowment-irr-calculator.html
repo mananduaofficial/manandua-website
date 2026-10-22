@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free endowment plan IRR calculator by Manan Dua. Find the true annual return (IRR) of your endowment or savings life insurance policy from the premium, term and maturity benefit.">
+<title>Endowment Plan IRR Calculator · Meridian Tools by Manan Dua</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.44.0/dist/tabler-icons.min.css">
+
+<style>
+:root {
+  --forest:    #2a4038;
+  --forest-d:  #1d2e28;
+  --forest-m:  #3a5448;
+  --forest-l:  #4a6858;
+  --gold:      #b8903a;
+  --gold-l:    #cfa54f;
+  --gold-pale: #f0e6cc;
+  --copper:    #a8623e;
+  --copper-d:  #935233;
+  --cream:     #f5f0e8;
+  --cream-d:   #ede8de;
+  --linen:     #faf8f3;
+  --warm:      #7a6e60;
+  --text:      #1c1917;
+  --soft:      #4a4038;
+  --mute:      #8c8070;
+  --border:    rgba(42,64,56,0.10);
+  --border-g:  rgba(184,144,58,0.25);
+  --good:      #3a6b4f;
+  --bad:       #a8483a;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'Inter', system-ui, sans-serif;
+  --r:         6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--linen); color: var(--text); line-height: 1.6; }
+img  { max-width: 100%; display: block; }
+a    { text-decoration: none; color: inherit; }
+
+/* ═══ NAV ═══ */
+.nav {
+  background: var(--linen);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand svg { flex-shrink: 0; }
+.nav-brand-txt { display: flex; flex-direction: column; line-height: 1.15; }
+.nav-brand-txt .nb-name { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--forest-d); letter-spacing: 0.2px; }
+.nav-brand-txt .nb-sub { font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--mute); }
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-link { font-size: 13.5px; font-weight: 400; color: var(--soft); cursor: pointer; transition: color .15s; letter-spacing: 0.1px; white-space: nowrap; }
+.nav-link:hover, .nav-link.active { color: var(--forest); }
+.nav-link.active { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.btn-book {
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  background: var(--forest); color: #fff;
+  border: none; border-radius: var(--r); padding: 11px 24px;
+  cursor: pointer; transition: background .15s; letter-spacing: 0.2px;
+}
+.btn-book:hover { background: var(--copper); }
+.btn-book:active { background: var(--copper-d); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--forest-d); margin: 5px 0; }
+.mob-menu {
+  display: none; position: fixed; top: 68px; left: 0; right: 0;
+  background: var(--linen); border-bottom: 0.5px solid var(--border);
+  padding: 1.5rem 2rem; z-index: 99; box-shadow: 0 8px 32px rgba(28,25,23,0.08);
+}
+.mob-menu a { display: block; font-size: 15px; color: var(--soft); padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+.mob-menu a:last-of-type { border-bottom: none; }
+.mob-menu .btn-book { display: block; width: 100%; text-align: center; margin-top: 16px; }
+
+/* ═══ HERO ═══ */
+.hero { background: var(--forest-d); padding: 56px 3rem 48px; position: relative; overflow: hidden; }
+.hero::after {
+  content: ''; position: absolute; top: -40%; right: -8%;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-in { max-width: 1240px; margin: 0 auto; position: relative; }
+.crumb { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 6px; }
+.crumb:hover { color: var(--gold-l); }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--gold-l); margin-bottom: 18px;
+}
+.hero-badge::before { content: ''; display: inline-block; width: 32px; height: 0.5px; background: var(--gold); }
+.hero h1 { font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.14; color: #fff; max-width: 680px; }
+.hero h1 em { color: var(--gold-l); font-style: italic; }
+.hero-sub { font-size: 14.5px; font-weight: 300; color: rgba(255,255,255,0.55); max-width: 560px; margin-top: 14px; line-height: 1.8; }
+.hero-switch { margin-top: 26px; display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-switch a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: rgba(255,255,255,0.7);
+  border: 0.5px solid rgba(255,255,255,0.18); border-radius: 20px;
+  padding: 9px 18px; transition: border-color .15s, color .15s;
+}
+.hero-switch a:hover { border-color: var(--gold); color: var(--gold-l); }
+
+/* ═══ SECTION WRAP ═══ */
+.sec { padding: 48px 3rem 88px; }
+.sec-in { max-width: 1240px; margin: 0 auto; }
+
+.layout-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 26px; align-items: flex-start; }
+
+/* ═══ PANELS (input cards) ═══ */
+.panel {
+  background: #fff; border: 0.5px solid var(--border); border-radius: 12px;
+  padding: 30px; box-shadow: 0 2px 24px rgba(28,25,23,0.04); margin-bottom: 22px;
+}
+.panel-hd h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--forest-d); }
+.panel-hd p.panel-sub { font-size: 12px; color: var(--mute); margin-top: 4px; line-height: 1.6; }
+.panel-body { margin-top: 22px; display: flex; flex-direction: column; gap: 22px; }
+.panel-body.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+
+/* ═══ FIELDS ═══ */
+.fld { display: flex; flex-direction: column; gap: 9px; }
+.fld-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fld-top label { font-size: 12.5px; color: var(--soft); font-weight: 400; }
+.fld-box {
+  display: flex; align-items: center; gap: 4px; background: var(--linen);
+  border: 0.5px solid var(--border); border-radius: var(--r); padding: 6px 10px;
+}
+.fld-box span { font-size: 11.5px; color: var(--mute); white-space: nowrap; }
+.fld-box input {
+  width: 92px; border: none; background: transparent; text-align: right;
+  font-family: var(--sans); font-size: 13.5px; font-weight: 600; color: var(--forest-d);
+}
+.fld-box input:focus { outline: none; }
+.fld-box.wide input { width: 140px; }
+.fld-box.wide { padding: 9px 12px; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 3px; border-radius: 3px;
+  background: var(--cream-d); outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--gold); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border-g); cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 13px; height: 13px; border-radius: 50%; background: var(--gold); border: 2px solid #fff; cursor: pointer;
+}
+
+.sel {
+  width: 100%; background: var(--linen); border: 0.5px solid var(--border);
+  border-radius: var(--r); padding: 10px 34px 10px 13px; font-size: 13px;
+  color: var(--text); font-family: var(--sans); appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c8070' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; cursor: pointer;
+}
+.sel:focus { outline: none; border-color: var(--gold); }
+.fld-hint { font-size: 11px; color: var(--mute); line-height: 1.6; }
+.fld-hint.warn { color: var(--bad); }
+
+.income-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; }
+.income-row .fld { flex: 1; min-width: 190px; }
+.income-row .fld-freq { width: 140px; }
+.income-row .fld-freq label { font-size: 11px; color: var(--mute); display: block; margin-bottom: 8px; }
+
+/* ═══ ASSET BLOCKS ═══ */
+.asset-block { border: 0.5px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.asset-block + .asset-block { margin-top: 14px; }
+.asset-hd { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; user-select: none; }
+.asset-hd input[type=checkbox] {
+  appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border-g); border-radius: 4px;
+  margin-top: 2px; flex-shrink: 0; cursor: pointer; position: relative; background: var(--linen);
+}
+.asset-hd input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
+.asset-hd input[type=checkbox]:checked::after {
+  content: ''; position: absolute; left: 5px; top: 1px; width: 5px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+.asset-name { font-size: 14.5px; font-weight: 500; color: var(--forest-d); }
+.asset-sub { font-size: 11.5px; color: var(--mute); margin-top: 2px; }
+.asset-content { margin-top: 18px; display: none; flex-direction: column; gap: 18px; padding-top: 16px; border-top: 0.5px dashed var(--border); }
+.asset-content.open { display: flex; }
+.asset-content .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.mini-panel { border: 0.5px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: var(--linen); }
+
+/* ═══ SIDEBAR / RESULTS ═══ */
+.side { position: sticky; top: 90px; display: flex; flex-direction: column; gap: 16px; }
+.hero-stat {
+  background: var(--forest-d); border-radius: 12px; padding: 24px 26px; position: relative; overflow: hidden;
+}
+.hero-stat::after {
+  content: ''; position: absolute; top: -30%; right: -8%; width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(207,165,79,0.14) 0%, transparent 70%);
+}
+.hero-stat .hs-l { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-l); position: relative; }
+.hero-stat .hs-v { font-family: var(--serif); font-size: 34px; font-weight: 500; color: #fff; margin-top: 8px; position: relative; }
+.hero-stat .hs-sub { font-size: 12.5px; color: rgba(255,255,255,0.5); margin-top: 4px; position: relative; }
+
+.res-card { background: #fff; border: 0.5px solid var(--border); border-radius: 10px; padding: 20px 22px; }
+.res-card h4 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
+.res-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; }
+.res-row span:first-child { color: var(--mute); }
+.res-row span:last-child { font-weight: 600; color: var(--forest-d); }
+.res-row.tot { border-top: 0.5px solid var(--border); margin-top: 4px; padding-top: 10px; }
+.res-row.empty { color: var(--mute); font-size: 12px; padding: 4px 0; }
+
+.cov-bar { height: 10px; border-radius: 6px; background: var(--cream-d); overflow: hidden; margin: 12px 0 6px; }
+.cov-bar-fill { height: 100%; background: linear-gradient(90deg, var(--forest), var(--gold)); border-radius: 6px; transition: width .3s; }
+.cov-pct { font-size: 11.5px; color: var(--mute); }
+
+.gap-card { border-radius: 10px; padding: 20px 22px; border: 0.5px solid var(--border); }
+.gap-card.neg { background: #fbeeec; border-color: rgba(168,72,58,0.25); }
+.gap-card.pos { background: #eef3ef; border-color: rgba(58,107,79,0.25); }
+.gap-card h4 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; color: var(--mute); margin-bottom: 8px; }
+.gap-card .gv { font-family: var(--serif); font-size: 24px; font-weight: 500; }
+.gap-card.neg .gv { color: var(--bad); }
+.gap-card.pos .gv { color: var(--good); }
+.gap-card .gs { font-size: 12px; color: var(--mute); margin-top: 4px; }
+
+.btn-gold-full {
+  width: 100%; background: var(--gold); color: #fff; border: none; border-radius: var(--r);
+  padding: 13px 20px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans);
+}
+.btn-gold-full:hover { background: #a37f32; }
+.btn-gold-full:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-outline-full {
+  width: 100%; background: transparent; color: var(--forest); border: 1px solid var(--forest); border-radius: var(--r);
+  padding: 12px 20px; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: all .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans);
+}
+.btn-outline-full:hover { background: var(--forest); color: #fff; }
+.dl-note { font-size: 11px; color: var(--mute); text-align: center; line-height: 1.6; }
+.method-tabs { display: inline-flex; gap: 6px; background: var(--linen); border: 0.5px solid var(--border); border-radius: 10px; padding: 5px; }
+.method-tab { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 9px 20px; border: none; background: transparent; color: var(--soft); border-radius: 7px; cursor: pointer; transition: all .15s; }
+.method-tab:hover { color: var(--forest); }
+.method-tab.active { background: var(--gold); color: #fff; }
+
+.note-strip { margin-top: 4px; font-size: 11.5px; color: var(--mute); line-height: 1.7; }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--forest-d); padding: 48px 3rem 28px; }
+.footer-in { max-width: 1240px; margin: 0 auto; }
+.footer-top { display: flex; gap: 56px; flex-wrap: wrap; padding-bottom: 28px; border-bottom: 0.5px solid rgba(255,255,255,0.07); }
+.ft-brand { flex: 1.3; min-width: 200px; display: flex; align-items: flex-start; gap: 12px; }
+.ft-logo { font-family: var(--serif); font-size: 19px; font-weight: 500; color: #fff; }
+.ft-logo em { color: var(--gold-l); font-style: normal; }
+.ft-brand p { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.35); margin-top: 8px; line-height: 1.8; max-width: 240px; }
+.ft-links { display: flex; gap: 48px; flex-wrap: wrap; }
+.ft-col h5 { font-size: 10px; font-weight: 500; letter-spacing: 0.9px; text-transform: uppercase; color: rgba(255,255,255,0.30); margin-bottom: 12px; }
+.ft-col a { display: block; font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 8px; transition: color .15s; }
+.ft-col a:hover { color: var(--gold-l); }
+.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-top: 18px; align-items: flex-start; }
+.footer-bottom span { font-size: 11px; color: rgba(255,255,255,0.18); }
+.ft-disc { font-size: 10px; color: rgba(255,255,255,0.16); max-width: 480px; line-height: 1.6; }
+
+@media(max-width: 1080px) {
+  .layout-grid { grid-template-columns: 1fr; }
+  .side { position: static; }
+}
+@media(max-width: 900px) {
+  .nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .hero { padding: 44px 1.5rem 40px; }
+  .hero h1 { font-size: 32px; }
+  .sec { padding: 36px 1.5rem 56px; }
+  .panel { padding: 22px; }
+  .panel-body.grid2, .asset-content .grid2, .income-row { grid-template-columns: 1fr; }
+  .income-row .fld-freq { width: 100%; }
+  .footer { padding: 40px 1.5rem 24px; }
+}
+
+/* ═══ TOOLTIPS (ⓘ) ═══ */
+.lbl-wrap { display: inline-flex; align-items: center; gap: 2px; min-width: 0; }
+.tip-btn { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 28px; height: 28px; margin: -4px -2px -4px 0; padding: 0; background: none; border: none; border-radius: 50%; cursor: pointer; color: var(--gold); font-size: 17px; line-height: 1; -webkit-tap-highlight-color: transparent; }
+.tip-btn:hover, .tip-btn[aria-expanded="true"] { color: var(--forest); background: rgba(184,144,58,0.14); }
+.tip-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.hero-stat .tip-btn { color: var(--gold-l); }
+.hero-stat .tip-btn:hover, .hero-stat .tip-btn[aria-expanded="true"] { color: #fff; background: rgba(255,255,255,0.14); }
+.tip-box { position: fixed; z-index: 1000; left: 0; top: 0; max-width: 280px; background: var(--forest-d); color: #fff; font-family: var(--sans); font-size: 13px; font-weight: 400; line-height: 1.55; letter-spacing: 0; text-transform: none; text-align: left; padding: 11px 14px; border-radius: 9px; box-shadow: 0 10px 30px rgba(0,0,0,0.28); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .12s; }
+.tip-box.show { opacity: 1; visibility: visible; }
+.asset-name .tip-btn { vertical-align: middle; margin-left: 2px; }
+.hs-explain { font-size: 11.5px; color: rgba(255,255,255,0.62); line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid rgba(255,255,255,0.14); position: relative; }
+.cmp-note { font-size: 11.5px; color: var(--soft); line-height: 1.65; background: var(--cream); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+.panel-q { font-family: var(--serif); font-size: 17px; color: var(--forest-d); margin-bottom: 4px; }
+.notes-list { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--soft); line-height: 1.75; }
+.notes-list li { margin-bottom: 8px; }
+.notes-list li:last-child { margin-bottom: 0; }
+.notes-list b { color: var(--forest-d); }
+.tax-note { font-size: 11px; color: var(--mute); line-height: 1.6; margin: 10px 0 0 30px; }
+
+/* ═══ ENDOWMENT IRR EXTRAS ═══ */
+.fld-box.wide input { width: 150px; }
+.cf-wrap { max-height: 420px; overflow: auto; border: 0.5px solid var(--border); border-radius: 10px; }
+.cf-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 460px; }
+.cf-table th { position: sticky; top: 0; background: var(--cream); color: var(--forest-d); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; text-align: right; padding: 10px 12px; border-bottom: 0.5px solid var(--border); }
+.cf-table th:first-child, .cf-table td:first-child { text-align: left; }
+.cf-table td { padding: 8px 12px; text-align: right; border-bottom: 0.5px solid var(--border); color: var(--soft); }
+.cf-table tr:last-child td { border-bottom: none; }
+.cf-table td.neg { color: var(--bad); }
+.cf-table td.pos { color: var(--good); font-weight: 600; }
+.cf-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; cursor: pointer; font-family: var(--sans); text-align: left; padding: 0; }
+.cf-toggle h3 { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--forest-d); }
+.cf-toggle i { font-size: 20px; color: var(--gold); transition: transform .2s; }
+.cf-toggle[aria-expanded="true"] i { transform: rotate(180deg); }
+.fld select.plain { width: 100%; background: var(--linen); border: 0.5px solid var(--border); border-radius: var(--r); padding: 11px 13px; font-size: 14px; font-family: var(--sans); color: var(--forest-d); }
+.irr-note-unused { background: var(--cream); border: 0.5px solid var(--border); border-left: 3px solid var(--gold); border-radius: 8px; padding: 14px 16px; font-size: 12.5px; color: var(--soft); line-height: 1.7; }
+.irr-note b { color: var(--forest-d); }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a href="https://manandua.in" class="nav-brand">
+    <svg width="34" height="34" viewBox="0 0 200 200" aria-hidden="true">
+      <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+      <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+      <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+      <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+    </svg>
+    <div class="nav-brand-txt">
+      <span class="nb-name">Meridian</span>
+      <span class="nb-sub">Tools by Manan Dua</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="https://manandua.in" class="nav-link">Home</a>
+    <a href="financial-tools.html" class="nav-link">All Tools</a>
+    <a href="https://manandua.in#contact" class="nav-link">Contact</a>
+  </div>
+
+  <div class="nav-right">
+    <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+    <button class="hamburger" id="ham" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="https://manandua.in">Home</a>
+  <a href="financial-tools.html">All Tools</a>
+  <a href="https://manandua.in#contact">Contact</a>
+  <a href="https://manandua.in#contact" class="btn-book">Book a Call</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-in">
+    <a href="https://manandua.in" class="crumb"><i class="ti ti-arrow-left" aria-hidden="true"></i> manandua.in</a>
+    <div class="hero-badge">Meridian Financial Tools</div>
+    <h1>What is your endowment plan <em>really</em> returning?</h1>
+    <p class="hero-sub">Find out what your endowment policy may earn each year, based on the premiums you pay and the benefits you receive. You can also compare it with an alternative investment.</p>
+    <div class="hero-switch">
+      <a href="endowment-surrender-calculator.html">Thinking of surrendering? Compare surrender vs continue <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      <a href="financial-tools.html">Explore all Meridian tools <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</header>
+
+<!-- ══ CALCULATOR ══ -->
+<section class="sec">
+  <div class="sec-in">
+    <div class="layout-grid">
+
+      <!-- LEFT: INPUTS -->
+      <div class="inputs-col">
+
+        <div class="panel">
+          <div class="panel-hd"><h3>Enter your policy details</h3><p class="panel-sub">Take these figures from your policy's benefit illustration or policy document.</p></div>
+          <div class="panel-body">
+            <div class="fld">
+              <div class="fld-top"><span class="lbl-wrap"><label for="premium">Annual premium</label></span><div class="fld-box wide"><span>₹</span><input type="number" id="premium" value="120000" min="0" inputmode="numeric"></div></div>
+              <div class="fld-hint">Enter the premium amount you actually pay, as shown in your policy document.</div>
+            </div>
+            <div class="panel-body grid2" style="margin-top:0;">
+              <div class="fld">
+                <div class="fld-top"><span class="lbl-wrap"><label for="ppt">Premium paying term</label><button type="button" class="tip-btn" data-tip="How many years will you pay? This is often shorter than the policy term." aria-label="More information: Premium paying term" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></span><div class="fld-box"><input type="number" id="ppt" value="12" min="1" max="60"><span>yrs</span></div></div>
+                <input type="range" id="pptR" min="1" max="40" step="1" value="12">
+              </div>
+              <div class="fld">
+                <div class="fld-top"><span class="lbl-wrap"><label for="term">Policy term</label><button type="button" class="tip-btn" data-tip="How long does the policy last? The maturity benefit is paid at the end of this period." aria-label="More information: Policy term" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></span><div class="fld-box"><input type="number" id="term" value="30" min="1" max="70"><span>yrs</span></div></div>
+                <input type="range" id="termR" min="5" max="50" step="1" value="30">
+              </div>
+            </div>
+            <div class="fld-hint warn" id="termWarn" style="display:none;"></div>
+            <div class="fld">
+              <div class="fld-top"><span class="lbl-wrap"><label for="maturity">Maturity benefit</label></span><div class="fld-box wide"><span>₹</span><input type="number" id="maturity" value="6000000" min="0" inputmode="numeric"></div></div>
+              <div class="fld-hint">Lump sum paid at the end of the policy term, including guaranteed additions and bonuses.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="asset-block" style="border:none;padding:0;">
+            <label class="asset-hd" for="incOn">
+              <input type="checkbox" id="incOn">
+              <div><div class="asset-name">Regular income / survival benefits <button type="button" class="tip-btn" data-tip="Money-back or guaranteed income the plan pays during the term, before maturity." aria-label="More information: Regular income / survival benefits" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></div><div class="asset-sub">Tick if your plan also pays money back or a guaranteed income during the term.</div></div>
+            </label>
+            <div class="asset-content" id="incBox">
+              <div class="grid2">
+                <div class="fld"><div class="fld-top"><span class="lbl-wrap"><label for="incAmt">Benefit per year</label><button type="button" class="tip-btn" data-tip="Annual survival benefit: money the plan pays you each year while the policy is running." aria-label="More information: Benefit per year" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></span></div><div class="fld-box wide"><span>₹</span><input type="number" id="incAmt" value="60000" min="0" inputmode="numeric"></div></div>
+                <div class="fld"><div class="fld-top"><span class="lbl-wrap"><label for="incStart">First payout at end of policy year</label><button type="button" class="tip-btn" data-tip="When does the first payout arrive? Enter 13 if it comes at the end of year 13." aria-label="More information: First payout at end of policy year" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></span><div class="fld-box"><input type="number" id="incStart" value="13" min="1"><span>yr</span></div></div></div>
+              </div>
+              <div class="grid2">
+                <div class="fld"><div class="fld-top"><span class="lbl-wrap"><label for="incYears">Number of payouts</label><button type="button" class="tip-btn" data-tip="For how many years does the plan pay the annual benefit?" aria-label="More information: Number of payouts" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></span><div class="fld-box"><input type="number" id="incYears" value="17" min="1"><span>yrs</span></div></div></div>
+              </div>
+              <div class="fld-hint">Payouts are assumed at the end of each policy year. If the last payout falls in the final year, it is added to the maturity benefit.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="asset-block" style="border:none;padding:0;">
+            <label class="asset-hd" for="taxOn">
+              <input type="checkbox" id="taxOn">
+              <div><div class="asset-name">Maturity is taxable <button type="button" class="tip-btn" data-tip="Tick if the gain at maturity is taxable, for example when the annual premium is above ₹5 lakh on policies issued on or after 1 Apr 2023." aria-label="More information: Maturity is taxable" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></div><div class="asset-sub">Tick if the gain is taxed (for example annual premium above ₹5 lakh on policies issued on or after 1 Apr 2023, or premium above 10% of sum assured).</div></div>
+            </label>
+            <div class="tax-note">Tax deductions on premiums (for example Section 80C under the old tax regime) are not considered in this calculator.</div>
+            <div class="asset-content" id="taxBox">
+              <div class="fld">
+                <div class="fld-top"><span class="lbl-wrap"><label for="taxSlab">Your income tax slab</label></span></div>
+                <select class="plain" id="taxSlab">
+                  <option value="5">5%</option><option value="10">10%</option><option value="15">15%</option>
+                  <option value="20">20%</option><option value="25">25%</option><option value="30" selected>30%</option>
+                </select>
+              </div>
+              <div class="fld-hint">Gain = total benefits − total premiums, taxed once at maturity at your slab plus 4% cess. Surcharge is ignored.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-hd"><h3>Compare with another investment</h3><div class="panel-q">What if you invested the same premiums elsewhere?</div><p class="panel-sub">Choose an assumed annual return (for example, what you might expect from an FD or a debt fund) to estimate how the alternative investment and the policy benefits could compare at the end of the policy term. This is an illustrative comparison, not a forecast or a guarantee.</p></div>
+          <div class="panel-body">
+            <div class="fld">
+              <div class="fld-top"><span class="lbl-wrap"><label for="bench">Alternative return (p.a.)</label><button type="button" class="tip-btn" data-tip="Assumed annual return on the alternative. This is an assumption, not a promised return." aria-label="More information: Alternative return (p.a.)" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></span><div class="fld-box"><input type="number" id="bench" value="7" step="0.1" min="0" max="25"><span>%</span></div></div>
+              <input type="range" id="benchR" min="0" max="20" step="0.1" value="7">
+              <div class="fld-hint">Use an after-tax figure if you turned on the tax option above.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <button class="cf-toggle" id="cfToggle" aria-expanded="false" aria-controls="cfBody">
+            <h3>Year-by-year cash flows</h3><i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="cfBody" style="display:none;margin-top:18px;">
+            <p class="panel-sub" style="font-size:12px;color:var(--mute);margin-bottom:12px;line-height:1.6;">Premiums go out at the <b>start</b> of each policy year and benefits arrive at the <b>end</b>. "End of year 0" means day one. You can copy these rows into Excel and run =IRR() to cross-check.</p>
+            <div class="cf-wrap"><table class="cf-table" id="cfTable"></table></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: RESULTS -->
+      <div class="side">
+        <div class="hero-stat">
+          <div class="hs-l"><span id="outLbl">Estimated annual return before tax (IRR)</span> <button type="button" class="tip-btn" data-tip="IRR is the yearly return your policy works out to, based on when you pay each premium and when you receive each benefit." aria-label="More information: Estimated annual return (IRR)" aria-expanded="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button></div>
+          <div class="hs-v" id="outIrr">—</div>
+          <div class="hs-sub" id="outSub">—</div>
+          <div class="hs-explain">This is the annualised return implied by the premiums and benefits entered, taking their timing into account. It is not the same as the total percentage gain over the policy term.</div>
+        </div>
+
+        <div class="res-card">
+          <h4>Your premiums and benefits</h4>
+          <div class="res-row"><span>Total premiums paid</span><span id="rPrem">—</span></div>
+          <div class="res-row"><span>Maturity benefit</span><span id="rMat">—</span></div>
+          <div class="res-row" id="rIncRow" style="display:none;"><span>Survival benefits</span><span id="rInc">—</span></div>
+          <div class="res-row" id="rTaxRow" style="display:none;"><span>&minus; Tax on gain</span><span id="rTax">—</span></div>
+          <div class="res-row tot"><span id="rGainLbl">Net gain</span><span id="rGain">—</span></div>
+          <div class="res-row"><span id="rMultLbl">Total benefits per ₹1 of premium</span><span id="rMult">—</span></div>
+        </div>
+
+        <div class="res-card">
+          <h4>Compared with another investment</h4>
+          <div class="res-row"><span id="rAltLbl">Same premiums invested at 7%</span><span id="rAlt">—</span></div>
+          <div class="res-row"><span id="rPolLbl">Policy benefits, reinvested at 7%</span><span id="rPol">—</span></div>
+        </div>
+
+        <div class="gap-card neg" id="gapCard">
+          <h4 id="gapH">Estimated difference at the end of the term</h4>
+          <div class="gv" id="gapV">—</div>
+          <div class="gs" id="gapS">—</div>
+        </div>
+
+        <div class="cmp-note">The comparison does not fully account for differences in investment risk, liquidity, tax treatment or life insurance cover. The alternative return is an assumption, not a promised return.</div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn-gold-full" id="downloadReportBtn"><i class="ti ti-download" aria-hidden="true"></i> Download report</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel" style="margin-top:22px;" id="important-notes">
+      <div class="panel-hd"><h3>Important notes</h3></div>
+      <div class="panel-body">
+        <ul class="notes-list">
+          <li>Internal Rate of Return (IRR) is the annualised rate of return implied by the premiums you pay and the benefits you receive, taking into account when each payment is made or received. It represents the annual interest rate at which an investment would need to grow to match the same cash flows over the same period. This is a calculated measure of return, not a return guaranteed or declared by the insurer.</li>
+          <li>Bonuses and other non-guaranteed amounts shown in a benefit illustration may turn out lower or higher than illustrated.</li>
+          <li>The same premium is assumed every year, paid at the start of each policy year, with benefits received at the end of the year. Results may be approximate for older policies where the premium changed over time, for example because GST applied in earlier years.</li>
+          <li><b>Disclaimer.</b> This calculator provides illustrative estimates based on the information entered. Actual benefits, bonuses, tax treatment and returns may differ. The calculation does not assign a monetary value to the life cover provided by the policy. It is intended for educational purposes and should not be the sole basis for an insurance or investment decision. Please verify the figures against your policy documents and applicable tax rules.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-in">
+    <div class="footer-top">
+      <div class="ft-brand">
+        <svg width="30" height="30" viewBox="0 0 200 200" aria-hidden="true" style="flex-shrink:0;">
+          <rect width="200" height="200" rx="40" fill="#1d2e28"/>
+          <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+          <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+          <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+        </svg>
+        <div>
+          <div class="ft-logo">Meridian<em>.</em></div>
+          <p>Free financial tools from Manan Dua, independent financial guidance for those building wealth with clarity and purpose.</p>
+        </div>
+      </div>
+      <div class="ft-links">
+        <div class="ft-col">
+          <h5>Manan Dua</h5>
+          <a href="https://manandua.in">Home</a>
+          <a href="financial-tools.html">All Tools</a>
+          <a href="https://manandua.in/resources.html">Resources</a>
+          <a href="resources.html#newsletter">Meridian Newsletter</a>
+        </div>
+        <div class="ft-col">
+          <h5>Legal</h5>
+          <a href="https://manandua.in/privacy.html">Privacy Policy</a>
+          <a href="https://manandua.in/disclaimer.html">Disclaimer</a>
+          <a href="https://manandua.in/terms.html">Terms of Use</a>
+          <a href="https://manandua.in/investor-charter.html">Investor Charter</a>
+        </div>
+        <div class="ft-col">
+          <h5>Connect</h5>
+          <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://manandua.in#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="cyear">2026</span> Manan Dua &middot; manandua.in &middot; All rights reserved</span>
+      <span class="ft-disc">This calculator is for illustrative purposes only and does not constitute financial advice. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.</span>
+      <span>manandua.in</span>
+    </div>
+  </div>
+</footer>
+
+<div class="tip-box" id="tipBox" role="tooltip"></div>
+<script>
+const fmtINR = (n) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(isFinite(n) ? n : 0);
+const $ = (id) => document.getElementById(id);
+const num = (id) => +$(id).value || 0;
+const pct = (x) => (x * 100).toFixed(2) + "%";
+
+/* NPV of a cash-flow list where index = years from day one */
+function npv(rate, cf) { let s = 0; for (let t = 0; t < cf.length; t++) s += cf[t] / Math.pow(1 + rate, t); return s; }
+
+/* IRR by bisection. Returns null when no sign change exists. */
+function irr(cf) {
+  let lo = -0.95, hi = 1.0;
+  let fLo = npv(lo, cf), fHi = npv(hi, cf);
+  if (!isFinite(fLo) || !isFinite(fHi) || fLo * fHi > 0) return null;
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2, fMid = npv(mid, cf);
+    if (Math.abs(fMid) < 1e-7) return mid;
+    if (fLo * fMid < 0) { hi = mid; fHi = fMid; } else { lo = mid; fLo = fMid; }
+  }
+  return (lo + hi) / 2;
+}
+
+/* Build the timeline. Index t = years from day one.
+   Premium for policy year k (1..PPT) is paid at t = k-1 (start of year).
+   Benefits for policy year k are received at t = k (end of year). Maturity at t = term. */
+function compute() {
+  const premium = num("premium");
+  let term = Math.max(Math.round(num("term")), 1);
+  let ppt = Math.max(Math.round(num("ppt")), 1);
+  const maturity = num("maturity");
+  const incOn = $("incOn").checked;
+  const taxOn = $("taxOn").checked;
+  const slab = num("taxSlab") / 100;
+  const bench = num("bench") / 100;
+
+  let warn = "";
+  if (ppt > term) { warn = "Premium paying term cannot be longer than the policy term. Using " + term + " years."; ppt = term; }
+
+  const prem = new Array(term + 1).fill(0);
+  const ben = new Array(term + 1).fill(0);
+  for (let k = 1; k <= ppt; k++) prem[k - 1] += premium;
+
+  let incTotal = 0;
+  if (incOn) {
+    const amt = num("incAmt"), start = Math.max(Math.round(num("incStart")), 1), n = Math.max(Math.round(num("incYears")), 0);
+    for (let i = 0; i < n; i++) {
+      const y = start + i;
+      if (y > term) { warn = warn || "Some survival payouts fall after the policy term and were ignored."; break; }
+      ben[y] += amt; incTotal += amt;
+    }
+  }
+  ben[term] += maturity;
+
+  const totalPrem = premium * ppt;
+  const totalBen = ben.reduce((a, b) => a + b, 0);
+  const gain = totalBen - totalPrem;
+  const taxRate = slab * 1.04;
+  const tax = taxOn ? Math.max(gain, 0) * taxRate : 0;
+
+  const net = prem.map((p, t) => -p + ben[t]);
+  const netPre = net.slice();
+  const netPost = net.slice(); netPost[term] -= tax;
+  const rPre = irr(netPre);
+  const rPost = taxOn ? irr(netPost) : rPre;
+
+  // Compare with an alternative: value of each stream at end of term, compounded at the alternative rate
+  let altVal = 0, polVal = 0;
+  for (let t = 0; t <= term; t++) {
+    const f = Math.pow(1 + bench, term - t);
+    altVal += prem[t] * f;
+    polVal += ben[t] * f;
+  }
+  polVal -= tax;
+
+  return { premium, term, ppt, maturity, incOn, incTotal, taxOn, slab, bench, warn, prem, ben, net, totalPrem, totalBen, gain, tax, rPre, rPost, altVal, polVal };
+}
+
+let LAST = null;
+
+/* One source of truth for every label that depends on the tax option.
+   Used by both the page and the downloadable report so they cannot drift apart. */
+function labels(d) {
+  const b = (d.bench * 100).toFixed(1).replace(/\.0$/, "");
+  return {
+    irr: d.taxOn ? "Estimated annual return after tax (IRR)" : "Estimated annual return before tax (IRR)",
+    gain: d.taxOn ? "Net gain after estimated tax" : "Net gain",
+    mult: d.taxOn ? "Total benefits after tax per ₹1 of premium" : "Total benefits per ₹1 of premium",
+    alt: "Same premiums invested at " + b + "%",
+    pol: d.taxOn ? "Policy benefits after tax, reinvested at " + b + "%" : "Policy benefits, reinvested at " + b + "%",
+    bench: b,
+  };
+}
+
+/* Derived figures, defined once. Multiple = total benefits (net of tax when tax is applied) / total premiums. */
+function derived(d) {
+  const netGain = d.gain - d.tax;
+  const mult = d.totalPrem > 0 ? (d.totalBen - d.tax) / d.totalPrem : null;
+  const diff = d.polVal - d.altVal;
+  const main = d.taxOn ? d.rPost : d.rPre;
+  return { netGain, mult, diff, main };
+}
+const fmtMult = (m) => (m === null ? "—" : "₹" + m.toFixed(2));
+
+function render() {
+  const d = compute();
+  LAST = d;
+  const L = labels(d), X = derived(d);
+  const w = $("termWarn");
+  w.style.display = d.warn ? "block" : "none"; w.textContent = d.warn;
+
+  $("outLbl").textContent = L.irr;
+  if (X.main === null || d.premium <= 0 || d.totalBen <= 0) {
+    $("outIrr").textContent = "—";
+    $("outSub").textContent = d.premium <= 0 ? "Enter an annual premium to begin" : "Enter the benefits you will receive";
+  } else {
+    $("outIrr").textContent = pct(X.main);
+    $("outSub").textContent = d.taxOn && d.rPre !== null ? "Before tax: " + pct(d.rPre) : "Before tax, on the figures entered";
+  }
+
+  $("rPrem").textContent = fmtINR(d.totalPrem);
+  $("rMat").textContent = fmtINR(d.maturity);
+  $("rIncRow").style.display = d.incOn ? "flex" : "none";
+  $("rInc").textContent = fmtINR(d.incTotal);
+  $("rTaxRow").style.display = d.taxOn ? "flex" : "none";
+  $("rTax").textContent = fmtINR(d.tax);
+  $("rGainLbl").textContent = L.gain;
+  $("rGain").textContent = fmtINR(X.netGain);
+  $("rMultLbl").textContent = L.mult;
+  $("rMult").textContent = fmtMult(X.mult);
+
+  $("rAltLbl").textContent = L.alt;
+  $("rPolLbl").textContent = L.pol;
+  $("rAlt").textContent = fmtINR(d.altVal);
+  $("rPol").textContent = fmtINR(d.polVal);
+  const card = $("gapCard");
+  card.className = "gap-card " + (X.diff >= 0 ? "pos" : "neg");
+  $("gapV").textContent = (X.diff >= 0 ? "+ " : "− ") + fmtINR(Math.abs(X.diff));
+  $("gapS").textContent = X.diff >= 0
+    ? "The policy ends ahead of the alternative at " + L.bench + "% p.a."
+    : "The alternative at " + L.bench + "% p.a. ends ahead, before counting the value of life cover.";
+
+  // cash-flow table
+  const rows = ['<thead><tr><th>Point in time</th><th>Premium paid</th><th>Benefits received</th><th>Net</th></tr></thead><tbody>'];
+  for (let t = 0; t <= d.term; t++) {
+    const n = d.net[t];
+    rows.push('<tr><td>' + (t === 0 ? 'Start (day one)' : 'End of year ' + t) + '</td><td>' + (d.prem[t] ? fmtINR(d.prem[t]) : '–') + '</td><td>' + (d.ben[t] ? fmtINR(d.ben[t]) : '–') + '</td><td class="' + (n < 0 ? 'neg' : n > 0 ? 'pos' : '') + '">' + (n ? fmtINR(n) : '–') + '</td></tr>');
+  }
+  if (d.taxOn) rows.push('<tr><td>Estimated tax at maturity</td><td>–</td><td>–</td><td class="neg">' + fmtINR(-d.tax) + '</td></tr>');
+  rows.push('</tbody>');
+  $("cfTable").innerHTML = rows.join("");
+}
+
+/* ── wiring ── */
+function linkSlider(n, r, onSync) {
+  const a = $(n), b = $(r);
+  a.addEventListener("input", () => { b.value = a.value; render(); });
+  b.addEventListener("input", () => { a.value = b.value; render(); });
+}
+linkSlider("ppt", "pptR"); linkSlider("term", "termR"); linkSlider("bench", "benchR");
+["premium", "maturity", "incAmt", "incStart", "incYears", "taxSlab"].forEach((id) => $(id).addEventListener("input", render));
+$("incOn").addEventListener("change", () => { $("incBox").classList.toggle("open", $("incOn").checked); render(); });
+$("taxOn").addEventListener("change", () => { $("taxBox").classList.toggle("open", $("taxOn").checked); render(); });
+$("cfToggle").addEventListener("click", () => {
+  const open = $("cfToggle").getAttribute("aria-expanded") === "true";
+  $("cfToggle").setAttribute("aria-expanded", String(!open));
+  $("cfBody").style.display = open ? "none" : "block";
+});
+
+/* ── report ── */
+const NOTES_TEXT = {
+  irr: "Internal Rate of Return (IRR) is the annualised rate of return implied by the premiums you pay and the benefits you receive, taking into account when each payment is made or received. It represents the annual interest rate at which an investment would need to grow to match the same cash flows over the same period. This is a calculated measure of return, not a return guaranteed or declared by the insurer.",
+  bonus: "Bonuses and other non-guaranteed amounts shown in a benefit illustration may turn out lower or higher than illustrated.",
+  assume: "The same premium is assumed every year, paid at the start of each policy year, with benefits received at the end of the year. Results may be approximate for older policies where the premium changed over time, for example because GST applied in earlier years.",
+  tax: "Tax deductions on premiums (for example Section 80C under the old tax regime) are not considered in this calculator.",
+  disc: "This calculator provides illustrative estimates based on the information entered. Actual benefits, bonuses, tax treatment and returns may differ. The calculation does not assign a monetary value to the life cover provided by the policy. It is intended for educational purposes and should not be the sole basis for an insurance or investment decision. Please verify the figures against your policy documents and applicable tax rules.",
+  cmp: "The comparison does not fully account for differences in investment risk, liquidity, tax treatment or life insurance cover. The alternative return is an assumption, not a promised return.",
+  explain: "This is the annualised return implied by the premiums and benefits entered, taking their timing into account. It is not the same as the total percentage gain over the policy term.",
+  mf: "Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.",
+};
+
+function buildReportHtml() {
+  const d = LAST || compute();
+  const L = labels(d), X = derived(d);
+  const irrTxt = X.main === null ? "n/a" : pct(X.main);
+  const dateStr = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+  const rawHref = typeof window !== "undefined" ? window.location.href : "";
+  const revisitUrl = /^https?:\/\//i.test(rawHref) ? rawHref : "https://manandua.in/endowment-irr-calculator.html";
+  const inputRows = [
+    ["Annual premium", fmtINR(d.premium)],
+    ["Premium paying term", d.ppt + " yrs"],
+    ["Policy term", d.term + " yrs"],
+    ["Maturity benefit", fmtINR(d.maturity)],
+    ["Survival benefits", d.incOn ? fmtINR(d.incTotal) + " in total" : "None"],
+    ["Tax on maturity gain", d.taxOn ? "Applied: " + (d.slab * 100) + "% slab + 4% cess" : "Not applied"],
+    ["Alternative return (p.a.)", (d.bench * 100).toFixed(1) + "% (assumption)"],
+  ];
+  const calcRows = [
+    ["Total premiums paid", fmtINR(d.totalPrem)],
+    ["Maturity benefit", fmtINR(d.maturity)],
+  ].concat(d.incOn ? [["Survival benefits", fmtINR(d.incTotal)]] : [])
+   .concat([["Total benefits received", fmtINR(d.totalBen)], ["Gain before tax", fmtINR(d.gain)]])
+   .concat(d.taxOn ? [["Estimated tax on gain", fmtINR(d.tax)]] : [])
+   .concat([[L.gain, fmtINR(X.netGain)], [L.mult, fmtMult(X.mult)]])
+   .concat([["Estimated annual return before tax (IRR)", d.rPre === null ? "n/a" : pct(d.rPre)]])
+   .concat(d.taxOn ? [["Estimated annual return after tax (IRR)", d.rPost === null ? "n/a" : pct(d.rPost)]] : []);
+  const cfRows = d.net.map((n, t) => '<tr><td>' + (t === 0 ? "Start (day one)" : "End of year " + t) + '</td><td style="text-align:right">' + (d.prem[t] ? fmtINR(d.prem[t]) : "–") + '</td><td style="text-align:right">' + (d.ben[t] ? fmtINR(d.ben[t]) : "–") + '</td><td style="text-align:right">' + (n ? fmtINR(n) : "–") + '</td></tr>').join("")
+    + (d.taxOn ? '<tr><td>Estimated tax at maturity</td><td style="text-align:right">–</td><td style="text-align:right">–</td><td style="text-align:right">' + fmtINR(-d.tax) + '</td></tr>' : "");
+  const cmpLine = (X.diff >= 0
+    ? "At the assumed " + L.bench + "% p.a., the policy benefits would end ahead of the alternative by " + fmtINR(Math.abs(X.diff)) + " at the end of the term."
+    : "At the assumed " + L.bench + "% p.a., the alternative would end ahead of the policy benefits by " + fmtINR(Math.abs(X.diff)) + " at the end of the term.")
+    + " This is an illustrative comparison, not a forecast or a guarantee.";
+  const li = (t) => "<li>" + t + "</li>";
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Endowment Plan Return Estimate · Meridian</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,Segoe UI,Roboto,Helvetica,sans-serif;max-width:860px;margin:0 auto;padding:48px 44px;color:#1c1917;background:#faf8f3;line-height:1.5}
+.brand{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #1d2e28;margin-bottom:28px}
+.brand-mark{font-size:11px;letter-spacing:2px;color:#1d2e28;font-weight:700}
+.brand-date{font-size:12px;color:#8c8070}
+.title{font-family:Georgia,serif;color:#1d2e28;font-size:32px;font-weight:700;margin:0 0 6px}
+.lede{color:#4a4038;font-size:14px;margin-bottom:22px;max-width:620px}
+.hero-card{background:#1d2e28;border-radius:12px;padding:22px 26px;color:#fff;margin-bottom:28px}
+.hero-card .lbl{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#cfa54f;font-weight:600;margin-bottom:8px}
+.hero-card .val{font-size:30px;font-weight:700}
+.hero-card .sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px}
+.hero-card .exp{font-size:11.5px;color:rgba(255,255,255,0.65);margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.15);line-height:1.6}
+h2{font-size:13px;color:#1d2e28;margin:26px 0 12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid rgba(42,64,56,0.12)}
+th{background:#f5f0e8;color:#1d2e28;font-weight:700;padding:10px 12px;text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+th:first-child{text-align:left}
+td{padding:9px 12px;border-bottom:1px solid #f0ece2}
+tr:last-child td{border-bottom:none}
+.tot td{background:#f5f0e8;font-weight:700;color:#1d2e28}
+.cmp-note,.insight{background:#1d2e28;color:#ece7dd;padding:16px 20px;border-radius:10px;font-size:12.5px;line-height:1.65;margin-top:14px}
+.cmp-note.light{background:#f5f0e8;color:#4a4038;border:1px solid rgba(42,64,56,0.12)}
+.notes{background:#fff;border:1px solid rgba(42,64,56,0.12);border-radius:10px;padding:18px 22px 18px 38px;font-size:12px;color:#4a4038;line-height:1.7}
+.notes li{margin-bottom:8px}.notes li:last-child{margin-bottom:0}.notes b{color:#1d2e28}
+.cta{margin-top:28px;padding:22px 26px;border-radius:14px;background:#1d2e28;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.cta-sub{font-size:12px;color:#e6ded0;max-width:460px}
+.cta-btn{display:inline-block;padding:10px 18px;background:#cfa54f;color:#1d2e28;font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;border-radius:8px;text-decoration:none}
+.footer{margin-top:24px;padding-top:18px;border-top:1px solid rgba(42,64,56,0.12);font-size:10px;color:#8c8070;text-align:center;line-height:1.6}
+</style></head><body>
+<div class="brand"><div class="brand-mark">MERIDIAN &middot; ENDOWMENT PLAN RETURN ESTIMATE</div><div class="brand-date">${dateStr}</div></div>
+<h1 class="title">Your Endowment Plan Return</h1>
+<p class="lede">An estimate of what your endowment policy may earn each year, based on the premiums you pay and the benefits you receive.</p>
+<div class="hero-card"><div class="lbl">${L.irr}</div><div class="val">${irrTxt}</div><div class="sub">${d.taxOn && d.rPre !== null ? "Before tax: " + pct(d.rPre) : "Before tax, on the figures entered"}</div><div class="exp">${NOTES_TEXT.explain}</div></div>
+<h2>Inputs</h2>
+<table><tbody>${inputRows.map((r) => `<tr><td style="color:#8c8070">${r[0]}</td><td style="text-align:right;font-weight:600">${r[1]}</td></tr>`).join("")}</tbody></table>
+<h2>Your premiums and benefits</h2>
+<table><tbody>${calcRows.map((r, i) => `<tr${i >= calcRows.length - (d.taxOn ? 2 : 1) ? ' class="tot"' : ""}><td>${r[0]}</td><td style="text-align:right">${r[1]}</td></tr>`).join("")}</tbody></table>
+<h2>Compared with another investment (${L.bench}% p.a.)</h2>
+<table><tbody>
+<tr><td>${L.alt}, value at end of term</td><td style="text-align:right">${fmtINR(d.altVal)}</td></tr>
+<tr><td>${L.pol}, value at end of term</td><td style="text-align:right">${fmtINR(d.polVal)}</td></tr>
+<tr class="tot"><td>Estimated difference at the end of the term</td><td style="text-align:right">${(X.diff >= 0 ? "+ " : "− ") + fmtINR(Math.abs(X.diff))}</td></tr>
+</tbody></table>
+<div class="cmp-note">${cmpLine}</div>
+<div class="cmp-note light">${NOTES_TEXT.cmp}</div>
+<h2>Cash flows</h2>
+<table><thead><tr><th>Point in time</th><th>Premium paid</th><th>Benefits received</th><th>Net</th></tr></thead><tbody>${cfRows}</tbody></table>
+<h2>Important notes</h2>
+<ul class="notes">${li("" + NOTES_TEXT.irr)}${li("" + NOTES_TEXT.bonus)}${li("" + NOTES_TEXT.assume)}${d.taxOn ? li("Tax is estimated as the gain (total benefits less total premiums) multiplied by your slab rate plus 4% cess, applied once at maturity. Surcharge and TDS are ignored. " + NOTES_TEXT.tax) : li("No tax has been applied. " + NOTES_TEXT.tax)}${li("<b>Disclaimer.</b> " + NOTES_TEXT.disc)}</ul>
+<div class="cta"><div><div class="cta-title">Try different figures.</div><div class="cta-sub">Change the premium, term or maturity figures and see the estimate update instantly.</div></div><a class="cta-btn" href="${revisitUrl}">Revisit Calculator →</a></div>
+<div class="footer">${NOTES_TEXT.mf}</div>
+</body></html>`;
+}
+function downloadHtml() {
+  const blob = new Blob([buildReportHtml()], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "endowment-irr-" + new Date().toISOString().slice(0, 10) + ".html";
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+$("downloadReportBtn").addEventListener("click", downloadHtml);
+
+document.getElementById("cyear").textContent = new Date().getFullYear();
+const ham = $("ham"), mob = $("mobMenu");
+ham.addEventListener("click", function () {
+  const open = mob.style.display === "block";
+  mob.style.display = open ? "none" : "block";
+  ham.setAttribute("aria-expanded", String(!open));
+});
+mob.querySelectorAll("a").forEach((el) => el.addEventListener("click", () => { mob.style.display = "none"; ham.setAttribute("aria-expanded", "false"); }));
+window.addEventListener("scroll", function () {
+  document.querySelector(".nav").style.boxShadow = window.scrollY > 20 ? "0 2px 24px rgba(28,25,23,0.07)" : "none";
+});
+render();
+
+/* ── tooltips: hover (mouse), tap (touch) and keyboard focus. One shared floating box so it is never clipped by a panel. ── */
+(function () {
+  const box = $("tipBox"), canHover = window.matchMedia("(hover: hover)").matches;
+  let cur = null, sticky = false;
+  function place() {
+    if (!cur) return;
+    const r = cur.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = window.innerHeight, m = 12;
+    box.style.maxWidth = Math.min(280, vw - 2 * m) + "px";
+    const bw = box.offsetWidth, bh = box.offsetHeight;
+    let left = r.left + r.width / 2 - bw / 2;
+    left = Math.max(m, Math.min(left, vw - bw - m));
+    let top = r.bottom + 8;
+    if (top + bh > vh - m && r.top - bh - 8 >= m) top = r.top - bh - 8;
+    top = Math.max(m, Math.min(top, vh - bh - m));
+    box.style.left = left + "px"; box.style.top = top + "px";
+  }
+  function open(btn, stick) {
+    if (cur && cur !== btn) cur.setAttribute("aria-expanded", "false");
+    cur = btn; sticky = !!stick;
+    box.textContent = btn.getAttribute("data-tip");
+    btn.setAttribute("aria-expanded", "true"); btn.setAttribute("aria-describedby", "tipBox");
+    box.classList.add("show"); place();
+  }
+  function close() {
+    if (cur) { cur.setAttribute("aria-expanded", "false"); cur.removeAttribute("aria-describedby"); }
+    cur = null; sticky = false; box.classList.remove("show");
+  }
+  document.querySelectorAll(".tip-btn").forEach((b) => {
+    b.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); (cur === b && sticky) ? close() : open(b, true); });
+    b.addEventListener("focus", () => { if (!sticky) open(b, false); });
+    b.addEventListener("blur", () => { if (cur === b) close(); });
+    if (canHover) {
+      b.addEventListener("mouseenter", () => open(b, false));
+      b.addEventListener("mouseleave", () => { if (cur === b && !sticky) close(); });
+    }
+  });
+  document.addEventListener("click", (ev) => { if (cur && !ev.target.closest(".tip-btn")) close(); });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && cur) { const b = cur; close(); b.focus({ preventScroll: true }); } });
+  window.addEventListener("resize", place);
+  window.addEventListener("scroll", place, true);
+})();
+</script>
+</body>
+</html>

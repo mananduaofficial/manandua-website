@@ -248,6 +248,16 @@ input[type=range]::-moz-range-thumb {
 .method-tab:hover { color: var(--forest); }
 .method-tab.active { background: var(--gold); color: #fff; }
 
+/* ═══ METHOD SELECTOR (prominent dropdown) ═══ */
+.method-pick { background: #fff; border: 1.5px solid var(--gold); border-radius: 12px; padding: 16px 18px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(184,144,58,0.12); }
+.method-pick-lbl { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.method-pick-wrap { position: relative; }
+.method-pick-wrap select { width: 100%; min-height: 52px; font-family: var(--sans); font-size: 17px; font-weight: 500; color: var(--forest-d); background: var(--cream); border: 1.5px solid var(--forest); border-radius: 10px; padding: 12px 64px 12px 16px; cursor: pointer; -webkit-appearance: none; appearance: none; }
+.method-pick-wrap select:focus { outline: 3px solid rgba(184,144,58,0.35); outline-offset: 1px; border-color: var(--gold); }
+.method-pick-wrap::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 52px; background: var(--forest) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") center / 20px no-repeat; border-radius: 0 8px 8px 0; pointer-events: none; margin: 1.5px; }
+.method-pick-hint { font-size: 12.5px; color: var(--soft); margin-top: 10px; line-height: 1.6; }
+@media(max-width: 900px) { .method-pick { padding: 14px; } .method-pick-wrap select { font-size: 16px; } }
+
 .note-strip { margin-top: 4px; font-size: 11.5px; color: var(--mute); line-height: 1.7; }
 
 /* ═══ FOOTER ═══ */
@@ -339,12 +349,15 @@ input[type=range]::-moz-range-thumb {
 <section class="sec">
   <div class="sec-in">
 
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:22px; flex-wrap:wrap;">
-      <label for="methodMode" style="font-size:12.5px; color:var(--soft); font-weight:500;">Method</label>
-      <select class="sel" id="methodMode" style="width:auto; min-width:220px;">
-        <option value="hlv" selected>Human Life Value (HLV)</option>
-        <option value="need">Need Based</option>
-      </select>
+    <div class="method-pick">
+      <label class="method-pick-lbl" for="methodMode"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 11V5a1.5 1.5 0 0 1 3 0v5"/><path d="M12 10V8.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 10.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-5-2.7L4 14.5a1.5 1.5 0 0 1 2.4-1.8L9 15"/></svg> Choose your calculation method</label>
+      <div class="method-pick-wrap">
+        <select id="methodMode" aria-label="Calculation method">
+          <option value="need" selected>Need Based (recommended)</option>
+          <option value="hlv">Human Life Value (HLV)</option>
+        </select>
+      </div>
+      <div class="method-pick-hint">Tap the box above to switch between <b>Need Based</b> and <b>Human Life Value (HLV)</b>.</div>
     </div>
 
     <div class="layout-grid">
@@ -353,24 +366,24 @@ input[type=range]::-moz-range-thumb {
       <div class="inputs-col">
 
         <!-- HLV PANEL -->
-        <div id="hlvPanel">
+        <div id="hlvPanel" style="display:none;">
           <div class="panel">
             <div class="panel-hd"><h3>HLV inputs</h3><p class="panel-sub">Values your future income stream. Best for salaried earners with stable income growth.</p></div>
             <div class="panel-body">
-              <div class="fld"><div class="fld-top"><label for="hlvIncome">Current annual income (net of tax)</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvIncome" value="3499080"></div></div>
-              <div class="fld"><div class="fld-top"><label for="hlvExpenses">Annual personal expenses</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvExpenses" value="1049724"></div></div>
+              <div class="fld"><div class="fld-top"><label for="hlvIncome">Current annual income (net of tax)</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvIncome" value="2000000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="hlvExpenses">Annual personal expenses</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvExpenses" value="800000"></div></div>
               <div class="res-row tot"><span>Net income for family</span><span id="hlvNetIncome">—</span></div>
               <div class="fld">
-                <div class="fld-top"><label for="hlvGrowth">Income growth rate</label><div class="fld-box"><input type="number" id="hlvGrowth" value="8" step="0.1"><span>%</span></div></div>
-                <input type="range" id="hlvGrowthR" min="0" max="20" step="0.1" value="8">
+                <div class="fld-top"><label for="hlvGrowth">Income growth rate</label><div class="fld-box"><input type="number" id="hlvGrowth" value="6" step="0.1"><span>%</span></div></div>
+                <input type="range" id="hlvGrowthR" min="0" max="20" step="0.1" value="6">
               </div>
               <div class="fld">
-                <div class="fld-top"><label for="hlvDiscount">Discount rate / investment return</label><div class="fld-box"><input type="number" id="hlvDiscount" value="7" step="0.1"><span>%</span></div></div>
-                <input type="range" id="hlvDiscountR" min="0" max="20" step="0.1" value="7">
+                <div class="fld-top"><label for="hlvDiscount">Discount rate / investment return</label><div class="fld-box"><input type="number" id="hlvDiscount" value="8" step="0.1"><span>%</span></div></div>
+                <input type="range" id="hlvDiscountR" min="0" max="20" step="0.1" value="8">
               </div>
               <div class="fld">
-                <div class="fld-top"><label for="hlvYears">Working years remaining</label><div class="fld-box"><input type="number" id="hlvYears" value="24"><span>yrs</span></div></div>
-                <input type="range" id="hlvYearsR" min="1" max="45" step="1" value="24">
+                <div class="fld-top"><label for="hlvYears">Working years remaining</label><div class="fld-box"><input type="number" id="hlvYears" value="25"><span>yrs</span></div></div>
+                <input type="range" id="hlvYearsR" min="1" max="45" step="1" value="25">
               </div>
               <div class="fld"><div class="fld-top"><label for="hlvSavings">Current savings &amp; investments</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvSavings" value="6990000"></div></div>
               <div class="fld"><div class="fld-top"><label for="hlvExistingCover">Existing life cover</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="hlvExistingCover" value="0"></div></div>
@@ -379,7 +392,7 @@ input[type=range]::-moz-range-thumb {
         </div>
 
         <!-- NEED-BASED PANEL -->
-        <div id="needPanel" style="display:none;">
+        <div id="needPanel">
           <div class="panel">
             <div class="panel-hd"><h3>Family income replacement</h3><p class="panel-sub">Sums your family's actual money needs. Best when income is variable or you want a goal led plan.</p></div>
             <div class="panel-body">
@@ -402,16 +415,16 @@ input[type=range]::-moz-range-thumb {
           <div class="panel">
             <div class="panel-hd"><h3>Outstanding liabilities</h3></div>
             <div class="panel-body grid2">
-              <div class="fld"><div class="fld-top"><label for="homeLoan">Home loan outstanding</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="homeLoan" value="3000000"></div></div>
-              <div class="fld"><div class="fld-top"><label for="otherLoans">Other loans (car, personal)</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="otherLoans" value="200000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="homeLoan">Home loan outstanding</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="homeLoan" value="2000000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="otherLoans">Other loans (car, personal)</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="otherLoans" value="0"></div></div>
             </div>
           </div>
 
           <div class="panel">
             <div class="panel-hd"><h3>Future goals</h3><p class="panel-sub">Enter these at future value, already inflated.</p></div>
             <div class="panel-body grid2">
-              <div class="fld"><div class="fld-top"><label for="childEducation">Children's education</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="childEducation" value="5000000"></div></div>
-              <div class="fld"><div class="fld-top"><label for="childMarriage">Children's marriage</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="childMarriage" value="2500000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="childEducation">Children's education</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="childEducation" value="2500000"></div></div>
+              <div class="fld"><div class="fld-top"><label for="childMarriage">Children's marriage</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="childMarriage" value="0"></div></div>
               <div class="fld"><div class="fld-top"><label for="otherGoals">Other goals</label></div><div class="fld-box wide"><span>₹</span><input type="number" id="otherGoals" value="0"></div></div>
             </div>
           </div>
@@ -436,7 +449,7 @@ input[type=range]::-moz-range-thumb {
           <div class="hs-sub" id="outCoverCr">—</div>
         </div>
 
-        <div class="res-card" id="hlvResultCard">
+        <div class="res-card" id="hlvResultCard" style="display:none;">
           <h4>HLV calculation</h4>
           <div class="res-row"><span>Net annual income for family</span><span id="rHlvNet">—</span></div>
           <div class="res-row"><span>HLV (PV of growing annuity)</span><span id="rHlvHlv">—</span></div>
@@ -444,7 +457,7 @@ input[type=range]::-moz-range-thumb {
           <div class="res-row tot"><span>&minus; Existing life cover</span><span id="rHlvCover">—</span></div>
         </div>
 
-        <div class="res-card" id="needResultCard" style="display:none;">
+        <div class="res-card" id="needResultCard">
           <h4>Need Based calculation</h4>
           <div class="res-row"><span>PV of family expenses</span><span id="rNeedIncome">—</span></div>
           <div class="res-row"><span>+ Outstanding liabilities</span><span id="rNeedLiab">—</span></div>
@@ -463,8 +476,8 @@ input[type=range]::-moz-range-thumb {
     <div class="panel" style="margin-top:22px;">
       <div class="panel-hd"><h3>Which method should I use?</h3></div>
       <div class="panel-body">
-        <div style="font-size:13px; color:var(--soft); line-height:1.7;"><b style="color:var(--forest-d)">HLV</b> values your future income stream. Best for salaried earners with stable income growth.</div>
         <div style="font-size:13px; color:var(--soft); line-height:1.7;"><b style="color:var(--forest-d)">Need Based</b> sums your family's actual money needs (liabilities, expenses, goals). Best when income is variable or you want a goal led plan.</div>
+        <div style="font-size:13px; color:var(--soft); line-height:1.7;"><b style="color:var(--forest-d)">HLV</b> values your future income stream. Best for salaried earners with stable income growth.</div>
         <div style="font-size:13px; color:var(--soft); line-height:1.7;">A common practice is to compute both and take the <b style="color:var(--forest-d)">higher</b> of the two as your target cover.</div>
       </div>
     </div>
@@ -494,7 +507,7 @@ input[type=range]::-moz-range-thumb {
           <a href="https://manandua.in">Home</a>
           <a href="financial-tools.html">All Tools</a>
           <a href="https://manandua.in/resources.html">Resources</a>
-          <a href="https://manandua.in#newsletter">Meridian Newsletter</a>
+          <a href="resources.html#newsletter">Meridian Newsletter</a>
         </div>
         <div class="ft-col">
           <h5>Legal</h5>
@@ -554,7 +567,7 @@ const plainIds = [
 plainIds.forEach((id) => { const el = $(id); if (el) el.addEventListener("input", render); });
 
 /* ═══════════ Method switching ═══════════ */
-let method = "hlv";
+let method = "need";
 function setMethod(m) {
   method = m;
   $("hlvPanel").style.display = m === "hlv" ? "block" : "none";

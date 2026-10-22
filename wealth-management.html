@@ -31,12 +31,6 @@ a{text-decoration:none;color:inherit;}
 .callout{background:var(--cream-d);border:0.5px solid var(--border);border-left:3px solid var(--gold);border-radius:6px;padding:18px 20px;margin:24px 0;}
 .callout p{margin-bottom:0;font-size:14px;}
 .callout strong{color:var(--forest-d);}
-.process-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin:32px 0;}
-.process-mini div{padding-top:18px;border-top:1px solid var(--border);transition:border-color .3s ease;}
-.process-mini div:hover{border-top-color:var(--gold);}
-.process-mini .n{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--gold);margin-bottom:8px;line-height:1;}
-.process-mini .t{font-size:12.5px;font-weight:500;color:var(--forest-d);margin-bottom:4px;letter-spacing:0.2px;}
-.process-mini .d{font-size:12px;color:var(--mute);line-height:1.6;}
 .cta-block{background:var(--forest-d);border-radius:12px;padding:40px;text-align:center;margin:48px 0 0;}
 .cta-block h3{font-family:var(--serif);font-size:26px;font-weight:400;color:#fff;margin-bottom:10px;}
 .cta-block p{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:22px;}
@@ -46,7 +40,245 @@ a{text-decoration:none;color:inherit;}
 .footer{background:var(--forest-d);padding:40px 3rem;margin-top:0;text-align:center;}
 .footer p{color:rgba(255,255,255,0.35);font-size:12px;margin-bottom:6px;}
 .footer a{color:var(--gold-l);}
-@media(max-width:640px){.nav{padding:0 1.25rem;}.svc-hero{padding:48px 1.25rem 40px;}.svc-hero h1{font-size:36px;}.wrap{padding:44px 1.25rem 32px;}.process-mini{grid-template-columns:1fr 1fr;}.footer{padding:32px 1.25rem;}}
+@media(max-width:640px){.nav{padding:0 1.25rem;}.svc-hero{padding:48px 1.25rem 40px;}.svc-hero h1{font-size:36px;}.wrap{padding:44px 1.25rem 32px;}.footer{padding:32px 1.25rem;}}
+
+/* ═══════════════════════════════════
+   ONBOARDING QUESTIONNAIRE
+═══════════════════════════════════ */
+.oq-outer {
+  max-width: 680px;
+  margin: 0 auto;
+}
+.oq-wrap {
+  background: #fff;
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.oq-hdr {
+  background: var(--forest-d);
+  padding: 32px 40px;
+}
+.oq-hdr h3 {
+  font-family: var(--serif);
+  font-size: 26px; font-weight: 400;
+  color: #fff; margin-bottom: 5px;
+}
+.oq-hdr p { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.45); }
+.oq-prog { background: rgba(255,255,255,0.10); height: 2px; margin-top: 24px; border-radius: 2px; }
+.oq-bar  { background: var(--gold); height: 2px; border-radius: 2px; transition: width .4s; }
+.oq-dots { display: flex; gap: 8px; margin-top: 12px; }
+.oq-dot  { flex: 1; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.15); }
+.oq-dot.done   { background: var(--gold); }
+.oq-dot.active { background: var(--gold-l); }
+.oq-body { padding: 40px; }
+.q-ey    { font-size: 10px; font-weight: 500; letter-spacing: 0.7px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.q-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--forest-d); margin-bottom: 5px; line-height: 1.3; }
+.q-sub   { font-size: 13px; font-weight: 300; color: var(--mute); margin-bottom: 28px; }
+.opts    { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
+.opt {
+  background: var(--linen);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 15px 16px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.opt:hover { border-color: var(--border-g); background: var(--cream); }
+.opt.sel   { border-color: var(--gold); background: var(--gold-pale); }
+.opt-ic-w  {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--cream-d);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.opt.sel .opt-ic-w { background: rgba(184,144,58,0.15); }
+.opt-ic-w .ti { font-size: 15px; color: var(--warm); }
+.opt.sel  .opt-ic-w .ti { color: var(--gold); }
+.opt-t   { font-family: var(--serif); font-size: 15px; font-weight: 500; color: var(--forest-d); margin-bottom: 2px; }
+.opt-d   { font-size: 11px; color: var(--mute); }
+.chk-g   { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+.chk {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px;
+  background: var(--linen);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.chk:hover { border-color: var(--border-g); }
+.chk.sel   { border-color: var(--gold); background: var(--gold-pale); }
+.chk-box {
+  width: 18px; height: 18px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.chk.sel .chk-box { background: var(--gold); border-color: var(--gold); }
+.chk-tick { display: none; font-size: 12px; color: #fff; }
+.chk.sel .chk-tick { display: block; }
+.chk-lbl { font-size: 13px; color: var(--forest-d); }
+.range-g  { margin-bottom: 28px; }
+.range-tt { font-size: 13px; font-weight: 500; color: var(--forest-d); margin-bottom: 12px; }
+.range-rw { display: flex; align-items: center; gap: 14px; }
+.range-rw label { font-size: 12px; color: var(--soft); min-width: 110px; }
+.range-rw input[type=range] { flex: 1; accent-color: var(--gold); }
+.range-v   { font-size: 13px; font-weight: 500; color: var(--forest-d); min-width: 90px; text-align: right; }
+.txt-in {
+  width: 100%;
+  background: var(--linen);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 11px 13px;
+  font-size: 13.5px; font-family: var(--sans); color: var(--text);
+  margin-bottom: 10px;
+  transition: border-color .15s;
+}
+.txt-in:focus { outline: none; border-color: var(--gold); }
+.oq-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 10px;
+}
+.btn-back-q {
+  font-size: 13px; color: var(--mute);
+  background: none; border: none;
+  cursor: pointer; font-family: var(--sans); padding: 8px 0;
+}
+.btn-next-q {
+  background: var(--forest-d); color: #fff;
+  border: none; border-radius: var(--r);
+  padding: 12px 30px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: var(--sans);
+  transition: background .15s;
+}
+.btn-next-q:hover   { background: var(--forest-m); }
+.btn-next-q:disabled { background: var(--cream-d); color: var(--mute); cursor: not-allowed; }
+.q-ct { font-size: 12px; color: var(--mute); }
+/* result */
+.res-hero {
+  background: var(--forest-d);
+  border-radius: 10px;
+  padding: 28px;
+  margin-bottom: 18px;
+}
+.res-hero h4 { font-family: var(--serif); font-size: 22px; font-weight: 400; color: #fff; margin-bottom: 5px; }
+.res-hero p  { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
+.res-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.res-tag  {
+  font-size: 11px; font-weight: 500;
+  background: rgba(184,144,58,0.2); color: var(--gold-l);
+  border-radius: 3px; padding: 4px 12px;
+}
+.match-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+.match-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--linen);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 13px 15px;
+}
+.match-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.match-t   { font-size: 13px; font-weight: 500; color: var(--forest-d); }
+.match-s   { font-size: 11px; color: var(--mute); margin-top: 2px; }
+.btn-confirm {
+  width: 100%;
+  background: var(--gold); color: #fff;
+  border: none; border-radius: var(--r);
+  padding: 14px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; font-family: var(--sans);
+  transition: background .15s;
+}
+.btn-confirm:hover { background: var(--gold-l); }
+.confirm-note { font-size: 11px; color: var(--mute); text-align: center; margin-top: 9px; }
+/* ═══════════════════════════════════
+   TOAST NOTIFICATIONS
+═══════════════════════════════════ */
+.toast-stack {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 360px;
+}
+.toast {
+  background: var(--forest-d);
+  border: 0.5px solid rgba(184,144,58,0.35);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 12px 32px rgba(28,25,23,0.25);
+  transform: translateX(420px);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.2,.9,.3,1), opacity .35s;
+}
+.toast.show { transform: translateX(0); opacity: 1; }
+.toast.error { border-left-color: #c0654a; }
+.toast-ic {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(207,165,79,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.toast.error .toast-ic { background: rgba(192,101,74,0.18); }
+.toast-ic .ti { font-size: 13px; color: var(--gold-l); }
+.toast.error .toast-ic .ti { color: #e0a48e; }
+.toast-msg { font-size: 13.5px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.6; }
+.toast-close {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  font-size: 16px; line-height: 1; padding: 0; margin-left: auto;
+  flex-shrink: 0;
+}
+.toast-close:hover { color: rgba(255,255,255,0.7); }
+@media(max-width: 640px) {
+  .toast-stack { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+}
+
+
+/* ── How we work together ── */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:28px 0 8px;}
+.step{position:relative;background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:28px 26px 26px;overflow:hidden;cursor:default;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;}
+.step::before{content:'';position:absolute;left:0;top:0;height:3px;width:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
+.step::after{content:attr(data-n);position:absolute;right:18px;top:6px;font-family:var(--serif);font-size:84px;font-weight:500;line-height:1;color:var(--gold);opacity:.10;transition:opacity .3s ease,transform .4s ease;pointer-events:none;}
+.step:hover,.step:focus-within{transform:translateY(-6px);box-shadow:0 16px 36px rgba(29,46,40,.12);border-color:var(--border-g);}
+.step:hover::before,.step:focus-within::before{transform:scaleX(1);}
+.step:hover::after{opacity:.22;transform:translateY(4px) scale(1.06);}
+.step-ic{width:46px;height:46px;border-radius:50%;background:var(--cream-d);display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background .3s ease,transform .3s ease;}
+.step-ic i{font-size:21px;color:var(--forest);transition:color .3s ease;}
+.step:hover .step-ic{background:var(--forest-d);transform:rotate(-8deg) scale(1.06);}
+.step:hover .step-ic i{color:var(--gold-l);}
+.step-k{font-size:10.5px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.step-t{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--forest-d);margin-bottom:8px;line-height:1.25;}
+.step-d{font-size:13.5px;font-weight:300;color:var(--soft);line-height:1.75;}
+.step{opacity:0;transform:translateY(16px);}
+.step.in{opacity:1;transform:none;}
+.step.in:hover,.step.in:focus-within{transform:translateY(-6px);}
+@media(max-width:640px){.steps{grid-template-columns:1fr;}.step::after{font-size:64px;}}
+@media(prefers-reduced-motion:reduce){.step,.step *{transition:none!important;}.step{opacity:1;transform:none;}}
+
+/* ── Onboarding section (moved from homepage) ── */
+.ob-sec{background:var(--cream-d);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);padding:72px 2rem;scroll-margin-top:68px;}
+.ob-head{max-width:680px;margin:0 auto 36px;}
+.ob-ey{font-size:11px;font-weight:500;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.ob-title{font-family:var(--serif);font-size:38px;font-weight:400;color:var(--forest-d);line-height:1.2;margin-bottom:12px;}
+.ob-body{font-size:15px;font-weight:300;color:var(--soft);line-height:1.8;}
+.wrap.wrap-end{padding-top:56px;}
+.ob-sec .opt-t,.ob-sec .q-title,.ob-sec .oq-hdr h3,.ob-sec .res-hero h4{font-family:var(--serif);}
+
+@media(max-width:640px){.ob-sec{padding:48px 1.25rem;}.ob-title{font-size:30px;}.wrap.wrap-end{padding-top:40px;}}
 </style>
 </head>
 <body>
@@ -75,30 +307,403 @@ a{text-decoration:none;color:inherit;}
   </ul>
 
   <h2>How we work together</h2>
-  <div class="process-mini">
-    <div><div class="n">01</div><div class="t">Discovery Call</div><div class="d">Understanding your current financial position and what you want to achieve. No obligation.</div></div>
-    <div><div class="n">02</div><div class="t">Financial Snapshot</div><div class="d">A structured questionnaire covering goals, risk profile, and investment horizon.</div></div>
-    <div><div class="n">03</div><div class="t">Investment Recommendations</div><div class="d">Curated mutual fund recommendations aligned to your requirements.</div></div>
-    <div><div class="n">04</div><div class="t">Ongoing Review</div><div class="d">Regular monitoring, with fresh recommendations and course correction as needed.</div></div>
+  <div class="steps">
+    <div class="step" data-n="01" tabindex="0">
+      <div class="step-ic"><i class="ti ti-phone-call" aria-hidden="true"></i></div>
+      <div class="step-k">Step 01</div>
+      <div class="step-t">Discovery Call</div>
+      <div class="step-d">Understanding your current financial position and what you want to achieve. No obligation.</div>
+    </div>
+    <div class="step" data-n="02" tabindex="0">
+      <div class="step-ic"><i class="ti ti-clipboard-list" aria-hidden="true"></i></div>
+      <div class="step-k">Step 02</div>
+      <div class="step-t">Financial Snapshot</div>
+      <div class="step-d">A structured questionnaire covering goals, risk profile, and investment horizon.</div>
+    </div>
+    <div class="step" data-n="03" tabindex="0">
+      <div class="step-ic"><i class="ti ti-chart-pie" aria-hidden="true"></i></div>
+      <div class="step-k">Step 03</div>
+      <div class="step-t">Investment Recommendations</div>
+      <div class="step-d">Curated mutual fund recommendations aligned to your requirements.</div>
+    </div>
+    <div class="step" data-n="04" tabindex="0">
+      <div class="step-ic"><i class="ti ti-refresh" aria-hidden="true"></i></div>
+      <div class="step-k">Step 04</div>
+      <div class="step-t">Ongoing Review</div>
+      <div class="step-d">Regular monitoring, with fresh recommendations and course correction as needed.</div>
+    </div>
   </div>
 
+</div>
+
+<!-- ══ ONBOARDING QUESTIONNAIRE (moved from homepage) ══ -->
+<section class="ob-sec" id="onboarding">
+  <div class="ob-head">
+    <div class="ob-ey">Get Started</div>
+    <div class="ob-title">Tell me about<br>your financial picture.</div>
+    <p class="ob-body">A few short questions to help me prepare for a conversation that is actually useful to you.</p>
+  </div>
+
+  <div class="oq-outer">
+    <div class="oq-wrap" role="form" aria-label="Onboarding questionnaire">
+      <div class="oq-hdr">
+        <h3>Financial Onboarding</h3>
+        <p>Answer in your own time. There are no right or wrong answers.</p>
+        <div class="oq-prog" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+          <div class="oq-bar" id="oqBar" style="width:20%"></div>
+        </div>
+        <div class="oq-dots" aria-hidden="true">
+          <div class="oq-dot" id="d1"></div>
+          <div class="oq-dot" id="d2"></div>
+          <div class="oq-dot" id="d3"></div>
+          <div class="oq-dot" id="d4"></div>
+          <div class="oq-dot" id="d5"></div>
+        </div>
+      </div>
+
+      <div class="oq-body">
+        <!-- Step 1 -->
+        <div id="s1">
+          <div class="q-ey">Step 1 of 5</div>
+          <div class="q-title">What is your primary financial goal right now?</div>
+          <div class="q-sub">Choose the one that feels most pressing. We can explore others in our conversation.</div>
+          <div class="opts" role="radiogroup" aria-label="Primary goal">
+            <div class="opt" onclick="oSel(this,'q1')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-home" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Buying a home</div><div class="opt-d">Down payment or EMI planning</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q1')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-sunset" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Retirement planning</div><div class="opt-d">Building a corpus for independence</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q1')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-school" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Children's education</div><div class="opt-d">Funding college or higher studies</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q1')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Growing my wealth</div><div class="opt-d">Investing surplus income well</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q1')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-shield" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Protecting what I have</div><div class="opt-d">Insurance, estate and risk planning</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q1')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-help" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Full financial review</div><div class="opt-d">I need clarity on the big picture</div></div>
+            </div>
+          </div>
+          <div class="oq-foot">
+            <span class="q-ct">Select one to continue</span>
+            <button class="btn-next-q" id="n1" disabled onclick="oGo(2)">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="s2" style="display:none">
+          <div class="q-ey">Step 2 of 5</div>
+          <div class="q-title">What is your approximate monthly investable surplus?</div>
+          <div class="q-sub">After all expenses, EMIs and fixed commitments. A rough estimate is perfectly fine.</div>
+          <div class="opts" role="radiogroup" aria-label="Monthly surplus">
+            <div class="opt" onclick="oSel(this,'q2')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-coins" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Below Rs.25,000</div><div class="opt-d">Just getting started</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q2')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-coins" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Rs.25,000 to Rs.1 lakh</div><div class="opt-d">Building a solid base</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q2')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-coins" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Rs.1 lakh to Rs.5 lakh</div><div class="opt-d">Significant investable income</div></div>
+            </div>
+            <div class="opt" onclick="oSel(this,'q2')" role="radio" tabindex="0" aria-checked="false">
+              <div class="opt-ic-w"><i class="ti ti-coins" aria-hidden="true"></i></div>
+              <div><div class="opt-t">Above Rs.5 lakh</div><div class="opt-d">HNI level planning</div></div>
+            </div>
+          </div>
+          <div class="oq-foot">
+            <button class="btn-back-q" onclick="oGo(1)">Back</button>
+            <button class="btn-next-q" id="n2" disabled onclick="oGo(3)">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="s3" style="display:none">
+          <div class="q-ey">Step 3 of 5</div>
+          <div class="q-title">How would you describe your investment experience so far?</div>
+          <div class="q-sub">This helps me calibrate how we approach the first conversation.</div>
+          <div class="chk-g" id="expG" role="radiogroup" aria-label="Investment experience">
+            <div class="chk" onclick="oChk(this,'q3')" role="radio" tabindex="0">
+              <div class="chk-box"><i class="ti ti-check chk-tick" aria-hidden="true"></i></div>
+              <div class="chk-lbl">Complete beginner. Most of my money is in FDs or savings accounts.</div>
+            </div>
+            <div class="chk" onclick="oChk(this,'q3')" role="radio" tabindex="0">
+              <div class="chk-box"><i class="ti ti-check chk-tick" aria-hidden="true"></i></div>
+              <div class="chk-lbl">Some experience. I have a few mutual funds or a PPF but no real structure or plan.</div>
+            </div>
+            <div class="chk" onclick="oChk(this,'q3')" role="radio" tabindex="0">
+              <div class="chk-box"><i class="ti ti-check chk-tick" aria-hidden="true"></i></div>
+              <div class="chk-lbl">Comfortable investor. I invest regularly but want professional guidance to do it better.</div>
+            </div>
+            <div class="chk" onclick="oChk(this,'q3')" role="radio" tabindex="0">
+              <div class="chk-box"><i class="ti ti-check chk-tick" aria-hidden="true"></i></div>
+              <div class="chk-lbl">Experienced. I manage a significant portfolio and am looking for advanced strategy.</div>
+            </div>
+          </div>
+          <div class="oq-foot">
+            <button class="btn-back-q" onclick="oGo(2)">Back</button>
+            <button class="btn-next-q" id="n3" disabled onclick="oGo(4)">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div id="s4" style="display:none">
+          <div class="q-ey">Step 4 of 5</div>
+          <div class="q-title">What is your investment horizon and risk comfort?</div>
+          <div class="q-sub">Drag the sliders to reflect where you are today. These are starting points and we will refine them together.</div>
+          <div class="range-g">
+            <div class="range-tt">Investment horizon</div>
+            <div class="range-rw">
+              <label for="hSlider">Short term</label>
+              <input type="range" id="hSlider" min="1" max="3" value="2" step="1"
+                oninput="document.getElementById('hVal').textContent=['1 to 3 years','3 to 7 years','7 years and beyond'][this.value-1]"
+                aria-label="Investment horizon">
+              <span class="range-v" id="hVal">3 to 7 years</span>
+            </div>
+          </div>
+          <div class="range-g">
+            <div class="range-tt">Risk comfort</div>
+            <div class="range-rw">
+              <label for="rSlider">Capital safety</label>
+              <input type="range" id="rSlider" min="1" max="4" value="2" step="1"
+                oninput="document.getElementById('rVal').textContent=['Very conservative','Moderate','Growth oriented','Aggressive growth'][this.value-1]"
+                aria-label="Risk comfort">
+              <span class="range-v" id="rVal">Moderate</span>
+            </div>
+          </div>
+          <div class="oq-foot">
+            <button class="btn-back-q" onclick="oGo(3)">Back</button>
+            <button class="btn-next-q" onclick="oGo(5)">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div id="s5" style="display:none">
+          <div class="q-ey">Step 5 of 5</div>
+          <div class="q-title">A few details to confirm your consultation.</div>
+          <div class="q-sub">I will be in touch within one business day to arrange a time that works for you.</div>
+          <input class="txt-in" type="text" id="oqName" placeholder="Your full name" autocomplete="name" aria-label="Full name">
+          <input class="txt-in" type="email" id="oqEmail" placeholder="Email address" autocomplete="email" aria-label="Email">
+          <input class="txt-in" type="tel" id="oqPhone" placeholder="Phone number (optional)" autocomplete="tel" aria-label="Phone">
+          <div style="margin-bottom:22px;">
+            <div style="font-size:13px;font-weight:500;color:var(--forest-d);margin-bottom:10px;">Preferred time for the call</div>
+            <div class="opts" style="grid-template-columns:repeat(3,1fr);" role="radiogroup" aria-label="Preferred call time">
+              <div class="opt" onclick="oSel(this,'q5')" role="radio" tabindex="0" aria-checked="false">
+                <div><div class="opt-t">Morning</div><div class="opt-d">9 AM – 12 PM</div></div>
+              </div>
+              <div class="opt" onclick="oSel(this,'q5')" role="radio" tabindex="0" aria-checked="false">
+                <div><div class="opt-t">Afternoon</div><div class="opt-d">12 PM – 3 PM</div></div>
+              </div>
+              <div class="opt" onclick="oSel(this,'q5')" role="radio" tabindex="0" aria-checked="false">
+                <div><div class="opt-t">Evening</div><div class="opt-d">3 PM – 6 PM</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="oq-foot">
+            <button class="btn-back-q" onclick="oGo(4)">Back</button>
+            <button class="btn-next-q" onclick="oSubmit()">Submit and Book</button>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div id="sRes" style="display:none">
+          <div class="res-hero">
+            <h4>Your financial snapshot</h4>
+            <p>Noted for our first conversation</p>
+            <div class="res-tags" id="rTags"></div>
+          </div>
+          <div style="font-size:13px;font-weight:500;color:var(--forest-d);margin-bottom:12px;">We will cover these in your consultation</div>
+          <div class="match-list">
+            <div class="match-item">
+              <div class="match-dot"></div>
+              <div><div class="match-t">Goal-based investment strategy</div><div class="match-s">A portfolio built around your specific objectives</div></div>
+            </div>
+            <div class="match-item">
+              <div class="match-dot"></div>
+              <div><div class="match-t">Emergency fund and liquidity review</div><div class="match-s">Ensuring the right foundation before committing to longer-term investments</div></div>
+            </div>
+            <div class="match-item">
+              <div class="match-dot"></div>
+              <div><div class="match-t">Insurance coverage check</div><div class="match-s">Term and health coverage assessed before any investment recommendation</div></div>
+            </div>
+          </div>
+          <button class="btn-confirm" id="confirmBtn" onclick="oConfirm()">
+            Confirm Consultation Booking
+          </button>
+          <p class="confirm-note">You will hear from me within one business day at your email address</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap wrap-end">
   <h2>Regulatory & disclosure</h2>
   <p>Mutual fund schemes are distributed as an AMFI-registered Mutual Fund Distributor under a valid ARN (details available in the <a href="investor-charter.html" style="color:var(--gold);">Investor Charter</a>). Specialized Investment Funds (SIFs) are made available to eligible investors in line with applicable SEBI norms. Investments are offered under the Regular Plan option. Commission is received from Asset Management Companies for distribution, in accordance with the AMFI Code of Conduct.</p>
   <div class="callout">
     <p>Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully before investing.</p>
   </div>
 
-  <div class="cta-block">
-    <h3>Let's talk about your goals.</h3>
-    <p>The first conversation is free, and there's no obligation to move forward.</p>
-    <a href="index.html#onboarding" class="btn-gold-lg">Request a Consultation</a>
-  </div>
 </div>
 
 <div class="footer">
   <p>&copy; <span id="cyear">2026</span> Manan Dua &middot; manandua.in &middot; All rights reserved</p>
   <p><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a> &middot; <a href="investor-charter.html">Investor Charter</a></p>
 </div>
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+<script>
+// ── Toast notifications (replaces browser alert() popups) ──
+function showToast(message, type) {
+  var stack = document.getElementById('toastStack');
+  if (!stack) { window.alert(message); return; }
+  var toast = document.createElement('div');
+  toast.className = 'toast' + (type === 'error' ? ' error' : '');
+  var iconClass = type === 'error' ? 'ti-alert-triangle' : 'ti-circle-check';
+  toast.innerHTML =
+    '<div class="toast-ic"><i class="ti ' + iconClass + '" aria-hidden="true"></i></div>' +
+    '<div class="toast-msg"></div>' +
+    '<button class="toast-close" aria-label="Dismiss">&times;</button>';
+  toast.querySelector('.toast-msg').textContent = message;
+  stack.appendChild(toast);
+  requestAnimationFrame(function() { toast.classList.add('show'); });
+  var timer = setTimeout(function() { dismissToast(toast); }, 6000);
+  toast.querySelector('.toast-close').addEventListener('click', function() {
+    clearTimeout(timer);
+    dismissToast(toast);
+  });
+}
+function dismissToast(toast) {
+  toast.classList.remove('show');
+  setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 350);
+}
+
+// ── Questionnaire ──────────────────────────
+var oqA = {};
+
+function oGo(n) {
+  for (var i = 1; i <= 5; i++) {
+    var el = document.getElementById('s' + i);
+    if (el) el.style.display = (i === n) ? 'block' : 'none';
+  }
+  document.getElementById('sRes').style.display = 'none';
+  var pct = Math.min(100, n * 20);
+  document.getElementById('oqBar').style.width = pct + '%';
+  document.getElementById('oqBar').setAttribute('aria-valuenow', String(pct));
+  for (var j = 1; j <= 5; j++) {
+    var d = document.getElementById('d' + j);
+    if (d) { d.className = 'oq-dot' + (j < n ? ' done' : j === n ? ' active' : ''); }
+  }
+}
+
+function oSel(el, grp) {
+  el.parentElement.querySelectorAll('.opt').forEach(function(o) {
+    o.classList.remove('sel'); o.setAttribute('aria-checked', 'false');
+  });
+  el.classList.add('sel'); el.setAttribute('aria-checked', 'true');
+  var t = el.querySelector('.opt-t');
+  oqA[grp] = t ? t.textContent : 'selected';
+  var num = grp.replace('q', '');
+  var btn = document.getElementById('n' + num);
+  if (btn) btn.disabled = false;
+}
+
+function oChk(el, grp) {
+  document.querySelectorAll('#expG .chk').forEach(function(o) {
+    o.classList.remove('sel'); o.setAttribute('aria-checked', 'false');
+  });
+  el.classList.add('sel'); el.setAttribute('aria-checked', 'true');
+  var lbl = el.querySelector('.chk-lbl');
+  oqA[grp] = lbl ? lbl.textContent : 'selected';
+  document.getElementById('n3').disabled = false;
+}
+
+function oSubmit() {
+  var email = document.getElementById('oqEmail').value.trim();
+  if (!email) { showToast('Please enter your email address.', 'error'); return; }
+  oqA.name  = document.getElementById('oqName').value.trim();
+  oqA.email = email;
+  for (var i = 1; i <= 5; i++) {
+    var el = document.getElementById('s' + i);
+    if (el) el.style.display = 'none';
+  }
+  document.getElementById('oqBar').style.width = '100%';
+  var tags = document.getElementById('rTags');
+  tags.innerHTML = '';
+  [oqA.q1 || 'Wealth management',
+   oqA.q3 ? oqA.q3.split('.')[0] : 'Some experience',
+   document.getElementById('rVal').textContent,
+   document.getElementById('hVal').textContent
+  ].forEach(function(t) {
+    var s = document.createElement('span');
+    s.className = 'res-tag'; s.textContent = t;
+    tags.appendChild(s);
+  });
+  for (var j = 1; j <= 5; j++) {
+    var d = document.getElementById('d' + j);
+    if (d) d.className = 'oq-dot done';
+  }
+  document.getElementById('sRes').style.display = 'block';
+  document.getElementById('sRes').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function oConfirm() {
+  var btn = document.getElementById('confirmBtn');
+  var orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  var payload = {
+    form: 'Onboarding questionnaire',
+    page: 'wealth-management.html',
+    name: oqA.name,
+    email: oqA.email,
+    phone: document.getElementById('oqPhone').value.trim(),
+    primary_goal: oqA.q1 || '',
+    monthly_surplus: oqA.q2 || '',
+    experience: oqA.q3 || '',
+    horizon: document.getElementById('hVal').textContent,
+    risk_comfort: document.getElementById('rVal').textContent,
+    preferred_call_time: oqA.q5 || ''
+  };
+  submitToFormspree(payload).then(function() {
+    showToast('Thank you. I will be in touch at your email within one business day to arrange your consultation.');
+  }).catch(function() {
+    showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');
+  }).finally(function() {
+    btn.disabled = false; btn.textContent = orig;
+  });
+}
+
+// Forms — all submit to Formspree (https://formspree.io/f/maqgzllk)
+var FORMSPREE_URL = 'https://formspree.io/f/maqgzllk';
+
+function submitToFormspree(payload, btn, btnDefaultText) {
+  return fetch(FORMSPREE_URL, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function(res) {
+    if (!res.ok) throw new Error('Submission failed');
+    return res;
+  });
+}
+
+</script>
+<script>
+(function(){var s=document.querySelectorAll('.step');
+if(!('IntersectionObserver' in window)){s.forEach(function(e){e.classList.add('in');});return;}
+var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var i=Array.prototype.indexOf.call(s,en.target);setTimeout(function(){en.target.classList.add('in');},i*110);io.unobserve(en.target);}});},{threshold:.15});
+s.forEach(function(e){io.observe(e);});})();
+</script>
 <script>document.getElementById('cyear').textContent = new Date().getFullYear();</script>
 
 </body>
