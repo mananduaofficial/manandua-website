@@ -178,7 +178,8 @@ a    { text-decoration: none; color: inherit; }
 .soc-btn:hover { border-color: var(--border-g); background: var(--cream); }
 .soc-btn .ti { font-size: 18px; color: var(--gold); }
 .soc-btn-name { font-weight: 500; color: var(--forest-d); }
-.soc-btn-handle { font-size: 11.5px; color: var(--mute); margin-left: auto; }
+.soc-arrow { margin-left: auto; color: var(--mute); flex: none; transition: color .15s, transform .15s; }
+.soc-btn:hover .soc-arrow { color: var(--gold); transform: translate(2px, -2px); }
 
 .avail-card {
   background: var(--forest-d);
@@ -367,17 +368,17 @@ a    { text-decoration: none; color: inherit; }
         <a href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener" class="soc-btn">
           <i class="ti ti-brand-instagram" aria-hidden="true"></i>
           <span class="soc-btn-name">Instagram</span>
-          <span class="soc-btn-handle">@mananduaofficial</span>
+          <svg class="soc-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>
         </a>
         <a href="https://www.linkedin.com/in/mananduaofficial/" target="_blank" rel="noopener" class="soc-btn">
           <i class="ti ti-brand-linkedin" aria-hidden="true"></i>
           <span class="soc-btn-name">LinkedIn</span>
-          <span class="soc-btn-handle">mananduaofficial</span>
+          <svg class="soc-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>
         </a>
         <a href="https://www.youtube.com/@MeridianbyMananDua" target="_blank" rel="noopener" class="soc-btn">
           <i class="ti ti-brand-youtube" aria-hidden="true"></i>
           <span class="soc-btn-name">YouTube</span>
-          <span class="soc-btn-handle">Meridian by Manan Dua</span>
+          <svg class="soc-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>
         </a>
       </div>
     </div>
@@ -385,7 +386,7 @@ a    { text-decoration: none; color: inherit; }
     <div class="avail-card">
       <i class="ti ti-clock" aria-hidden="true"></i>
       <h4>Response time</h4>
-      <p>All messages are responded to within one business day. If your query is time-sensitive, note that in your message and I will prioritise it.</p>
+      <p>I will be in touch as soon as I can, via email. If your query is time-sensitive, note that in your message and I will prioritise it.</p>
     </div>
   </div>
 
@@ -541,7 +542,7 @@ function handleCon(e) {
   })
   .then(function(res) {
     if(!res.ok) throw new Error('Network error');
-    showToast('Thank you, ' + name + '. I will respond within one business day at ' + email + '.');
+    showToast('Thank you, ' + name + '. I will be in touch as soon as I can at ' + email + '.');
     e.target.reset();
     setFieldErr('c-name',  'c-name-err',  false);
     setFieldErr('c-email', 'c-email-err', false);
