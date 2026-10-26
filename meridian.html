@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — The Newsletter by Manan Dua</title>
+<meta name="description" content="Regular writing on investing, money habits, and the things that actually matter for your wealth journey. Written personally by Manan Dua.">
+<meta property="og:title" content="Meridian — The Newsletter by Manan Dua">
+<meta property="og:description" content="Regular writing on investing, money habits, and the things that actually matter for your wealth journey. Subscribe free.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://manandua.in/meridian.html">
+<meta property="og:image" content="https://manandua.in/meridian-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://manandua.in/meridian-preview.png">
+<link rel="canonical" href="https://manandua.in/meridian.html">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='40' fill='%231d2e28'/%3E%3Cpath d='M15,100 L100,88 L185,100 L100,112 Z' fill='%23faf8f3' opacity='0.3'/%3E%3Cpath d='M100,15 L112,100 L100,185 L88,100 Z' fill='%23cfa54f'/%3E%3Crect x='96' y='96' width='8' height='8' fill='%231d2e28' transform='rotate(45 100 100)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#2a4038;--forest-d:#1d2e28;--gold:#b8903a;--gold-l:#cfa54f;--cream:#f5f0e8;--cream-d:#ede8de;--linen:#faf8f3;--text:#1c1917;--soft:#4a4038;--mute:#8c8070;--border:rgba(42,64,56,0.12);--border-g:rgba(184,144,58,0.35);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--r:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:var(--sans);background:var(--linen);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+a{color:inherit;text-decoration:none;}
+
+/* hero */
+.hero{background:var(--forest-d);padding:64px 24px 120px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 0%,rgba(207,165,79,0.14),transparent 55%);pointer-events:none;}
+.hero-in{position:relative;max-width:620px;margin:0 auto;}
+.mark{filter:drop-shadow(0 0 14px rgba(207,165,79,0.35));margin-bottom:18px;}
+.ey{font-size:11px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold-l);margin-bottom:10px;}
+.hero h1{font-family:var(--serif);font-size:64px;font-weight:500;color:var(--gold-l);line-height:1.05;letter-spacing:.3px;text-shadow:0 0 28px rgba(207,165,79,0.25);}
+.hero p{font-size:16px;font-weight:300;color:rgba(255,255,255,0.72);line-height:1.85;margin-top:18px;}
+
+/* subscribe card */
+.wrap{width:100%;max-width:520px;margin:-72px auto 0;padding:0 20px;position:relative;}
+.card{background:#fff;border:0.5px solid var(--border);border-radius:16px;padding:34px 32px 28px;box-shadow:0 18px 50px rgba(29,46,40,0.14);}
+.card h2{font-family:var(--serif);font-size:30px;font-weight:500;color:var(--forest-d);line-height:1.2;}
+.card .sub{font-size:14px;font-weight:300;color:var(--soft);margin:6px 0 22px;}
+.card label{display:block;font-size:11px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:var(--mute);margin-bottom:7px;}
+.card input[type=email]{width:100%;font-family:var(--sans);font-size:16px;color:var(--text);background:var(--linen);border:1px solid var(--border);border-radius:var(--r);padding:14px 15px;min-height:52px;transition:border-color .15s,box-shadow .15s;}
+.card input[type=email]::placeholder{color:#b3a999;}
+.card input[type=email]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,144,58,0.18);}
+.btn{width:100%;margin-top:14px;min-height:52px;font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:.2px;color:#fff;background:var(--gold);border:none;border-radius:var(--r);cursor:pointer;transition:background .15s,transform .15s,box-shadow .15s;}
+.btn:hover{background:#a8623e;transform:translateY(-1px);box-shadow:0 8px 20px rgba(168,98,62,0.25);}
+.btn:active{background:#935233;transform:none;}
+.btn:focus-visible{outline:3px solid rgba(184,144,58,0.45);outline-offset:2px;}
+.btn[disabled]{opacity:.7;cursor:default;transform:none;box-shadow:none;}
+.note{font-size:11.5px;color:var(--mute);line-height:1.7;margin-top:14px;text-align:center;}
+.note a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+
+/* follow */
+.follow{width:100%;max-width:520px;margin:40px auto 0;padding:0 20px;}
+.follow .ey{color:var(--mute);text-align:center;margin-bottom:14px;}
+.soc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.soc{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#fff;border:0.5px solid var(--border);border-radius:14px;padding:24px 14px 20px;overflow:hidden;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;}
+.soc::before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-l));transform:scaleX(0);transform-origin:left;transition:transform .35s ease;}
+.soc:hover,.soc:focus-visible{transform:translateY(-5px);box-shadow:0 14px 32px rgba(29,46,40,0.13);border-color:var(--border-g);}
+.soc:hover::before,.soc:focus-visible::before{transform:scaleX(1);}
+.soc:focus-visible{outline:3px solid rgba(184,144,58,0.45);outline-offset:2px;}
+.soc-ic{width:52px;height:52px;border-radius:50%;background:var(--cream-d);color:var(--forest);display:flex;align-items:center;justify-content:center;margin-bottom:6px;transition:background .25s,color .25s,transform .25s;}
+.soc:hover .soc-ic,.soc:focus-visible .soc-ic{background:var(--forest-d);color:var(--gold-l);transform:scale(1.08) rotate(-6deg);}
+.soc-n{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--forest-d);line-height:1.2;}
+.soc-a{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:400;color:var(--mute);transition:color .2s;}
+.soc-a svg{transition:transform .2s;}
+.soc:hover .soc-a,.soc:focus-visible .soc-a{color:var(--gold);}
+.soc:hover .soc-a svg,.soc:focus-visible .soc-a svg{transform:translate(2px,-2px);}
+
+/* footer */
+.foot{margin-top:auto;padding:44px 24px 28px;text-align:center;}
+.foot p{font-size:11.5px;color:var(--mute);line-height:1.7;max-width:520px;margin:0 auto 8px;}
+.foot a{color:var(--soft);text-decoration:underline;text-underline-offset:2px;}
+
+/* toast */
+.toast-stack{position:fixed;bottom:24px;left:16px;right:16px;z-index:1000;display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none;}
+.toast{pointer-events:auto;max-width:420px;width:100%;background:var(--forest-d);border:0.5px solid rgba(184,144,58,0.35);border-left:3px solid var(--gold);border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;color:rgba(255,255,255,0.9);font-size:13.5px;font-weight:300;line-height:1.6;box-shadow:0 12px 32px rgba(0,0,0,0.3);transform:translateY(16px);opacity:0;transition:transform .3s,opacity .3s;}
+.toast.show{transform:none;opacity:1;}
+.toast.error{border-left-color:#c0654a;}
+.toast button{margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;line-height:1;cursor:pointer;padding:0 2px;}
+
+@media(max-width:560px){
+  .hero{padding:48px 20px 104px;}
+  .hero h1{font-size:50px;}
+  .hero p{font-size:15px;}
+  .card{padding:28px 20px 22px;}
+  .soc-grid{gap:10px;}
+  .soc{padding:20px 10px 16px;}
+  .soc-n{font-size:19px;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <svg class="mark" width="56" height="56" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+      <path d="M15,100 L100,88 L185,100 L100,112 Z" fill="#faf8f3" opacity="0.3"/>
+      <path d="M100,15 L112,100 L100,185 L88,100 Z" fill="#cfa54f"/>
+      <rect x="96" y="96" width="8" height="8" fill="#1d2e28" transform="rotate(45 100 100)"/>
+    </svg>
+    <div class="ey">The Newsletter</div>
+    <h1>Meridian.</h1>
+    <p>Regular writing on investing, money habits, and the things that actually matter for your wealth journey. Written personally by Manan Dua.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="card">
+      <h2>Subscribe to Meridian</h2>
+      <p class="sub">Free, and delivered straight to your inbox.</p>
+      <form id="nlForm" novalidate>
+        <label for="nl-email">Email address</label>
+        <input type="email" id="nl-email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required>
+        <button type="submit" class="btn" id="nlBtn">Subscribe</button>
+        <p class="note">Sent from newsletter@manandua.in. Unsubscribe at any time. By subscribing you agree to receive Meridian by email; see our <a href="privacy.html">Privacy Policy</a>.</p>
+      </form>
+    </div>
+  </div>
+
+  <section class="follow" aria-labelledby="followHd">
+    <div class="ey" id="followHd">Follow Meridian</div>
+    <div class="soc-grid">
+      <a class="soc" href="https://www.youtube.com/@MeridianbyMananDua" target="_blank" rel="noopener noreferrer" aria-label="Meridian on YouTube (opens in a new tab)">
+        <span class="soc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></span>
+        <span class="soc-n">YouTube</span>
+        <span class="soc-a">Watch on YouTube <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg></span>
+      </a>
+      <a class="soc" href="https://www.instagram.com/mananduaofficial" target="_blank" rel="noopener noreferrer" aria-label="Meridian on Instagram (opens in a new tab)">
+        <span class="soc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.9" fill="currentColor"/></svg></span>
+        <span class="soc-n">Instagram</span>
+        <span class="soc-a">Follow on Instagram <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg></span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Meridian is shared for general education and is not personalised investment advice. Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully before investing.</p>
+  <p>&copy; <span id="cyear">2026</span> Manan Dua &middot; AMFI-Registered Mutual Fund Distributor &middot; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script>
+var BREVO_FORM_URL = 'https://c7d30daa.sibforms.com/serve/MUIFAKp0oopX-_6BjksgObWpxKMXdo7HuJYqDH3PqJ8CcyobxBN4BPomtYV9bXSOAr1ct13EEXuXuMYyNI0usP2m18h114IjhGGXAC1pIR0umw9slHhC82Vyqv9jeLloXi15wZfZQurKbk8d3q7WtVJgP1luuQM58WbehnJHL1FjZi9Mwz6BbKTkdtz8iDDLYFQMg9gJnmDIZOoNOg==';
+
+function showToast(msg, type) {
+  var stack = document.getElementById('toastStack');
+  var t = document.createElement('div');
+  t.className = 'toast' + (type === 'error' ? ' error' : '');
+  t.setAttribute('role', type === 'error' ? 'alert' : 'status');
+  var span = document.createElement('span'); span.textContent = msg;
+  var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Dismiss'); x.innerHTML = '&times;';
+  function close() { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 300); }
+  x.addEventListener('click', close);
+  t.appendChild(span); t.appendChild(x); stack.appendChild(t);
+  requestAnimationFrame(function () { t.classList.add('show'); });
+  setTimeout(close, 6500);
+}
+
+document.getElementById('nlForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var input = document.getElementById('nl-email');
+  var email = input.value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('Please enter a valid email address.', 'error'); input.focus(); return;
+  }
+  var btn = document.getElementById('nlBtn'), orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Subscribing...';
+
+  var body = new URLSearchParams();
+  body.append('EMAIL', email);
+  body.append('email_address_check', ''); // Brevo spam honeypot: must stay empty
+  body.append('locale', 'en');
+
+  fetch(BREVO_FORM_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  }).then(function () {
+    showToast('Thank you for subscribing to Meridian. Check your inbox to confirm.');
+    e.target.reset();
+  }).catch(function () {
+    showToast('Something went wrong sending that. Please try again or email newsletter@manandua.in directly.', 'error');
+  }).finally(function () {
+    btn.disabled = false; btn.textContent = orig;
+  });
+});
+
+document.getElementById('cyear').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

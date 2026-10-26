@@ -1136,7 +1136,7 @@ a    { text-decoration: none; color: inherit; }
       <p>Whether you have a specific question or simply want to understand what working together might look like, reach out. The first conversation is always free and completely without obligation.</p>
       <div class="con-item"><i class="ti ti-mail" aria-hidden="true"></i> <a href="mailto:contact@manandua.in">contact@manandua.in</a></div>
       <div class="con-item"><i class="ti ti-map-pin" aria-hidden="true"></i> India, remote-first practice</div>
-      <div class="con-item"><i class="ti ti-clock" aria-hidden="true"></i> Responds within one business day</div>
+      <div class="con-item"><i class="ti ti-clock" aria-hidden="true"></i> Replies by email as soon as possible</div>
       <div class="con-soc">
         <a href="https://www.youtube.com/@MeridianbyMananDua" target="_blank" rel="noopener" class="con-soc-btn">
           <i class="ti ti-brand-youtube" aria-hidden="true"></i> YouTube
@@ -1304,7 +1304,7 @@ function handleCon(e) {
   var orig = btn.textContent;
   btn.disabled = true; btn.textContent = 'Sending...';
   submitToFormspree({ form: 'Contact form', name: name, email: email, phone: phone, interest: interest, message: message }).then(function() {
-    showToast('Thank you, ' + name + '. I will respond within one business day at ' + email + '.');
+    showToast('Thank you, ' + name + '. I will be in touch as soon as I can at ' + email + '.');
     e.target.reset();
   }).catch(function() {
     showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');

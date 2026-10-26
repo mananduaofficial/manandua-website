@@ -492,7 +492,7 @@ a{text-decoration:none;color:inherit;}
         <div id="s5" style="display:none">
           <div class="q-ey">Step 5 of 5</div>
           <div class="q-title">A few details to confirm your consultation.</div>
-          <div class="q-sub">I will be in touch within one business day to arrange a time that works for you.</div>
+          <div class="q-sub">I will be in touch by email to arrange a time that works for you.</div>
           <input class="txt-in" type="text" id="oqName" placeholder="Your full name" autocomplete="name" aria-label="Full name">
           <input class="txt-in" type="email" id="oqEmail" placeholder="Email address" autocomplete="email" aria-label="Email">
           <input class="txt-in" type="tel" id="oqPhone" placeholder="Phone number (optional)" autocomplete="tel" aria-label="Phone">
@@ -519,29 +519,29 @@ a{text-decoration:none;color:inherit;}
         <!-- Result -->
         <div id="sRes" style="display:none">
           <div class="res-hero">
-            <h4>Your financial snapshot</h4>
-            <p>Noted for our first conversation</p>
+            <h4>Confirm Consultation Request</h4>
+            <p>Your financial snapshot has been noted for our first conversation.</p>
             <div class="res-tags" id="rTags"></div>
           </div>
-          <div style="font-size:13px;font-weight:500;color:var(--forest-d);margin-bottom:12px;">We will cover these in your consultation</div>
+          <div style="font-size:13px;font-weight:500;color:var(--forest-d);margin-bottom:12px;">What we'll cover in your consultation</div>
           <div class="match-list">
             <div class="match-item">
               <div class="match-dot"></div>
-              <div><div class="match-t">Goal-based investment strategy</div><div class="match-s">A portfolio built around your specific objectives</div></div>
+              <div><div class="match-t">Goal-based investment strategy</div><div class="match-s">Aligning your investments with your personal goals, priorities and time horizons.</div></div>
             </div>
             <div class="match-item">
               <div class="match-dot"></div>
-              <div><div class="match-t">Emergency fund and liquidity review</div><div class="match-s">Ensuring the right foundation before committing to longer-term investments</div></div>
+              <div><div class="match-t">Emergency fund and liquidity review</div><div class="match-s">Assessing your financial cushion before committing to long-term investments.</div></div>
             </div>
             <div class="match-item">
               <div class="match-dot"></div>
-              <div><div class="match-t">Insurance coverage check</div><div class="match-s">Term and health coverage assessed before any investment recommendation</div></div>
+              <div><div class="match-t">Insurance coverage review</div><div class="match-s">Understanding your existing protection needs before discussing suitable investment options.</div></div>
             </div>
           </div>
           <button class="btn-confirm" id="confirmBtn" onclick="oConfirm()">
-            Confirm Consultation Booking
+            Submit Consultation Request
           </button>
-          <p class="confirm-note">You will hear from me within one business day at your email address</p>
+          <p class="confirm-note">Thank you for reaching out. I'll review your details and get in touch by email to discuss availability and arrange a convenient time for our conversation.</p>
         </div>
       </div>
     </div>
@@ -675,7 +675,7 @@ function oConfirm() {
     preferred_call_time: oqA.q5 || ''
   };
   submitToFormspree(payload).then(function() {
-    showToast('Thank you. I will be in touch at your email within one business day to arrange your consultation.');
+    showToast('Thank you. I will review your details and be in touch by email to arrange your consultation.');
   }).catch(function() {
     showToast('Something went wrong sending that. Please try again or email contact@manandua.in directly.', 'error');
   }).finally(function() {
